@@ -73,7 +73,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
     text-decoration: none;
     letter-spacing: 2px;
 }
-.nav-logo span { color: var(--gold); }
+.nav-logo .brand-accent { color: var(--gold); }
 .nav-links { display: flex; gap: 28px; list-style: none; }
 .nav-links a {
     text-decoration: none; color: var(--text);
@@ -113,7 +113,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
     letter-spacing: 8px;
     margin-bottom: 16px;
 }
-.hero h1 span { color: var(--gold); }
+.hero h1 .brand-accent { color: var(--gold); }
 .hero p {
     font-size: clamp(1rem, 2vw, 1.3rem);
     color: rgba(255,255,255,0.7);
