@@ -19,9 +19,9 @@ const VF = {
     // Default settings (used when sheet is not configured)
     DEFAULTS: {
         whatsapp_number: '2348127252004',
-        site_title: 'Gift Shop by VF — Customized Jewelry & Acrylic Pieces',
-        hero_subtitle: 'Customized Jewelry & Acrylic Pieces',
-        about_text: 'Over 5 years of turning ideas into beautiful, lasting pieces.'
+        site_title: 'Gift Shop by VF',
+        hero_subtitle: 'Handcrafted Jewelry & Acrylic Art — Made Just for You',
+        about_text: "We've been doing this for 5+ years. Here's why people keep ordering."
     },
 
     // ══════════════════════════════════════════════════════
