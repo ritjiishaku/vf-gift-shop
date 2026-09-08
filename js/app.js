@@ -19,8 +19,8 @@ const VF = {
     // Default settings (used when sheet is not configured)
     DEFAULTS: {
         whatsapp_number: '2348127252004',
-        site_title: 'Gift Shop by VF',
-        hero_subtitle: 'Handcrafted Jewelry & Acrylic Art — Made Just for You',
+        site_title: 'Gift Shop by VF — Customized Jewelry & Acrylic Pieces',
+        hero_subtitle: 'Customized Jewelry & Acrylic Pieces',
         about_text: "We've been doing this for 5+ years. Here's why people keep ordering."
     },
 
@@ -56,7 +56,13 @@ const VF = {
         for (let i = 0; i < line.length; i++) {
             const char = line[i];
             if (char === '"') {
-                inQuotes = !inQuotes;
+                if (inQuotes && line[i + 1] === '"') {
+                    // Escaped double-quote inside a quoted field (RFC 4180)
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
             } else if (char === ',' && !inQuotes) {
                 result.push(current);
                 current = '';
@@ -89,6 +95,9 @@ const VF = {
     //  SITE SETTINGS
     // ══════════════════════════════════════════════════════
     async applySiteSettings() {
+        // When sheet is not yet configured, preserve the static HTML as-is
+        if (this.SHEET_ID === 'YOUR_SHEET_ID') return;
+
         const rows = await this.fetchTab(this.TABS.SETTINGS);
         const settings = { ...this.DEFAULTS };
 
@@ -130,6 +139,9 @@ const VF = {
         const container = document.getElementById('gallery-grid');
         if (!container) return;
 
+        // Keep static HTML when sheet is not yet configured
+        if (this.SHEET_ID === 'YOUR_SHEET_ID') return;
+
         const rows = await this.fetchTab(this.TABS.PORTFOLIO);
         const visible = rows
             .filter(r => r.is_visible !== 'FALSE' && r.is_visible !== '0')
@@ -144,8 +156,8 @@ const VF = {
             const isWide = i % 5 === 0;
             return `
                 <div class="gallery-item fade-in${isWide ? ' wide' : ''}">
-                    <img src="${item.image_url}" alt="${item.caption || ''}" loading="lazy">
-                    <div class="gallery-label">${item.caption || ''}</div>
+                    <img src="${this.sanitize(item.image_url)}" alt="${this.sanitize(item.caption)}" loading="lazy">
+                    <div class="gallery-label">${this.sanitize(item.caption)}</div>
                 </div>
             `;
         }).join('');
@@ -159,6 +171,9 @@ const VF = {
     async renderTestimonials() {
         const container = document.getElementById('testimonials-grid');
         if (!container) return;
+
+        // Keep static HTML when sheet is not yet configured
+        if (this.SHEET_ID === 'YOUR_SHEET_ID') return;
 
         const rows = await this.fetchTab(this.TABS.TESTIMONIALS);
         const visible = rows
@@ -180,12 +195,12 @@ const VF = {
             return `
                 <div class="testimonial-card fade-in">
                     <div class="star-rating">${stars}</div>
-                    <p class="testimonial-text">"${item.quote || ''}"</p>
+                    <p class="testimonial-text">"${this.sanitize(item.quote)}"</p>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">${initials}</div>
+                        <div class="testimonial-avatar">${this.sanitize(initials)}</div>
                         <div>
-                            <div class="testimonial-name">${item.name || ''}</div>
-                            <div class="testimonial-source">${item.source || ''}</div>
+                            <div class="testimonial-name">${this.sanitize(item.name)}</div>
+                            <div class="testimonial-source">${this.sanitize(item.source)}</div>
                         </div>
                     </div>
                 </div>
@@ -198,6 +213,12 @@ const VF = {
     // ══════════════════════════════════════════════════════
     //  UTILITIES
     // ══════════════════════════════════════════════════════
+    // Safely encode a string for insertion into HTML (XSS prevention)
+    sanitize(str) {
+        const div = document.createElement('div');
+        div.textContent = String(str || '');
+        return div.innerHTML;
+    },
     observeFadeIns() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
