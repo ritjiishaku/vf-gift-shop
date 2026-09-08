@@ -391,6 +391,18 @@ footer {
     letter-spacing: 1px;
 }
 
+/* ── EMPTY STATE ── */
+.empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    grid-column: 1 / -1;
+}
+#testimonials .empty-state {
+    color: rgba(255,255,255,0.4);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .nav-links { 
