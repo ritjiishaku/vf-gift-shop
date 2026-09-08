@@ -16,6 +16,14 @@ const VF = {
         TESTIMONIALS: 'Testimonials'
     },
 
+    // Default settings (used when sheet is not configured)
+    DEFAULTS: {
+        whatsapp_number: '2348127252004',
+        site_title: 'Gift Shop by VF — Customized Jewelry & Acrylic Pieces',
+        hero_subtitle: 'Customized Jewelry & Acrylic Pieces',
+        about_text: 'Over 5 years of turning ideas into beautiful, lasting pieces.'
+    },
+
     // ══════════════════════════════════════════════════════
     //  CSV PARSER
     // ══════════════════════════════════════════════════════
@@ -82,12 +90,13 @@ const VF = {
     // ══════════════════════════════════════════════════════
     async applySiteSettings() {
         const rows = await this.fetchTab(this.TABS.SETTINGS);
-        if (rows.length === 0) return;
+        const settings = { ...this.DEFAULTS };
 
-        const settings = {};
-        rows.forEach(row => {
-            if (row.key && row.value) settings[row.key] = row.value;
-        });
+        if (rows.length > 0) {
+            rows.forEach(row => {
+                if (row.key && row.value) settings[row.key] = row.value;
+            });
+        }
 
         // Update WhatsApp link
         if (settings.whatsapp_number) {
