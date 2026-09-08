@@ -1,6 +1,6 @@
 # Sample Data Import
 
-These CSV files contain sample data for the Gift Shop by VF showroom. Import each into its matching tab in the Google Sheet.
+These CSV files contain sample data for the Gifts by VF showroom. Import each into its matching tab in the Google Sheet.
 
 ## Files → Tabs
 

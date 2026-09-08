@@ -1,4 +1,4 @@
-// Gift Shop by VF — Showroom Script
+// Gifts by VF — Showroom Script
 // All content is editable from a Google Sheet (no code changes needed).
 
 const VF = {
@@ -22,9 +22,9 @@ const VF = {
     // ── Fallback text (used when a setting is missing from the sheet) ──
     DEFAULTS: {
         whatsapp_number: '2348127252004',
-        site_title: 'Gift Shop by VF — Customized Jewelry & Acrylic Pieces',
-        site_description: 'Gift Shop by VF handcrafts personalized jewelry, acrylic frames, and custom gifts for birthdays, weddings, and corporate events. Order on WhatsApp — delivered across Nigeria.',
-        brand_name: 'Gift Shop by V',
+        site_title: 'Gifts by VF — Customized Jewelry & Acrylic Pieces',
+        site_description: 'Gifts by VF handcrafts personalized jewelry, acrylic frames, and custom gifts for birthdays, weddings, and corporate events. Order on WhatsApp — delivered across Nigeria.',
+        brand_name: 'Gifts by V',
         brand_accent: 'F',
         hero_subtitle: 'Handcrafted Jewelry & Acrylic Art — Made Just for You',
         hero_button_text: 'See Our Work',
@@ -46,7 +46,7 @@ const VF = {
         cta_title: "Let's Make Something for You",
         cta_desc: "Tell us your idea. We'll bring it to life.",
         cta_button_text: 'Message Us on WhatsApp',
-        footer_text: '© 2026 Gift Shop by VF. Handcrafted with love.'
+        footer_text: '© 2026 Gifts by VF. Handcrafted with love.'
     },
 
     // ── Icon keys the owner can use in the "icon" column ──
