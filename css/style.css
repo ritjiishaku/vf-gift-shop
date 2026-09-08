@@ -247,7 +247,7 @@ section { padding: 100px 24px; }
     position: absolute; inset: 0;
     background: rgba(17,17,17,0.92);
 }
-#testimonials > * { position: relative; z-index: 1; }
+#testimonials .section-inner { position: relative; z-index: 1; }
 #testimonials .section-label { color: var(--gold-light); }
 #testimonials .section-title { color: var(--white); }
 #testimonials .section-desc { color: rgba(255,255,255,0.5); }
