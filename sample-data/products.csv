@@ -1,0 +1,5 @@
+name,description,icon,display_order,is_visible
+Customized Jewelry,"Rings, necklaces, bracelets, anklets — engraved with names, dates, or your own design.",jewelry,1,TRUE
+Acrylic Frameless,"Crystal-clear acrylic photo frames, name blocks, and LED signages that pop.",acrylic,2,TRUE
+Gift Items,"Birthday, wedding, anniversary, graduation — we make gifts that actually mean something.",gift,3,TRUE
+Corporate / Custom Orders,"Branded merch, plaques, and bulk gift sets for companies, churches, and events.",corporate,4,TRUE
