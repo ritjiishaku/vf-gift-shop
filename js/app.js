@@ -406,9 +406,10 @@ const VF = {
             const srcset = this.srcVariant(url, 300) + ' 300w, ' +
                            this.srcVariant(url, 600) + ' 600w, ' +
                            this.srcVariant(url, 900) + ' 900w';
+            const sizes = isWide ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, 33vw';
             return `
                 <div class="gallery-item fade-in${isWide ? ' wide' : ''}">
-                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${this.sanitize(item.caption)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}">
+                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="${sizes}" alt="${this.sanitize(item.caption)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}">
                     <div class="gallery-label">${this.sanitize(item.caption)}</div>
                 </div>
             `;

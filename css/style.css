@@ -221,6 +221,7 @@ section { padding: 100px 24px; }
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 16px;
     margin-top: 50px;
+    grid-auto-flow: dense;
 }
 .gallery-item {
     aspect-ratio: 1;
