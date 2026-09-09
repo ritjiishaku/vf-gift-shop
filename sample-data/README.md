@@ -35,7 +35,28 @@ These CSV files contain sample data for the Gifts by VF showroom. Import each in
 
 - Your site reads the sheet automatically — no re-publishing or code changes needed
 - Replace placeholder portfolio photos with your real photos by swapping the `image_url` values
-- **Products (optional):** add a `price_from` column (e.g. `₦15,000`). If filled, the product card shows "From ₦15,000". Leave blank to hide it.
+
+## Products tab (catalogue)
+
+Each row becomes a catalogue card. Columns:
+
+| Column | What it does |
+|--------|--------------|
+| `name` | Product title on the card |
+| `description` | Short blurb shown under the title |
+| `image_url` | Square photo (600×600 works best). If blank, the card shows an icon tile instead |
+| `price` | Shown as "From ₦18,000" on the card. Blank hides the price. (The old `price_from` column is still accepted too) |
+| `category` | The storefront builds its filter pills automatically from these — one pill per category, plus "All" |
+| `display_order` | Card position |
+| `is_visible` | `FALSE` hides the row |
+
+Example row:
+
+```
+Engraved Bar Necklace,"Sleek stainless bar with any name, date, or short message.",https://images.unsplash.com/...,₦18,000,Jewelry,1,TRUE
+```
+
+The storefront search + category filters + "Showing X of Y pieces" counter all work off this tab — no code changes needed when you add a product.
 
 ---
 
@@ -68,3 +89,5 @@ index.html?ref=REP_ID&p=DISPLAY_ORDER
 ```
 
 Buyers who were referred keep the attribution for 30 days (stored in their browser), so even if they order a different product later, the referral still reaches you in the WhatsApp message.
+
+When a buyer opens a product link, the catalogue filters reset to "All" automatically so the exact product is shown and highlighted.

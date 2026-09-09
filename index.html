@@ -55,7 +55,7 @@
     <div class="hero-content">
         <h1><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></h1>
         <p id="hero-subtitle">Handcrafted Jewelry &amp; Acrylic Art — Made Just for You</p>
-        <a href="#gallery" class="hero-btn" id="hero-button">See Our Work</a>
+        <a href="#products" class="hero-btn" id="hero-button">Browse Catalogue</a>
     </div>
 </section>
 
@@ -67,26 +67,104 @@
             <h2 class="section-title" id="products-title">What We Offer</h2>
             <p class="section-desc" id="products-desc">Every piece is handmade to your exact taste — names, colors, sizes, your way.</p>
         </div>
+        <div class="catalogue-controls fade-in">
+            <div class="catalogue-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1113.5 9.5 4.5 4.5 0 019 14z"/></svg>
+                <input type="search" id="catalogue-search" placeholder="Search products…" aria-label="Search products">
+            </div>
+            <div class="catalogue-filters" id="catalogue-filters" role="group" aria-label="Filter by category"></div>
+            <p class="catalogue-count" id="catalogue-count" aria-live="polite">Showing 4 pieces</p>
+        </div>
         <div class="products-grid" id="products-grid">
             <div class="product-card fade-in">
-                <div class="product-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
-                <h3>Customized Jewelry</h3>
-                <p>Rings, necklaces, bracelets, anklets — engraved with names, dates, or your own design.</p>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop" alt="Engraved Bar Necklace" loading="lazy">
+                    <span class="product-badge">Jewelry</span>
+                    <span class="product-pricetag">From ₦18,000</span>
+                </div>
+                <div class="product-body">
+                    <h3>Engraved Bar Necklace</h3>
+                    <p>Sleek stainless bar with any name, date, or short message hand-engraved.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Engraved%20Bar%20Necklace." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
             </div>
             <div class="product-card fade-in">
-                <div class="product-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-                <h3>Acrylic Frameless</h3>
-                <p>Crystal-clear acrylic photo frames, name blocks, and LED signages that pop.</p>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=600&fit=crop" alt="Couple's Matching Signet Rings" loading="lazy">
+                    <span class="product-badge">Jewelry</span>
+                    <span class="product-pricetag">From ₦25,000</span>
+                </div>
+                <div class="product-body">
+                    <h3>Couple's Matching Signet Rings</h3>
+                    <p>Two matching signet rings, perfectly engraved for both of you.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Couple's%20Matching%20Signet%20Rings." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
             </div>
             <div class="product-card fade-in">
-                <div class="product-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg></div>
-                <h3>Gift Items</h3>
-                <p>Birthday, wedding, anniversary, graduation — we make gifts that actually mean something.</p>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=600&h=600&fit=crop" alt="Custom Name Acrylic Block" loading="lazy">
+                    <span class="product-badge">Acrylic Frames</span>
+                    <span class="product-pricetag">From ₦12,000</span>
+                </div>
+                <div class="product-body">
+                    <h3>Custom Name Acrylic Block</h3>
+                    <p>Crystal-clear acrylic block with a name, message, or photo printed through.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Custom%20Name%20Acrylic%20Block." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
             </div>
             <div class="product-card fade-in">
-                <div class="product-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
-                <h3>Corporate / Custom Orders</h3>
-                <p>Branded merch, plaques, and bulk gift sets for companies, churches, and events.</p>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1549465220-1a8b9238f84e?w=600&h=600&fit=crop" alt="Monogrammed Leatherette Gift Box" loading="lazy">
+                    <span class="product-badge">Gift Boxes</span>
+                    <span class="product-pricetag">From ₦9,500</span>
+                </div>
+                <div class="product-body">
+                    <h3>Monogrammed Leatherette Gift Box</h3>
+                    <p>Premium leatherette box embossed with initials — gift-ready.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Monogrammed%20Leatherette%20Gift%20Box." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&h=600&fit=crop" alt="Corporate Crystal Plaque" loading="lazy">
+                    <span class="product-badge">Corporate</span>
+                    <span class="product-pricetag">From ₦35,000</span>
+                </div>
+                <div class="product-body">
+                    <h3>Corporate Crystal Plaque</h3>
+                    <p>Engraved crystal awards and plaques for staff, partners, and ceremonies.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Corporate%20Crystal%20Plaque." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            <div class="product-card fade-in">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1519235106695-a1bfbe0d0822?w=600&h=600&fit=crop" alt="Wedding Collection Set" loading="lazy">
+                    <span class="product-badge">Jewelry</span>
+                    <span class="product-pricetag">From ₦30,000</span>
+                </div>
+                <div class="product-body">
+                    <h3>Wedding Collection Set</h3>
+                    <p>Matching engraved pieces — rings, accents, and keepsakes for your big day.</p>
+                    <a href="https://wa.me/2348127252004?text=Hello!%20I'd%20like%20to%20order%20Wedding%20Collection%20Set." class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

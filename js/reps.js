@@ -60,6 +60,12 @@ const RepTools = {
         return div.innerHTML;
     },
 
+    validateUrl(str) {
+        const s = String(str || '').trim();
+        if (/^https?:\/\//i.test(s)) return s;
+        return '';
+    },
+
     filterAndSort(rows) {
         return rows
             .filter(r => {
@@ -137,12 +143,18 @@ const RepTools = {
             const pid = p.display_order || (i + 1);
             const link = this.shareLink(pid, this._rep.rep_id);
             const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
-            const price = p.price_from ? ` · From ${this.sanitize(p.price_from)}` : '';
+            const price = p.price || p.price_from || '';
+            const img = this.validateUrl(p.image_url);
+            const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
             return `
                 <div class="rep-product">
+                    <div class="rep-product-thumb${img ? '' : ' no-image'}">
+                        ${img ? `<img src="${this.sanitize(img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('no-image')">` : ''}
+                        <span class="rep-thumb-initial">${this.sanitize(initial)}</span>
+                    </div>
                     <div class="rep-product-info">
                         <h4>${this.sanitize(p.name)}</h4>
-                        <p>${this.sanitize(p.description)}${price}</p>
+                        <p>${this.sanitize(p.description)}${price ? ` &middot; From ${this.sanitize(price)}` : ''}</p>
                     </div>
                     <div class="rep-product-actions">
                         <input type="text" readonly value="${this.sanitize(link)}" aria-label="Share link for ${this.sanitize(p.name)}">

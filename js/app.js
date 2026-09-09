@@ -29,7 +29,7 @@ const VF = {
         brand_name: 'Gifts by V',
         brand_accent: 'F',
         hero_subtitle: 'Handcrafted Jewelry & Acrylic Art — Made Just for You',
-        hero_button_text: 'See Our Work',
+        hero_button_text: 'Browse Catalogue',
         products_label: 'What We Make',
         products_title: 'What We Offer',
         products_desc: 'Every piece is handmade to your exact taste — names, colors, sizes, your way.',
@@ -50,6 +50,9 @@ const VF = {
         cta_button_text: 'Message Us on WhatsApp',
         footer_text: `© ${new Date().getFullYear()} Gifts by VF. Handcrafted with love.`
     },
+
+    // ── WhatsApp icon used on the product order buttons ──
+    WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
 
     // ── Icon keys the owner can use in the "icon" column ──
     ICONS: {
@@ -214,11 +217,9 @@ const VF = {
     },
 
     initLightbox() {
-        const grid = document.getElementById('gallery-grid');
         const lightbox = document.getElementById('lightbox');
-        if (!grid || !lightbox) return;
         const img = document.getElementById('lightbox-img');
-        const caption = document.getElementById('lightbox-caption');
+        if (!lightbox || !img) return;
         const closeBtn = document.getElementById('lightbox-close');
 
         const hide = () => {
@@ -227,14 +228,24 @@ const VF = {
             document.body.style.overflow = '';
         };
 
-        grid.addEventListener('click', (e) => {
-            const target = e.target.closest('img[data-full]');
-            if (!target) return;
-            img.src = target.getAttribute('data-full');
+        const open = (target) => {
+            const src = target.getAttribute('data-full') || target.getAttribute('src');
+            if (!src) return;
+            img.src = src;
             img.alt = target.getAttribute('alt') || '';
-            caption.textContent = target.getAttribute('alt') || '';
+            const caption = document.getElementById('lightbox-caption');
+            if (caption) caption.textContent = img.alt;
             lightbox.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+        };
+
+        ['gallery-grid', 'products-grid'].forEach(id => {
+            const grid = document.getElementById(id);
+            if (!grid) return;
+            grid.addEventListener('click', (e) => {
+                const target = e.target.closest('img[data-full]');
+                if (target) open(target);
+            });
         });
 
         if (closeBtn) closeBtn.addEventListener('click', hide);
@@ -282,16 +293,16 @@ const VF = {
         document.body.classList.add('has-referral');
     },
 
-    orderMessage(productName) {
+    orderMessage(productName, price) {
         let msg = productName
-            ? `Hello! I'd like to order ${productName}.`
+            ? `Hello! I'd like to order ${productName}${price ? ` (from ${price})` : ''}.`
             : 'Hello! I would love to place an order with Gifts by VF.';
         if (this._referral) msg += ` I was referred by ${this._referral.name}.`;
         return encodeURIComponent(msg);
     },
 
-    waLink(productName) {
-        return `https://wa.me/${this._waNumber}?text=${this.orderMessage(productName)}`;
+    waLink(productName, price) {
+        return `https://wa.me/${this._waNumber}?text=${this.orderMessage(productName, price)}`;
     },
 
     // ══════════════════════════════════════════════════════
@@ -373,17 +384,90 @@ const VF = {
             return;
         }
 
-        container.innerHTML = items.map((p, i) => `
-            <div class="product-card fade-in" id="product-${this.sanitize(p.display_order || i + 1)}">
-                <div class="product-icon">${this.icon(p.icon)}</div>
-                <h3>${this.sanitize(p.name)}</h3>
-                <p>${this.sanitize(p.description)}</p>
-                ${p.price_from ? `<p class="product-price">From ${this.sanitize(p.price_from)}</p>` : ''}
-                <a href="${this.waLink(p.name)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a>
-            </div>
-        `).join('');
+        this._products = items;
+        this.renderFilterPills();
+        this.applyProductFilters();
+    },
 
+    renderFilterPills() {
+        const bar = document.getElementById('catalogue-filters');
+        if (!bar) return;
+        const cats = [];
+        this._products.forEach(p => {
+            const c = String(p.category || '').trim();
+            if (c && !cats.some(x => x.toLowerCase() === c.toLowerCase())) cats.push(c);
+        });
+        const pills = ['All', ...cats].map(c => {
+            const key = c === 'All' ? 'all' : c.toLowerCase();
+            return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${this.sanitize(key)}">${this.sanitize(c)}</button>`;
+        }).join('');
+        bar.innerHTML = pills;
+    },
+
+    applyProductFilters() {
+        const container = document.getElementById('products-grid');
+        if (!container) return;
+
+        const q = String(this._searchQuery || '').toLowerCase();
+        const filtered = this._products.filter(p => {
+            const cat = String(p.category || '').trim().toLowerCase();
+            if (this._activeCategory !== 'all' && cat !== this._activeCategory) return false;
+            if (!q) return true;
+            return `${p.name} ${p.description} ${p.category}`.toLowerCase().includes(q);
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="empty-state">No products match your search.</div>`;
+        } else {
+            container.innerHTML = filtered.map((p, i) =>
+                this.productCardHTML(p, p.display_order || i + 1)
+            ).join('');
+        }
+
+        const count = document.getElementById('catalogue-count');
+        if (count) count.textContent = `Showing ${filtered.length} of ${this._products.length} pieces`;
         this.observeFadeIns();
+    },
+
+    clearProductFilters() {
+        this._activeCategory = 'all';
+        this._searchQuery = '';
+        const input = document.getElementById('catalogue-search');
+        if (input) input.value = '';
+        if (this._products) {
+            this.renderFilterPills();
+            this.applyProductFilters();
+        }
+    },
+
+    productCardHTML(p, pid) {
+        const url = this.validateUrl(p.image_url);
+        const srcset = url
+            ? this.srcVariant(url, 300) + ' 300w, ' + this.srcVariant(url, 600) + ' 600w, ' + this.srcVariant(url, 900) + ' 900w'
+            : '';
+        const price = p.price || p.price_from || '';
+        const category = String(p.category || '').trim() || 'Custom';
+        const img = url
+            ? `<img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${this.sanitize(p.name)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
+            : '';
+        return `
+            <div class="product-card fade-in" id="product-${this.sanitize(pid)}">
+                <div class="product-img${url ? '' : ' no-image'}">
+                    ${img}
+                    <div class="product-icon-fallback">${this.icon(p.icon || category.toLowerCase())}</div>
+                    <span class="product-badge">${this.sanitize(category)}</span>
+                    ${price ? `<span class="product-pricetag">From ${this.sanitize(price)}</span>` : ''}
+                </div>
+                <div class="product-body">
+                    <h3>${this.sanitize(p.name)}</h3>
+                    <p>${this.sanitize(p.description)}</p>
+                    <a href="${this.waLink(p.name, price)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">
+                        ${this.WA_ICON}
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        `;
     },
 
     // ══════════════════════════════════════════════════════
@@ -509,6 +593,9 @@ const VF = {
         // Defaults / state
         this._waNumber = this.DEFAULTS.whatsapp_number;
         this._referral = null;
+        this._products = null;
+        this._activeCategory = 'all';
+        this._searchQuery = '';
 
         // Read ?ref and ?p from rep share links
         const params = new URLSearchParams(window.location.search);
@@ -548,8 +635,28 @@ const VF = {
         // Fade-in
         this.observeFadeIns();
 
-        // Lightbox for gallery images
+        // Lightbox for gallery + product images
         this.initLightbox();
+
+        // Catalogue search (instant text filter)
+        const searchInput = document.getElementById('catalogue-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                this._searchQuery = searchInput.value.trim();
+                if (this._products) this.applyProductFilters();
+            });
+        }
+        // Catalogue category pills (delegated)
+        const filterBar = document.getElementById('catalogue-filters');
+        if (filterBar) {
+            filterBar.addEventListener('click', (e) => {
+                const pill = e.target.closest('.pill[data-category]');
+                if (!pill) return;
+                this._activeCategory = pill.getAttribute('data-category');
+                this.renderFilterPills();
+                if (this._products) this.applyProductFilters();
+            });
+        }
 
         // Referral attribution (fetch rep name, show banner)
         await this.resolveReferral();
@@ -566,6 +673,8 @@ const VF = {
 
         // Scroll to the referred product if the link included &p=
         if (productParam) {
+            // Reset filters so the target card is never hidden by an active filter/search
+            if (this._products) this.clearProductFilters();
             const target = document.getElementById('product-' + this.sanitize(productParam));
             if (target) {
                 setTimeout(() => {
