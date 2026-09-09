@@ -35,6 +35,7 @@ These CSV files contain sample data for the Gifts by VF showroom. Import each in
 
 - Your site reads the sheet automatically — no re-publishing or code changes needed
 - Replace placeholder portfolio photos with your real photos by swapping the `image_url` values
+- **Products (optional):** add a `price_from` column (e.g. `₦15,000`). If filled, the product card shows "From ₦15,000". Leave blank to hide it.
 
 ---
 
@@ -50,7 +51,13 @@ The site lets sales reps share product links and earn commission. Setup is simpl
    - The share link looks like: `https://your-site.com/index.html?ref=kofi&p=3`
    - When a buyer clicks it, the site shows *"You were referred by Kofi"*, highlights the product, and the **Order on WhatsApp** button opens a message pre-filled with the product **and** the referral.
    - The owner confirms the order + payment in WhatsApp, then logs the sale in the `Payouts` tab: `rep_id`, `product`, `order_amount`, `commission` (amount × rate), `status` (`PENDING` or `PAID`), `date`, `notes`.
-4. **Commission:** `commission = order_amount × commission_rate / 100`. The owner writes the number in the `commission` column. Flip `status` to `PAID` once the rep is paid.
+4. **Commission:** `commission = order_amount × commission_rate / 100`. The owner writes the number in the `commission` column. Flip `status` to `PAID` once the rep is paid. Status matching is **case-insensitive** (`paid`/`PAID`/`Pending`/`pending` all work).
+
+### Important notes
+
+- **Reps and activation:** rep rows use `is_active` (`TRUE`/`FALSE`). The site accepts both `is_active` and the older `is_visible` column, so either works.
+- **Rep codes are not secrets:** the rep list is fetched by the reps page, so codes (e.g. `kofi`) aren't private. They're an ID for tracking, not a password — tell reps never to share sensitive info under their code, and keep the sheet **view-only** (no one can write to it via this setup).
+- **Payouts tab is readable by anyone with the link once published.** Only what you want reps to see belongs there.
 
 ### Rep link format
 

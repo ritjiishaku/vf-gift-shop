@@ -151,6 +151,19 @@ const VF = {
         return '';
     },
 
+    srcVariant(url, width) {
+        const u = String(url || '');
+        if (/[?&]w=\d+/i.test(u)) return u.replace(/([?&])w=\d+/i, `$1w=${width}`);
+        return u + (u.includes('?') ? '&' : '?') + `w=${width}`;
+    },
+
+    repIsActive(row) {
+        if (!row) return false;
+        const raw = row.is_active != null && row.is_active !== '' ? row.is_active : row.is_visible;
+        const v = String(raw || '').toLowerCase();
+        return v !== 'false' && v !== '0';
+    },
+
     icon(name) {
         const key = String(name || '').trim().toLowerCase();
         if (!this.ICONS[key]) {
@@ -200,6 +213,35 @@ const VF = {
         container.appendChild(el);
     },
 
+    initLightbox() {
+        const grid = document.getElementById('gallery-grid');
+        const lightbox = document.getElementById('lightbox');
+        if (!grid || !lightbox) return;
+        const img = document.getElementById('lightbox-img');
+        const caption = document.getElementById('lightbox-caption');
+        const closeBtn = document.getElementById('lightbox-close');
+
+        const hide = () => {
+            lightbox.classList.add('hidden');
+            img.removeAttribute('src');
+            document.body.style.overflow = '';
+        };
+
+        grid.addEventListener('click', (e) => {
+            const target = e.target.closest('img[data-full]');
+            if (!target) return;
+            img.src = target.getAttribute('data-full');
+            img.alt = target.getAttribute('alt') || '';
+            caption.textContent = target.getAttribute('alt') || '';
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', hide);
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) hide(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+    },
+
     getReferral() {
         try {
             const raw = localStorage.getItem('vf_referral');
@@ -224,7 +266,7 @@ const VF = {
         try {
             const reps = await this.fetchTab(this.TABS.REPS);
             const rep = reps.find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
-            if (rep && String(rep.is_visible || '').toLowerCase() !== 'false' && rep.is_visible !== '0') {
+            if (rep && this.repIsActive(rep)) {
                 name = rep.name || stored.rep_id;
             }
         } catch (e) { /* fall back to rep id */ }
@@ -237,6 +279,7 @@ const VF = {
         if (!banner || !this._referral) return;
         banner.textContent = `You were referred by ${this._referral.name}`;
         banner.classList.add('visible');
+        document.body.classList.add('has-referral');
     },
 
     orderMessage(productName) {
@@ -335,6 +378,7 @@ const VF = {
                 <div class="product-icon">${this.icon(p.icon)}</div>
                 <h3>${this.sanitize(p.name)}</h3>
                 <p>${this.sanitize(p.description)}</p>
+                ${p.price_from ? `<p class="product-price">From ${this.sanitize(p.price_from)}</p>` : ''}
                 <a href="${this.waLink(p.name)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a>
             </div>
         `).join('');
@@ -359,12 +403,12 @@ const VF = {
             const url = this.validateUrl(item.image_url);
             if (!url) return '';
             const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
-            const srcset = url.replace(/\?w=\d+/, '?w=300') + ' 300w, ' +
-                           url.replace(/\?w=\d+/, '?w=600') + ' 600w, ' +
-                           url.replace(/\?w=\d+/, '?w=900') + ' 900w';
+            const srcset = this.srcVariant(url, 300) + ' 300w, ' +
+                           this.srcVariant(url, 600) + ' 600w, ' +
+                           this.srcVariant(url, 900) + ' 900w';
             return `
                 <div class="gallery-item fade-in${isWide ? ' wide' : ''}">
-                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${this.sanitize(item.caption)}" loading="lazy">
+                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${this.sanitize(item.caption)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}">
                     <div class="gallery-label">${this.sanitize(item.caption)}</div>
                 </div>
             `;
@@ -504,6 +548,9 @@ const VF = {
 
         // Fade-in
         this.observeFadeIns();
+
+        // Lightbox for gallery images
+        this.initLightbox();
 
         // Referral attribution (fetch rep name, show banner)
         await this.resolveReferral();

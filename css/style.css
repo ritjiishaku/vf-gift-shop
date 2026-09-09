@@ -14,7 +14,8 @@
     --shadow: 0 4px 30px rgba(0,0,0,0.08);
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+html:has(body.has-referral) { scroll-padding-top: 124px; }
 
 body {
     font-family: 'Inter', sans-serif;
@@ -205,6 +206,12 @@ section { padding: 100px 24px; }
     color: var(--text-light);
     font-size: 0.9rem;
     line-height: 1.6;
+}
+.product-card .product-price {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 8px;
 }
 
 /* ── GALLERY ── */
@@ -443,6 +450,29 @@ footer {
     color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px;
 }
 .footer-rep a:hover { color: var(--gold); }
+
+/* ── LIGHTBOX ── */
+.lightbox {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.92);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; cursor: zoom-out;
+}
+.lightbox img {
+    max-width: 92vw; max-height: 78vh; object-fit: contain;
+}
+.lightbox-caption {
+    color: var(--white); margin-top: 16px; padding: 0 24px;
+    font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;
+    text-align: center;
+}
+.lightbox-close {
+    position: absolute; top: 16px; right: 22px;
+    background: none; border: none; color: var(--white);
+    font-size: 2.6rem; line-height: 1; cursor: pointer;
+    transition: color 0.3s;
+}
+.lightbox-close:hover { color: var(--gold); }
 
 /* ── SALES REP PAGE ── */
 .hidden { display: none !important; }

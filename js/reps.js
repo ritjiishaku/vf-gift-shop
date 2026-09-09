@@ -69,13 +69,17 @@ const RepTools = {
             .sort((a, b) => (parseInt(a.display_order) || 999) - (parseInt(b.display_order) || 999));
     },
 
+    isActive(row) {
+        if (!row) return false;
+        const raw = row.is_active != null && row.is_active !== '' ? row.is_active : row.is_visible;
+        const v = String(raw || '').toLowerCase();
+        return v !== 'false' && v !== '0';
+    },
+
     findRep(repId, reps) {
         const key = String(repId || '').trim().toLowerCase();
         if (!key) return null;
-        return reps.find(r => {
-            if (String(r.is_visible || '').toLowerCase() === 'false' || r.is_visible === '0') return false;
-            return String(r.rep_id || '').trim().toLowerCase() === key;
-        }) || null;
+        return reps.find(r => this.isActive(r) && String(r.rep_id || '').trim().toLowerCase() === key) || null;
     },
 
     shareLink(pid, ref) {
@@ -107,8 +111,10 @@ const RepTools = {
         document.getElementById('rep-login').classList.add('hidden');
         document.getElementById('rep-dashboard').classList.remove('hidden');
         document.getElementById('rep-name').textContent = this._rep.name;
-        const rate = parseInt(this._rep.rate, 10);
-        document.getElementById('rep-rate').textContent = (rate || rate === 0) ? rate + '%' : this._rep.rate + '%';
+        const rawRate = String(this._rep.rate || '').trim();
+        const parsed = parseInt(rawRate, 10);
+        const rateText = Number.isFinite(parsed) ? parsed + '%' : (rawRate.endsWith('%') ? rawRate : rawRate + '%');
+        document.getElementById('rep-rate').textContent = rateText;
         this.loadAndRender();
     },
 
@@ -131,11 +137,12 @@ const RepTools = {
             const pid = p.display_order || (i + 1);
             const link = this.shareLink(pid, this._rep.rep_id);
             const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
+            const price = p.price_from ? ` · From ${this.sanitize(p.price_from)}` : '';
             return `
                 <div class="rep-product">
                     <div class="rep-product-info">
                         <h4>${this.sanitize(p.name)}</h4>
-                        <p>${this.sanitize(p.description)}</p>
+                        <p>${this.sanitize(p.description)}${price}</p>
                     </div>
                     <div class="rep-product-actions">
                         <input type="text" readonly value="${this.sanitize(link)}" aria-label="Share link for ${this.sanitize(p.name)}">
@@ -146,18 +153,6 @@ const RepTools = {
                 </div>
             `;
         }).join('');
-
-        container.addEventListener('click', (e) => {
-            const copyBtn = e.target.closest('[data-copy]');
-            if (copyBtn) {
-                this.copyText(copyBtn.getAttribute('data-copy'), copyBtn);
-                return;
-            }
-            const shareBtn = e.target.closest('[data-share]');
-            if (shareBtn) {
-                navigator.share({ title: 'Gifts by VF', url: shareBtn.getAttribute('data-share') }).catch(() => {});
-            }
-        });
     },
 
     copyText(text, btn) {
@@ -231,6 +226,17 @@ const RepTools = {
         document.getElementById('rep-logout').addEventListener('click', () => {
             sessionStorage.removeItem(this._sessionKey);
             location.reload();
+        });
+        document.getElementById('rep-products').addEventListener('click', (e) => {
+            const copyBtn = e.target.closest('[data-copy]');
+            if (copyBtn) {
+                this.copyText(copyBtn.getAttribute('data-copy'), copyBtn);
+                return;
+            }
+            const shareBtn = e.target.closest('[data-share]');
+            if (shareBtn) {
+                navigator.share({ title: 'Gifts by VF', url: shareBtn.getAttribute('data-share') }).catch(() => {});
+            }
         });
         const saved = sessionStorage.getItem(this._sessionKey);
         if (saved) {
