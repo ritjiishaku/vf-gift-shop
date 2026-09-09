@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Rep Tools — Gifts by VF</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="rep-header">
+    <a href="index.html" class="nav-logo"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></a>
+    <span class="rep-tag">Sales Rep Tools</span>
+</header>
+
+<!-- LOGIN -->
+<section id="rep-login" class="rep-section">
+    <h2>Sales Rep Login</h2>
+    <p class="rep-hint">Enter the rep code the owner gave you (e.g. <strong>kofi</strong>). You'll get your share links and commission status.</p>
+    <form id="rep-form" class="rep-form">
+        <input type="text" id="rep-input" placeholder="Your rep code" autocomplete="off">
+        <button type="submit" class="rep-btn">Continue</button>
+    </form>
+    <p id="rep-error" class="rep-error hidden"></p>
+</section>
+
+<!-- DASHBOARD -->
+<section id="rep-dashboard" class="rep-section hidden">
+    <h2>Hi, <span id="rep-name"></span></h2>
+    <p class="rep-hint">Your commission rate: <strong id="rep-rate"></strong></p>
+
+    <h3>Your Product Links</h3>
+    <p class="rep-hint">Copy a link and share it on WhatsApp, Instagram, or Facebook. When a buyer clicks it and orders, you earn commission.</p>
+    <div id="rep-products"></div>
+
+    <h3>Your Commissions</h3>
+    <p id="rep-payout-summary" class="rep-hint hidden"></p>
+    <table id="rep-payouts" class="rep-table">
+        <thead>
+            <tr><th>Product</th><th>Order Amount</th><th>Commission</th><th>Status</th><th>Date</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button id="rep-logout" class="rep-btn rep-btn-ghost">Start over</button>
+</section>
+
+<script src="js/reps.js"></script>
+
+</body>
+</html>

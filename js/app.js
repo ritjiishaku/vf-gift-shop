@@ -16,7 +16,9 @@ const VF = {
         PORTFOLIO: 'Portfolio',
         TESTIMONIALS: 'Testimonials',
         WHY: 'Why Us',
-        STEPS: 'How to Order'
+        STEPS: 'How to Order',
+        REPS: 'Sales Reps',
+        PAYOUTS: 'Payouts'
     },
 
     // ── Fallback text (used when a setting is missing from the sheet) ──
@@ -198,6 +200,57 @@ const VF = {
         container.appendChild(el);
     },
 
+    getReferral() {
+        try {
+            const raw = localStorage.getItem('vf_referral');
+            if (!raw) return null;
+            const ref = JSON.parse(raw);
+            const maxAge = 30 * 24 * 60 * 60 * 1000;
+            if (!ref || !ref.rep_id || Date.now() - ref.arrive_at > maxAge) {
+                localStorage.removeItem('vf_referral');
+                return null;
+            }
+            return ref;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    async resolveReferral() {
+        this._referral = null;
+        const stored = this.getReferral();
+        if (!stored) return;
+        let name = stored.rep_id;
+        try {
+            const reps = await this.fetchTab(this.TABS.REPS);
+            const rep = reps.find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
+            if (rep && String(rep.is_visible || '').toLowerCase() !== 'false' && rep.is_visible !== '0') {
+                name = rep.name || stored.rep_id;
+            }
+        } catch (e) { /* fall back to rep id */ }
+        this._referral = { rep_id: stored.rep_id, name };
+        this.showReferralBanner();
+    },
+
+    showReferralBanner() {
+        const banner = document.getElementById('referral-banner');
+        if (!banner || !this._referral) return;
+        banner.textContent = `You were referred by ${this._referral.name}`;
+        banner.classList.add('visible');
+    },
+
+    orderMessage(productName) {
+        let msg = productName
+            ? `Hello! I'd like to order ${productName}.`
+            : 'Hello! I would love to place an order with Gifts by VF.';
+        if (this._referral) msg += ` I was referred by ${this._referral.name}.`;
+        return encodeURIComponent(msg);
+    },
+
+    waLink(productName) {
+        return `https://wa.me/${this._waNumber}?text=${this.orderMessage(productName)}`;
+    },
+
     // ══════════════════════════════════════════════════════
     //  SITE SETTINGS (all headings + text)
     // ══════════════════════════════════════════════════════
@@ -221,9 +274,9 @@ const VF = {
 
         // WhatsApp link
         if (settings.whatsapp_number) {
-            const clean = settings.whatsapp_number.replace(/[^0-9]/g, '');
-            const waLink = document.getElementById('whatsapp-link');
-            if (waLink) waLink.href = `https://wa.me/${clean}`;
+            this._waNumber = settings.whatsapp_number.replace(/[^0-9]/g, '');
+            const waEl = document.getElementById('whatsapp-link');
+            if (waEl) waEl.href = this.waLink();
         }
 
         // Hero
@@ -277,11 +330,12 @@ const VF = {
             return;
         }
 
-        container.innerHTML = items.map(p => `
-            <div class="product-card fade-in">
+        container.innerHTML = items.map((p, i) => `
+            <div class="product-card fade-in" id="product-${this.sanitize(p.display_order || i + 1)}">
                 <div class="product-icon">${this.icon(p.icon)}</div>
                 <h3>${this.sanitize(p.name)}</h3>
                 <p>${this.sanitize(p.description)}</p>
+                <a href="${this.waLink(p.name)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">Order on WhatsApp</a>
             </div>
         `).join('');
 
@@ -409,6 +463,21 @@ const VF = {
     //  INIT
     // ══════════════════════════════════════════════════════
     async init() {
+        // Defaults / state
+        this._waNumber = this.DEFAULTS.whatsapp_number;
+        this._referral = null;
+
+        // Read ?ref and ?p from rep share links
+        const params = new URLSearchParams(window.location.search);
+        const refParam = params.get('ref');
+        if (refParam) {
+            const cleanRef = String(refParam).replace(/[^a-z0-9_-]/gi, '').toLowerCase().slice(0, 30);
+            if (cleanRef) {
+                localStorage.setItem('vf_referral', JSON.stringify({ rep_id: cleanRef, arrive_at: Date.now() }));
+            }
+        }
+        const productParam = params.get('p');
+
         // Nav
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
@@ -436,6 +505,9 @@ const VF = {
         // Fade-in
         this.observeFadeIns();
 
+        // Referral attribution (fetch rep name, show banner)
+        await this.resolveReferral();
+
         // Fetch everything from Google Sheet (in parallel)
         await Promise.all([
             this.applySiteSettings(),
@@ -445,6 +517,18 @@ const VF = {
             this.renderWhyUs(),
             this.renderSteps()
         ]);
+
+        // Scroll to the referred product if the link included &p=
+        if (productParam) {
+            const target = document.getElementById('product-' + this.sanitize(productParam));
+            if (target) {
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.classList.add('highlighted');
+                    setTimeout(() => target.classList.remove('highlighted'), 2500);
+                }, 400);
+            }
+        }
     }
 };
 
