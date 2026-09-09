@@ -90,6 +90,15 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
     display: block; width: 24px; height: 2px;
     background: var(--dark); transition: 0.3s;
 }
+.hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
 
 /* ── HERO ── */
 .hero {

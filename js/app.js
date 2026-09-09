@@ -72,7 +72,7 @@ const VF = {
         const lines = text.split('\n').filter(line => line.trim());
         if (lines.length < 2) return [];
 
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
+        const headers = this.parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
         const rows = [];
 
         for (let i = 1; i < lines.length; i++) {
@@ -118,13 +118,16 @@ const VF = {
     //  FETCH FROM GOOGLE SHEET
     // ══════════════════════════════════════════════════════
     async fetchTab(tabName) {
+        if (this._cache[tabName]) return this._cache[tabName];
         if (this.SHEET_ID === 'YOUR_SHEET_ID') return [];
         try {
             const url = `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
             const text = await response.text();
-            return this.parseCSV(text);
+            const result = this.parseCSV(text);
+            this._cache[tabName] = result;
+            return result;
         } catch (err) {
             console.warn(`Could not fetch tab "${tabName}":`, err.message);
             return [];
@@ -138,6 +141,12 @@ const VF = {
         const div = document.createElement('div');
         div.textContent = String(str == null ? '' : str);
         return div.innerHTML;
+    },
+
+    validateUrl(str) {
+        const s = String(str || '').trim();
+        if (/^https?:\/\//i.test(s)) return s;
+        return '';
     },
 
     icon(name) {
@@ -165,6 +174,7 @@ const VF = {
     },
 
     _fadeObserver: null,
+    _cache: {},
 
     observeFadeIns() {
         if (!this._fadeObserver) {
@@ -175,6 +185,17 @@ const VF = {
             }, { threshold: 0.1 });
         }
         document.querySelectorAll('.fade-in:not(.visible)').forEach(el => this._fadeObserver.observe(el));
+    },
+
+    showError(containerId, message) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const existing = container.querySelector('.empty-state');
+        if (existing) return;
+        const el = document.createElement('div');
+        el.className = 'empty-state';
+        el.textContent = message;
+        container.appendChild(el);
     },
 
     // ══════════════════════════════════════════════════════
@@ -251,7 +272,10 @@ const VF = {
         if (!container) return;
 
         const items = this.filterAndSort(await this.fetchTab(this.TABS.PRODUCTS));
-        if (items.length === 0) return;
+        if (items.length === 0) {
+            this.showError('products-grid', 'Could not load latest products. Showing cached content.');
+            return;
+        }
 
         container.innerHTML = items.map(p => `
             <div class="product-card fade-in">
@@ -272,17 +296,25 @@ const VF = {
         if (!container) return;
 
         const items = this.filterAndSort(await this.fetchTab(this.TABS.PORTFOLIO));
-        if (items.length === 0) return;
+        if (items.length === 0) {
+            this.showError('gallery-grid', 'Could not load portfolio. Showing cached content.');
+            return;
+        }
 
-        container.innerHTML = items.map((item, i) => {
-            const isWide = i % 5 === 0;
+        container.innerHTML = items.map(item => {
+            const url = this.validateUrl(item.image_url);
+            if (!url) return '';
+            const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
+            const srcset = url.replace(/\?w=\d+/, '?w=300') + ' 300w, ' +
+                           url.replace(/\?w=\d+/, '?w=600') + ' 600w, ' +
+                           url.replace(/\?w=\d+/, '?w=900') + ' 900w';
             return `
                 <div class="gallery-item fade-in${isWide ? ' wide' : ''}">
-                    <img src="${this.sanitize(item.image_url)}" alt="${this.sanitize(item.caption)}" loading="lazy">
+                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${this.sanitize(item.caption)}" loading="lazy">
                     <div class="gallery-label">${this.sanitize(item.caption)}</div>
                 </div>
             `;
-        }).join('');
+        }).filter(Boolean).join('');
 
         this.observeFadeIns();
     },
@@ -295,9 +327,12 @@ const VF = {
         if (!container) return;
 
         const items = this.filterAndSort(await this.fetchTab(this.TABS.TESTIMONIALS));
-        if (items.length === 0) return;
+        if (items.length === 0) {
+            this.showError('testimonials-grid', 'Could not load reviews. Showing cached content.');
+            return;
+        }
 
-        const starSVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+        const starSVG = this.icon('star');
 
         container.innerHTML = items.map(item => {
             const rating = Math.max(1, Math.min(5, parseInt(item.rating) || 5));
@@ -330,7 +365,10 @@ const VF = {
         if (!container) return;
 
         const items = this.filterAndSort(await this.fetchTab(this.TABS.WHY));
-        if (items.length === 0) return;
+        if (items.length === 0) {
+            this.showError('why-grid', 'Could not load content. Showing cached content.');
+            return;
+        }
 
         container.innerHTML = items.map(w => `
             <div class="why-item fade-in">
@@ -351,7 +389,10 @@ const VF = {
         if (!container) return;
 
         const items = this.filterAndSort(await this.fetchTab(this.TABS.STEPS));
-        if (items.length === 0) return;
+        if (items.length === 0) {
+            this.showError('steps', 'Could not load steps. Showing cached content.');
+            return;
+        }
 
         container.innerHTML = items.map((s, i) => `
             <div class="step fade-in">
@@ -372,9 +413,15 @@ const VF = {
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
             document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => navLinks.classList.remove('active'));
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
             });
         }
 
