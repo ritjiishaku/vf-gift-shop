@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Gifts by VF</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="rep-header">
+    <a href="index.html" class="nav-logo"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></a>
+    <span class="rep-tag">Owner Admin</span>
+</header>
+
+<section class="admin-section">
+    <h2>Add Content</h2>
+    <p class="admin-intro">Use the Google Forms below to add new items. Each submission is added to the site's Google Sheet and appears on the store automatically.</p>
+
+    <div class="admin-cards" id="admin-cards">
+        <a class="admin-card" id="form-products" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon">&#9998;</div>
+            <h3>Add a Product</h3>
+            <p>New item for "What We Make" — jewelry, acrylic, or custom gifts.</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-portfolio" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon">&#128247;</div>
+            <h3>Add to Portfolio</h3>
+            <p>Add a photo of a finished piece to the "Things We've Made" gallery.</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-testimonials" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon">&#128172;</div>
+            <h3>Add a Review</h3>
+            <p>Add a customer review to "What People Say".</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+    </div>
+
+    <div class="admin-note" id="admin-note" hidden>
+        <strong>Form links not set up yet.</strong>
+        Open this file (<code>admin.html</code>) and paste your Google Form URLs into the <code>FORM_LINKS</code> block near the bottom.
+    </div>
+</section>
+
+<section class="admin-section">
+    <h2>Column Reference</h2>
+    <p class="admin-intro">When you create each Google Form, name the questions <em>exactly</em> as shown below so they land in the right columns of your sheet.</p>
+
+    <div class="admin-colgroup">
+        <h3>Products</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>Product Name</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Description</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>Image URL</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Category</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Price</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>Price From</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>Icon</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
+                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>Portfolio</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>Image URL</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Caption</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
+                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>Testimonials</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>Quote</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>Customer Name</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>Rating</td><td>Dropdown (1 &ndash; 5)</td><td>Yes</td></tr>
+                <tr><td>Source</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
+                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="admin-section">
+    <h2>Setup Guide</h2>
+    <div class="admin-steps">
+        <ol>
+            <li>In Google Forms, create a new form for each of the three sections.</li>
+            <li>Add the questions exactly as listed in the tables above.</li>
+            <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>.</li>
+            <li>Pick your VF Gift Shop Google Sheet, then choose the matching tab (<code>Products</code>, <code>Portfolio</code>, or <code>Testimonials</code>).</li>
+            <li>Make sure the response columns line up with your existing headers. The site reads these columns: <code>name</code>, <code>description</code>, <code>image_url</code>, <code>category</code>, <code>price</code>, <code>price_from</code>, <code>icon</code>, <code>display_order</code>, <code>is_visible</code> (Products); <code>image_url</code>, <code>caption</code>, <code>display_order</code>, <code>is_visible</code> (Portfolio); <code>quote</code>, <code>name</code>, <code>rating</code>, <code>source</code>, <code>display_order</code>, <code>is_visible</code> (Testimonials).</li>
+            <li>Copy each form's share link and paste it into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>.</li>
+        </ol>
+        <p class="admin-tip"><strong>Tip:</strong> If a response form creates a new sheet with its own headers, you can also link it directly and the site will still work — just make sure the header names match. To keep everything in one place, use "Select existing spreadsheet" and point at the correct tab.</p>
+    </div>
+</section>
+
+<footer>
+    <span id="footer-text">Gifts by VF &middot; Owner area</span>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  PASTE YOUR GOOGLE FORM LINKS HERE
+//  Replace each '' with the share URL of your form, e.g.
+//  'https://docs.google.com/forms/d/e/XXXX/viewform'
+// ══════════════════════════════════════════════════════
+const FORM_LINKS = {
+    products: '',
+    portfolio: '',
+    testimonials: ''
+};
+</script>
+<script>
+(function () {
+    const ids = { products: 'form-products', portfolio: 'form-portfolio', testimonials: 'form-testimonials' };
+    let anySet = false;
+    Object.keys(ids).forEach(key => {
+        const el = document.getElementById(ids[key]);
+        const url = FORM_LINKS[key];
+        if (el && url) {
+            el.href = url;
+            anySet = true;
+        }
+    });
+    if (!anySet) {
+        document.getElementById('admin-note').hidden = false;
+    }
+})();
+</script>
+
+</body>
+</html>
