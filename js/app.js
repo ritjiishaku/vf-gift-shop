@@ -2,14 +2,6 @@
 // All content is editable from a Google Sheet (no code changes needed).
 
 const VF = {
-    // ══════════════════════════════════════════════════════
-    //  CONFIGURATION
-    //  Replace YOUR_SHEET_ID with the ID from your Google Sheet URL
-    //  e.g. https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit
-    // ══════════════════════════════════════════════════════
-    SHEET_ID: '1N3_A0mPYkbTZ1ZeC3b_-KdrgV84jPRfyfYwEqzIwNB4',
-
-    // Tab names (must match your Google Sheet tab names exactly)
     TABS: {
         SETTINGS: 'Site Settings',
         PRODUCTS: 'Products',
@@ -21,7 +13,6 @@ const VF = {
         PAYOUTS: 'Payouts'
     },
 
-    // ── Fallback text (used when a setting is missing from the sheet) ──
     DEFAULTS: {
         whatsapp_number: '2348127252004',
         site_title: 'Gifts by VF — Customized Jewelry & Acrylic Pieces',
@@ -51,16 +42,14 @@ const VF = {
         footer_text: `© ${new Date().getFullYear()} Gifts by VF. Handcrafted with love.`
     },
 
-    // ── WhatsApp icon used on the product order buttons ──
-    WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+    WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>',
 
-    // ── Icon keys the owner can use in the "icon" column ──
     ICONS: {
         jewelry: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
         acrylic: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
         gift: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>',
         corporate: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>',
-        star: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
+        star: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-star"/></svg>',
         target: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h4V7h2v4h4v2h-4v4h-2v-4H7z"/></svg>',
         chat: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>',
         truck: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.9 5.1H17V9.5h2.5m0-2H17c-1.1 0-2 .9-2 2v8h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-3.5l-2.5-6.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM8 9.5v6H4.5L2 17V4.5C2 3.67 2.67 3 3.5 3h9c.83 0 1.5.67 1.5 1.5V9.5H8z"/></svg>',
@@ -70,110 +59,16 @@ const VF = {
         sparkle: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2zm8 12l.9 2.9L24 18l-3.1.9L20 22l-.9-3.1L16 18l3.1-1.1L20 14zM4 15l.7 2.2L7 18l-2.3.8L4 21l-.7-2.2L1 18l2.3-.8L4 15z"/></svg>'
     },
 
-    // ══════════════════════════════════════════════════════
-    //  CSV PARSER
-    // ══════════════════════════════════════════════════════
-    parseCSV(text) {
-        const lines = text.split('\n').filter(line => line.trim());
-        if (lines.length < 2) return [];
+    _cache: {},
+    _fadeObserver: null,
 
-        const headers = this.parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
-        const rows = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            const values = this.parseCSVLine(lines[i]);
-            if (values.length < headers.length) continue;
-
-            const row = {};
-            headers.forEach((header, index) => {
-                row[header] = values[index]?.trim() || '';
-            });
-            rows.push(row);
-        }
-
-        return rows;
-    },
-
-    parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                if (inQuotes && line[i + 1] === '"') {
-                    current += '"';
-                    i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-            } else if (char === ',' && !inQuotes) {
-                result.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        result.push(current);
-        return result;
-    },
-
-    // ══════════════════════════════════════════════════════
-    //  FETCH FROM GOOGLE SHEET
-    // ══════════════════════════════════════════════════════
     async fetchTab(tabName) {
-        if (this._cache[tabName]) return this._cache[tabName];
-        if (this.SHEET_ID === 'YOUR_SHEET_ID') return [];
-        try {
-            const url = `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
-            const text = await response.text();
-            const result = this.parseCSV(text);
-            this._cache[tabName] = result;
-            return result;
-        } catch (err) {
-            console.warn(`Could not fetch tab "${tabName}":`, err.message);
-            return [];
-        }
-    },
-
-    // ══════════════════════════════════════════════════════
-    //  UTILITIES
-    // ══════════════════════════════════════════════════════
-    sanitize(str) {
-        const div = document.createElement('div');
-        div.textContent = String(str == null ? '' : str);
-        return div.innerHTML;
-    },
-
-    validateUrl(str) {
-        const s = String(str || '').trim();
-        if (/^https?:\/\//i.test(s)) return s;
-        return '';
-    },
-
-    srcVariant(url, width) {
-        const u = String(url || '');
-        if (/[?&]w=\d+/i.test(u)) return u.replace(/([?&])w=\d+/i, `$1w=${width}`);
-        return u + (u.includes('?') ? '&' : '?') + `w=${width}`;
-    },
-
-    repIsActive(row) {
-        if (!row) return false;
-        const raw = row.is_active != null && row.is_active !== '' ? row.is_active : row.is_visible;
-        const v = String(raw || '').toLowerCase();
-        return v !== 'false' && v !== '0';
+        return VFUtils.fetchTab(tabName, VFUtils.SHEET_ID, this._cache);
     },
 
     icon(name) {
         const key = String(name || '').trim().toLowerCase();
-        if (!this.ICONS[key]) {
-            if (key) console.warn(`Unknown icon key "${key}" — using default star.`);
-            return this.ICONS.star;
-        }
-        return this.ICONS[key];
+        return this.ICONS[key] || this.ICONS.star;
     },
 
     setText(id, value) {
@@ -181,18 +76,6 @@ const VF = {
         const el = document.getElementById(id);
         if (el) el.textContent = value;
     },
-
-    filterAndSort(rows) {
-        return rows
-            .filter(r => {
-                const v = String(r.is_visible || '').toLowerCase();
-                return v !== 'false' && v !== '0';
-            })
-            .sort((a, b) => (parseInt(a.display_order) || 999) - (parseInt(b.display_order) || 999));
-    },
-
-    _fadeObserver: null,
-    _cache: {},
 
     observeFadeIns() {
         if (!this._fadeObserver) {
@@ -208,8 +91,7 @@ const VF = {
     showError(containerId, message) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        const existing = container.querySelector('.empty-state');
-        if (existing) return;
+        if (container.querySelector('.empty-state')) return;
         const el = document.createElement('div');
         el.className = 'empty-state';
         el.textContent = message;
@@ -277,7 +159,7 @@ const VF = {
         try {
             const reps = await this.fetchTab(this.TABS.REPS);
             const rep = reps.find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
-            if (rep && this.repIsActive(rep)) {
+            if (rep && VFUtils.isActive(rep)) {
                 name = rep.name || stored.rep_id;
             }
         } catch (e) { /* fall back to rep id */ }
@@ -305,8 +187,14 @@ const VF = {
         return `https://wa.me/${this._waNumber}?text=${this.orderMessage(productName, price)}`;
     },
 
+    srcVariant(url, width) {
+        const u = String(url || '');
+        if (/[?&]w=\d+/i.test(u)) return u.replace(/([?&])w=\d+/i, `$1w=${width}`);
+        return u + (u.includes('?') ? '&' : '?') + `w=${width}`;
+    },
+
     // ══════════════════════════════════════════════════════
-    //  SITE SETTINGS (all headings + text)
+    //  SITE SETTINGS
     // ══════════════════════════════════════════════════════
     async applySiteSettings() {
         const rows = await this.fetchTab(this.TABS.SETTINGS);
@@ -315,59 +203,41 @@ const VF = {
             if (row.key && row.value) settings[row.key] = row.value;
         });
 
-        // Brand name (nav logo + hero) with gold accent letter
         const brandName = settings.brand_name || '';
         const brandAccent = settings.brand_accent || '';
         document.querySelectorAll('.brand-text').forEach(el => (el.textContent = brandName));
         document.querySelectorAll('.brand-accent').forEach(el => (el.textContent = brandAccent));
 
-        // Browser tab title (social crawlers read static HTML meta, not JS)
         if (settings.site_title) {
             document.title = settings.site_title;
         }
 
-        // WhatsApp link
         if (settings.whatsapp_number) {
             this._waNumber = settings.whatsapp_number.replace(/[^0-9]/g, '');
             const waEl = document.getElementById('whatsapp-link');
             if (waEl) waEl.href = this.waLink();
         }
 
-        // Hero
         this.setText('hero-subtitle', settings.hero_subtitle);
         this.setText('hero-button', settings.hero_button_text);
-
-        // Products heading
         this.setText('products-label', settings.products_label);
         this.setText('products-title', settings.products_title);
         this.setText('products-desc', settings.products_desc);
-
-        // Portfolio heading
         this.setText('portfolio-label', settings.portfolio_label);
         this.setText('portfolio-title', settings.portfolio_title);
         this.setText('portfolio-desc', settings.portfolio_desc);
-
-        // Testimonials heading
         this.setText('testimonials-label', settings.testimonials_label);
         this.setText('testimonials-title', settings.testimonials_title);
         this.setText('testimonials-desc', settings.testimonials_desc);
-
-        // Why Us heading
         this.setText('why-label', settings.why_label);
         this.setText('why-title', settings.why_title);
         this.setText('why-desc', settings.why_desc);
-
-        // How to Order heading
         this.setText('order-label', settings.order_label);
         this.setText('order-title', settings.order_title);
         this.setText('order-desc', settings.order_desc);
-
-        // CTA
         this.setText('cta-title', settings.cta_title);
         this.setText('cta-desc', settings.cta_desc);
         this.setText('cta-button', settings.cta_button_text);
-
-        // Footer
         this.setText('footer-text', settings.footer_text);
     },
 
@@ -378,7 +248,7 @@ const VF = {
         const container = document.getElementById('products-grid');
         if (!container) return;
 
-        const items = this.filterAndSort(await this.fetchTab(this.TABS.PRODUCTS));
+        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PRODUCTS));
         if (items.length === 0) {
             this.showError('products-grid', 'Could not load latest products. Showing cached content.');
             return;
@@ -399,7 +269,7 @@ const VF = {
         });
         const pills = ['All', ...cats].map(c => {
             const key = c === 'All' ? 'all' : c.toLowerCase();
-            return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${this.sanitize(key)}">${this.sanitize(c)}</button>`;
+            return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${VFUtils.sanitize(key)}">${VFUtils.sanitize(c)}</button>`;
         }).join('');
         bar.innerHTML = pills;
     },
@@ -441,26 +311,26 @@ const VF = {
     },
 
     productCardHTML(p, pid) {
-        const url = this.validateUrl(p.image_url);
+        const url = VFUtils.validateUrl(p.image_url);
         const srcset = url
             ? this.srcVariant(url, 300) + ' 300w, ' + this.srcVariant(url, 600) + ' 600w, ' + this.srcVariant(url, 900) + ' 900w'
             : '';
         const price = p.price || p.price_from || '';
         const category = String(p.category || '').trim() || 'Custom';
         const img = url
-            ? `<img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${this.sanitize(p.name)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
+            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
             : '';
         return `
-            <div class="product-card fade-in" id="product-${this.sanitize(pid)}">
+            <div class="product-card fade-in" id="product-${VFUtils.sanitize(pid)}">
                 <div class="product-img${url ? '' : ' no-image'}">
                     ${img}
                     <div class="product-icon-fallback">${this.icon(p.icon || category.toLowerCase())}</div>
-                    <span class="product-badge">${this.sanitize(category)}</span>
-                    ${price ? `<span class="product-pricetag">From ${this.sanitize(price)}</span>` : ''}
+                    <span class="product-badge">${VFUtils.sanitize(category)}</span>
+                    ${price ? `<span class="product-pricetag">From ${VFUtils.sanitize(price)}</span>` : ''}
                 </div>
                 <div class="product-body">
-                    <h3>${this.sanitize(p.name)}</h3>
-                    <p>${this.sanitize(p.description)}</p>
+                    <h3>${VFUtils.sanitize(p.name)}</h3>
+                    <p>${VFUtils.sanitize(p.description)}</p>
                     <a href="${this.waLink(p.name, price)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">
                         ${this.WA_ICON}
                         <span>Order on WhatsApp</span>
@@ -477,22 +347,22 @@ const VF = {
         const container = document.getElementById('gallery-grid');
         if (!container) return;
 
-        const items = this.filterAndSort(await this.fetchTab(this.TABS.PORTFOLIO));
+        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PORTFOLIO));
         if (items.length === 0) {
             this.showError('gallery-grid', 'Could not load portfolio. Showing cached content.');
             return;
         }
 
         container.innerHTML = items.map(item => {
-            const url = this.validateUrl(item.image_url);
+            const url = VFUtils.validateUrl(item.image_url);
             if (!url) return '';
             const srcset = this.srcVariant(url, 300) + ' 300w, ' +
                            this.srcVariant(url, 600) + ' 600w, ' +
                            this.srcVariant(url, 900) + ' 900w';
             return `
                 <div class="gallery-item fade-in">
-                    <img src="${this.sanitize(url)}" srcset="${this.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${this.sanitize(item.caption)}" loading="lazy" data-full="${this.sanitize(this.srcVariant(url, 1200))}">
-                    <div class="gallery-label">${this.sanitize(item.caption)}</div>
+                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200))}">
+                    <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>
             `;
         }).filter(Boolean).join('');
@@ -507,7 +377,7 @@ const VF = {
         const container = document.getElementById('testimonials-grid');
         if (!container) return;
 
-        const items = this.filterAndSort(await this.fetchTab(this.TABS.TESTIMONIALS));
+        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.TESTIMONIALS));
         if (items.length === 0) {
             this.showError('testimonials-grid', 'Could not load reviews. Showing cached content.');
             return;
@@ -523,12 +393,12 @@ const VF = {
             return `
                 <div class="testimonial-card fade-in">
                     <div class="star-rating">${stars}</div>
-                    <p class="testimonial-text">"${this.sanitize(item.quote)}"</p>
+                    <p class="testimonial-text">"${VFUtils.sanitize(item.quote)}"</p>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">${this.sanitize(initials)}</div>
+                        <div class="testimonial-avatar">${VFUtils.sanitize(initials)}</div>
                         <div>
-                            <div class="testimonial-name">${this.sanitize(item.name)}</div>
-                            <div class="testimonial-source">${this.sanitize(item.source)}</div>
+                            <div class="testimonial-name">${VFUtils.sanitize(item.name)}</div>
+                            <div class="testimonial-source">${VFUtils.sanitize(item.source)}</div>
                         </div>
                     </div>
                 </div>
@@ -545,7 +415,7 @@ const VF = {
         const container = document.getElementById('why-grid');
         if (!container) return;
 
-        const items = this.filterAndSort(await this.fetchTab(this.TABS.WHY));
+        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.WHY));
         if (items.length === 0) {
             this.showError('why-grid', 'Could not load content. Showing cached content.');
             return;
@@ -554,8 +424,8 @@ const VF = {
         container.innerHTML = items.map(w => `
             <div class="why-item fade-in">
                 <div class="why-icon">${this.icon(w.icon)}</div>
-                <h4>${this.sanitize(w.title)}</h4>
-                <p>${this.sanitize(w.description)}</p>
+                <h4>${VFUtils.sanitize(w.title)}</h4>
+                <p>${VFUtils.sanitize(w.description)}</p>
             </div>
         `).join('');
 
@@ -569,7 +439,7 @@ const VF = {
         const container = document.getElementById('steps');
         if (!container) return;
 
-        const items = this.filterAndSort(await this.fetchTab(this.TABS.STEPS));
+        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.STEPS));
         if (items.length === 0) {
             this.showError('steps', 'Could not load steps. Showing cached content.');
             return;
@@ -578,8 +448,8 @@ const VF = {
         container.innerHTML = items.map((s, i) => `
             <div class="step fade-in">
                 <div class="step-number">${i + 1}</div>
-                <h4>${this.sanitize(s.title)}</h4>
-                <p>${this.sanitize(s.description)}</p>
+                <h4>${VFUtils.sanitize(s.title)}</h4>
+                <p>${VFUtils.sanitize(s.description)}</p>
             </div>
         `).join('');
 
@@ -590,14 +460,12 @@ const VF = {
     //  INIT
     // ══════════════════════════════════════════════════════
     async init() {
-        // Defaults / state
         this._waNumber = this.DEFAULTS.whatsapp_number;
         this._referral = null;
         this._products = null;
         this._activeCategory = 'all';
         this._searchQuery = '';
 
-        // Read ?ref and ?p from rep share links
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
         if (refParam) {
@@ -608,7 +476,6 @@ const VF = {
         }
         const productParam = params.get('p');
 
-        // Nav
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         if (hamburger && navLinks) {
@@ -630,20 +497,17 @@ const VF = {
                 });
             });
 
-            // Close on outside click
             document.addEventListener('click', (e) => {
                 if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
                     closeMenu();
                 }
             });
 
-            // Close on Escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeMenu();
             });
         }
 
-        // Nav shadow
         const navbar = document.getElementById('navbar');
         if (navbar) {
             window.addEventListener('scroll', () => {
@@ -651,13 +515,9 @@ const VF = {
             }, { passive: true });
         }
 
-        // Fade-in
         this.observeFadeIns();
-
-        // Lightbox for gallery + product images
         this.initLightbox();
 
-        // Catalogue search (instant text filter)
         const searchInput = document.getElementById('catalogue-search');
         if (searchInput) {
             searchInput.addEventListener('input', () => {
@@ -665,7 +525,7 @@ const VF = {
                 if (this._products) this.applyProductFilters();
             });
         }
-        // Catalogue category pills (delegated)
+
         const filterBar = document.getElementById('catalogue-filters');
         if (filterBar) {
             filterBar.addEventListener('click', (e) => {
@@ -677,10 +537,8 @@ const VF = {
             });
         }
 
-        // Referral attribution (fetch rep name, show banner)
         await this.resolveReferral();
 
-        // Fetch everything from Google Sheet (in parallel)
         await Promise.all([
             this.applySiteSettings(),
             this.renderProducts(),
@@ -690,11 +548,9 @@ const VF = {
             this.renderSteps()
         ]);
 
-        // Scroll to the referred product if the link included &p=
         if (productParam) {
-            // Reset filters so the target card is never hidden by an active filter/search
             if (this._products) this.clearProductFilters();
-            const target = document.getElementById('product-' + this.sanitize(productParam));
+            const target = document.getElementById('product-' + VFUtils.sanitize(productParam));
             if (target) {
                 setTimeout(() => {
                     target.scrollIntoView({ behavior: 'smooth', block: 'center' });

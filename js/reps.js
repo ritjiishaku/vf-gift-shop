@@ -2,90 +2,19 @@
 // Reads the same Google Sheet the site uses.
 
 const RepTools = {
-    SHEET_ID: '1N3_A0mPYkbTZ1ZeC3b_-KdrgV84jPRfyfYwEqzIwNB4',
     TABS: { REPS: 'Sales Reps', PRODUCTS: 'Products', PAYOUTS: 'Payouts' },
     _sessionKey: 'vf_rep_session',
     _cache: {},
     _rep: null,
 
-    parseCSV(text) {
-        const lines = text.split('\n').filter(line => line.trim());
-        if (lines.length < 2) return [];
-        const headers = this.parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
-        const rows = [];
-        for (let i = 1; i < lines.length; i++) {
-            const values = this.parseCSVLine(lines[i]);
-            if (values.length < headers.length) continue;
-            const row = {};
-            headers.forEach((header, index) => { row[header] = values[index]?.trim() || ''; });
-            rows.push(row);
-        }
-        return rows;
-    },
-
-    parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
-                else inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) { result.push(current); current = ''; }
-            else current += char;
-        }
-        result.push(current);
-        return result;
-    },
-
     async fetchTab(tabName) {
-        if (this._cache[tabName]) return this._cache[tabName];
-        try {
-            const url = `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
-            const result = this.parseCSV(await response.text());
-            this._cache[tabName] = result;
-            return result;
-        } catch (err) {
-            console.warn(`Could not fetch tab "${tabName}":`, err.message);
-            return [];
-        }
-    },
-
-    sanitize(str) {
-        const div = document.createElement('div');
-        div.textContent = String(str == null ? '' : str);
-        return div.innerHTML;
-    },
-
-    validateUrl(str) {
-        const s = String(str || '').trim();
-        if (/^https?:\/\//i.test(s)) return s;
-        return '';
-    },
-
-    filterAndSort(rows) {
-        return rows
-            .filter(r => {
-                const v = String(r.is_visible || '').toLowerCase();
-                return v !== 'false' && v !== '0';
-            })
-            .sort((a, b) => (parseInt(a.display_order) || 999) - (parseInt(b.display_order) || 999));
-    },
-
-    isActive(row) {
-        if (!row) return false;
-        const raw = row.is_active != null && row.is_active !== '' ? row.is_active : row.is_visible;
-        const v = String(raw || '').toLowerCase();
-        return v !== 'false' && v !== '0';
+        return VFUtils.fetchTab(tabName, VFUtils.SHEET_ID, this._cache);
     },
 
     findRep(repId, reps) {
         const key = String(repId || '').trim().toLowerCase();
         if (!key) return null;
-        return reps.find(r => this.isActive(r) && String(r.rep_id || '').trim().toLowerCase() === key) || null;
+        return reps.find(r => VFUtils.isActive(r) && String(r.rep_id || '').trim().toLowerCase() === key) || null;
     },
 
     shareLink(pid, ref) {
@@ -129,7 +58,7 @@ const RepTools = {
             this.fetchTab(this.TABS.PRODUCTS),
             this.fetchTab(this.TABS.PAYOUTS)
         ]);
-        this.renderProducts(this.filterAndSort(products));
+        this.renderProducts(VFUtils.filterAndSort(products));
         this.renderPayouts(payouts);
     },
 
@@ -144,23 +73,23 @@ const RepTools = {
             const link = this.shareLink(pid, this._rep.rep_id);
             const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
             const price = p.price || p.price_from || '';
-            const img = this.validateUrl(p.image_url);
+            const img = VFUtils.validateUrl(p.image_url);
             const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
             return `
                 <div class="rep-product">
                     <div class="rep-product-thumb${img ? '' : ' no-image'}">
-                        ${img ? `<img src="${this.sanitize(img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('no-image')">` : ''}
-                        <span class="rep-thumb-initial">${this.sanitize(initial)}</span>
+                        ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('no-image')">` : ''}
+                        <span class="rep-thumb-initial">${VFUtils.sanitize(initial)}</span>
                     </div>
                     <div class="rep-product-info">
-                        <h4>${this.sanitize(p.name)}</h4>
-                        <p>${this.sanitize(p.description)}${price ? ` &middot; From ${this.sanitize(price)}` : ''}</p>
+                        <h4>${VFUtils.sanitize(p.name)}</h4>
+                        <p>${VFUtils.sanitize(p.description)}${price ? ` &middot; From ${VFUtils.sanitize(price)}` : ''}</p>
                     </div>
                     <div class="rep-product-actions">
-                        <input type="text" readonly value="${this.sanitize(link)}" aria-label="Share link for ${this.sanitize(p.name)}">
-                        <button class="rep-sm-btn" data-copy="${this.sanitize(link)}">Copy</button>
+                        <input type="text" readonly value="${VFUtils.sanitize(link)}" aria-label="Share link for ${VFUtils.sanitize(p.name)}">
+                        <button class="rep-sm-btn" data-copy="${VFUtils.sanitize(link)}">Copy</button>
                         <a class="rep-sm-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                        ${navigator.share ? `<button class="rep-sm-btn" data-share="${this.sanitize(link)}">Share</button>` : ''}
+                        ${navigator.share ? `<button class="rep-sm-btn" data-share="${VFUtils.sanitize(link)}">Share</button>` : ''}
                     </div>
                 </div>
             `;
@@ -168,28 +97,10 @@ const RepTools = {
     },
 
     copyText(text, btn) {
-        const done = () => {
-            const original = btn.textContent;
-            btn.textContent = 'Copied!';
-            setTimeout(() => (btn.textContent = original), 1500);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(done).catch(() => this.fallbackCopy(text, done));
-        } else {
-            this.fallbackCopy(text, done);
-        }
-    },
-
-    fallbackCopy(text, done) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); } catch (e) {}
-        document.body.removeChild(ta);
-        done();
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => (btn.textContent = original), 1500);
+        navigator.clipboard.writeText(text).catch(() => {});
     },
 
     renderPayouts(rows) {
@@ -216,11 +127,11 @@ const RepTools = {
             if (paid) paidTotal += commission; else pendingTotal += commission;
             return `
                 <tr>
-                    <td>${this.sanitize(r.product)}</td>
-                    <td>${this.sanitize(naira(amount))}</td>
-                    <td>${this.sanitize(naira(commission))}</td>
-                    <td><span class="rep-status ${paid ? 'paid' : 'pending'}">${this.sanitize(paid ? 'Paid' : 'Pending')}</span></td>
-                    <td>${this.sanitize(r.date)}</td>
+                    <td>${VFUtils.sanitize(r.product)}</td>
+                    <td>${VFUtils.sanitize(naira(amount))}</td>
+                    <td>${VFUtils.sanitize(naira(commission))}</td>
+                    <td><span class="rep-status ${paid ? 'paid' : 'pending'}">${VFUtils.sanitize(paid ? 'Paid' : 'Pending')}</span></td>
+                    <td>${VFUtils.sanitize(r.date)}</td>
                 </tr>
             `;
         }).join('');
