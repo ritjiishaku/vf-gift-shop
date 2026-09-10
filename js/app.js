@@ -612,15 +612,34 @@ const VF = {
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         if (hamburger && navLinks) {
+            const closeMenu = () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+            };
+
             hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
+                const open = hamburger.classList.toggle('active');
                 navLinks.classList.toggle('active');
+                hamburger.setAttribute('aria-expanded', String(open));
             });
+
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
+                    setTimeout(closeMenu, 150);
                 });
+            });
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMenu();
             });
         }
 
