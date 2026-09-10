@@ -356,11 +356,12 @@ const VF = {
         container.innerHTML = items.map(item => {
             const url = VFUtils.validateUrl(item.image_url);
             if (!url) return '';
+            const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
             const srcset = this.srcVariant(url, 300) + ' 300w, ' +
                            this.srcVariant(url, 600) + ' 600w, ' +
                            this.srcVariant(url, 900) + ' 900w';
             return `
-                <div class="gallery-item fade-in">
+                <div class="gallery-item${isWide ? ' wide' : ''} fade-in">
                     <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200))}">
                     <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>

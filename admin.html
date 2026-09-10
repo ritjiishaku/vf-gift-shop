@@ -12,6 +12,17 @@
 </head>
 <body>
 
+<!-- SVG sprite (hidden) — referenced by <use href="#icon-*"/> -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="icon-gift" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2S13.77 8.8 12 8.8 8.8 10.23 8.8 12s1.43 3.2 3.2 3.2zM9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></symbol>
+    <symbol id="icon-award" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></symbol>
+    <symbol id="icon-list" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></symbol>
+    <symbol id="icon-group" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+    <symbol id="icon-payments" viewBox="0 0 24 24"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"/></symbol>
+</svg>
+
 <header class="rep-header">
     <a href="index.html" class="nav-logo"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></a>
     <span class="rep-tag">Owner Admin</span>
@@ -23,21 +34,45 @@
 
     <div class="admin-cards" id="admin-cards">
         <a class="admin-card" id="form-products" target="_blank" rel="noopener noreferrer">
-            <div class="admin-card-icon">&#9998;</div>
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gift"/></svg></div>
             <h3>Add a Product</h3>
             <p>New item for "What We Make" — jewelry, acrylic, or custom gifts.</p>
             <span class="admin-card-cta">Open form &rarr;</span>
         </a>
         <a class="admin-card" id="form-portfolio" target="_blank" rel="noopener noreferrer">
-            <div class="admin-card-icon">&#128247;</div>
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-camera"/></svg></div>
             <h3>Add to Portfolio</h3>
             <p>Add a photo of a finished piece to the "Things We've Made" gallery.</p>
             <span class="admin-card-cta">Open form &rarr;</span>
         </a>
         <a class="admin-card" id="form-testimonials" target="_blank" rel="noopener noreferrer">
-            <div class="admin-card-icon">&#128172;</div>
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chat"/></svg></div>
             <h3>Add a Review</h3>
             <p>Add a customer review to "What People Say".</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-why" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-award"/></svg></div>
+            <h3>Add a "Why Us" Point</h3>
+            <p>Add a selling point to "Why People Come Back".</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-steps" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-list"/></svg></div>
+            <h3>Add an Order Step</h3>
+            <p>Add a step to "How It Works" / "5 Simple Steps".</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-reps" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-group"/></svg></div>
+            <h3>Add a Sales Rep</h3>
+            <p>Onboard a new sales rep with a rep code and commission rate.</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-payouts" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-payments"/></svg></div>
+            <h3>Record a Payout</h3>
+            <p>Log a confirmed sale / commission for a sales rep.</p>
             <span class="admin-card-cta">Open form &rarr;</span>
         </a>
     </div>
@@ -50,22 +85,20 @@
 
 <section class="admin-section">
     <h2>Column Reference</h2>
-    <p class="admin-intro">When you create each Google Form, name the questions <em>exactly</em> as shown below so they land in the right columns of your sheet.</p>
+    <p class="admin-intro">These are the <strong>exact column headers</strong> in your Google Sheet. Name each Google Form question <em>exactly</em> as shown (including underscores) so submissions map to the correct column.</p>
 
     <div class="admin-colgroup">
         <h3>Products</h3>
         <table class="admin-table">
             <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
             <tbody>
-                <tr><td>Product Name</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Description</td><td>Paragraph</td><td>Yes</td></tr>
-                <tr><td>Image URL</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Category</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Price</td><td>Short answer</td><td>No</td></tr>
-                <tr><td>Price From</td><td>Short answer</td><td>No</td></tr>
-                <tr><td>Icon</td><td>Short answer</td><td>No</td></tr>
-                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
-                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>name</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>description</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>image_url</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>price</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>category</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
             </tbody>
         </table>
     </div>
@@ -75,12 +108,15 @@
         <table class="admin-table">
             <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
             <tbody>
-                <tr><td>Image URL</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Caption</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
-                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>image_url</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>caption</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>category</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>wide</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
             </tbody>
         </table>
+        <p class="admin-tip"><code>wide</code> = <code>true</code> makes the photo span two columns (featured tile). <code>category</code> is stored but not yet shown on the site.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -88,14 +124,74 @@
         <table class="admin-table">
             <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
             <tbody>
-                <tr><td>Quote</td><td>Paragraph</td><td>Yes</td></tr>
-                <tr><td>Customer Name</td><td>Short answer</td><td>Yes</td></tr>
-                <tr><td>Rating</td><td>Dropdown (1 &ndash; 5)</td><td>Yes</td></tr>
-                <tr><td>Source</td><td>Short answer</td><td>No</td></tr>
-                <tr><td>Display Order</td><td>Number</td><td>No</td></tr>
-                <tr><td>Is Visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>name</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>quote</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>source</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>rating</td><td>Dropdown (1 &ndash; 5)</td><td>Yes</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>Why Us</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>title</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>description</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>icon</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+        <p class="admin-tip"><code>icon</code> can be one of: <code>jewelry</code>, <code>acrylic</code>, <code>gift</code>, <code>corporate</code>, <code>star</code>, <code>target</code>, <code>chat</code>, <code>truck</code>, <code>heart</code>, <code>camera</code>, <code>award</code>, or <code>sparkle</code>. Leave blank for the default star.</p>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>How to Order</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>title</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>description</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>Sales Reps</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>rep_id</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>name</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>commission_rate</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>is_active</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>whatsapp</td><td>Short answer</td><td>No</td></tr>
+            </tbody>
+        </table>
+        <p class="admin-tip"><code>rep_id</code> is the code the rep types to log in (e.g. <code>kofi</code>). <code>commission_rate</code> is a percentage number like <code>10</code>. <code>whatsapp</code> is stored but not yet shown on the site.</p>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>Payouts</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>rep_id</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>product</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>order_amount</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>commission</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>status</td><td>Dropdown (paid / pending)</td><td>Yes</td></tr>
+                <tr><td>date</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>notes</td><td>Short answer</td><td>No</td></tr>
+            </tbody>
+        </table>
+        <p class="admin-tip"><code>rep_id</code> must match the rep's code exactly (case-insensitive) so the payout shows on their dashboard. <code>notes</code> is stored but not yet shown.</p>
     </div>
 </section>
 
@@ -103,13 +199,14 @@
     <h2>Setup Guide</h2>
     <div class="admin-steps">
         <ol>
-            <li>In Google Forms, create a new form for each of the three sections.</li>
+            <li>In Google Forms, create a new form for each of the seven sections.</li>
             <li>Add the questions exactly as listed in the tables above.</li>
             <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>.</li>
-            <li>Pick your VF Gift Shop Google Sheet, then choose the matching tab (<code>Products</code>, <code>Portfolio</code>, or <code>Testimonials</code>).</li>
-            <li>Make sure the response columns line up with your existing headers. The site reads these columns: <code>name</code>, <code>description</code>, <code>image_url</code>, <code>category</code>, <code>price</code>, <code>price_from</code>, <code>icon</code>, <code>display_order</code>, <code>is_visible</code> (Products); <code>image_url</code>, <code>caption</code>, <code>display_order</code>, <code>is_visible</code> (Portfolio); <code>quote</code>, <code>name</code>, <code>rating</code>, <code>source</code>, <code>display_order</code>, <code>is_visible</code> (Testimonials).</li>
+            <li>Pick your VF Gift Shop Google Sheet, then choose the matching tab (<code>Products</code>, <code>Portfolio</code>, <code>Testimonials</code>, <code>Why Us</code>, <code>How to Order</code>, <code>Sales Reps</code>, or <code>Payouts</code>).</li>
+            <li>Make sure each form question title matches the existing column header in your sheet so submissions land in the right column.</li>
             <li>Copy each form's share link and paste it into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>.</li>
         </ol>
+        <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet (including any underscores) so they map correctly. When in doubt, open the sheet and copy the exact header text.</p>
         <p class="admin-tip"><strong>Tip:</strong> If a response form creates a new sheet with its own headers, you can also link it directly and the site will still work — just make sure the header names match. To keep everything in one place, use "Select existing spreadsheet" and point at the correct tab.</p>
     </div>
 </section>
@@ -121,18 +218,43 @@
 <script>
 // ══════════════════════════════════════════════════════
 //  PASTE YOUR GOOGLE FORM LINKS HERE
-//  Replace each '' with the share URL of your form, e.g.
-//  'https://docs.google.com/forms/d/e/XXXX/viewform'
+//
+//  In Google Forms, click "Send" > copy the link. It looks like:
+//      https://docs.google.com/forms/d/e/1FAIpQLSfAbCdEfGh1234567/viewform
+//
+//  Paste each link inside the quotes below, e.g.:
+//
+//  const FORM_LINKS = {
+//      products:     'https://docs.google.com/forms/d/e/1FAIpQLSfAbCdEfGh1234567/viewform',
+//      portfolio:    'https://docs.google.com/forms/d/e/1FAIpQLSfIjKlMnO7890123/viewform',
+//      testimonials: 'https://docs.google.com/forms/d/e/1FAIpQLSfQrStUvW4567890/viewform',
+//      why:          'https://docs.google.com/forms/d/e/1FAIpQLSfXxYyZzW1122334/viewform',
+//      steps:        'https://docs.google.com/forms/d/e/1FAIpQLSfAaBbCcD5566778/viewform',
+//      reps:         'https://docs.google.com/forms/d/e/1FAIpQLSfEeFfGgH9900112/viewform',
+//      payouts:      'https://docs.google.com/forms/d/e/1FAIpQLSfIiJjKkL3344556/viewform'
+//  };
 // ══════════════════════════════════════════════════════
 const FORM_LINKS = {
     products: '',
     portfolio: '',
-    testimonials: ''
+    testimonials: '',
+    why: '',
+    steps: '',
+    reps: '',
+    payouts: ''
 };
 </script>
 <script>
 (function () {
-    const ids = { products: 'form-products', portfolio: 'form-portfolio', testimonials: 'form-testimonials' };
+    const ids = {
+        products: 'form-products',
+        portfolio: 'form-portfolio',
+        testimonials: 'form-testimonials',
+        why: 'form-why',
+        steps: 'form-steps',
+        reps: 'form-reps',
+        payouts: 'form-payouts'
+    };
     let anySet = false;
     Object.keys(ids).forEach(key => {
         const el = document.getElementById(ids[key]);
