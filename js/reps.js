@@ -69,11 +69,11 @@ const RepTools = {
             return;
         }
         container.innerHTML = items.map((p, i) => {
-            const pid = p.display_order || (i + 1);
+            const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
             const link = this.shareLink(pid, this._rep.rep_id);
             const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
             const price = p.price || p.price_from || '';
-            const img = VFUtils.validateUrl(p.image_url);
+            const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
             const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
             return `
                 <div class="rep-product">

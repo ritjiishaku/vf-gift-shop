@@ -103,22 +103,27 @@ const VF = {
         const img = document.getElementById('lightbox-img');
         if (!lightbox || !img) return;
         const closeBtn = document.getElementById('lightbox-close');
+        let lastFocused = null;
 
         const hide = () => {
             lightbox.classList.add('hidden');
             img.removeAttribute('src');
             document.body.style.overflow = '';
+            if (lastFocused && lastFocused.focus) lastFocused.focus();
+            lastFocused = null;
         };
 
         const open = (target) => {
             const src = target.getAttribute('data-full') || target.getAttribute('src');
             if (!src) return;
+            lastFocused = document.activeElement;
             img.src = src;
             img.alt = target.getAttribute('alt') || '';
             const caption = document.getElementById('lightbox-caption');
             if (caption) caption.textContent = img.alt;
             lightbox.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            if (closeBtn) closeBtn.focus();
         };
 
         ['gallery-grid', 'products-grid'].forEach(id => {
@@ -187,10 +192,18 @@ const VF = {
         return `https://wa.me/${this._waNumber}?text=${this.orderMessage(productName, price)}`;
     },
 
-    srcVariant(url, width) {
+    srcVariant(url, width, height) {
         const u = String(url || '');
-        if (/[?&]w=\d+/i.test(u)) return u.replace(/([?&])w=\d+/i, `$1w=${width}`);
-        return u + (u.includes('?') ? '&' : '?') + `w=${width}`;
+        const h = height == null ? width : height;
+        if (/[?&]sz=/i.test(u)) {
+            return u.replace(/([?&])sz=[^&]*/i, `$1sz=w${width}-h${h}`);
+        }
+        let out = u;
+        if (/[?&]w=\d+/i.test(out)) out = out.replace(/([?&])w=\d+/i, `$1w=${width}`);
+        else out += (out.includes('?') ? '&' : '?') + `w=${width}`;
+        if (/[?&]h=\d+/i.test(out)) out = out.replace(/([?&])h=\d+/i, `$1h=${h}`);
+        else out += `&h=${h}`;
+        return out;
     },
 
     // ══════════════════════════════════════════════════════
@@ -250,7 +263,7 @@ const VF = {
 
         const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PRODUCTS));
         if (items.length === 0) {
-            this.showError('products-grid', 'Could not load latest products. Showing cached content.');
+            this.showError('products-grid', "Couldn't load products right now. Please refresh the page.");
             return;
         }
 
@@ -311,17 +324,18 @@ const VF = {
     },
 
     productCardHTML(p, pid) {
-        const url = VFUtils.validateUrl(p.image_url);
+        const url = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
         const srcset = url
-            ? this.srcVariant(url, 300) + ' 300w, ' + this.srcVariant(url, 600) + ' 600w, ' + this.srcVariant(url, 900) + ' 900w'
+            ? this.srcVariant(url, 300, 300) + ' 300w, ' + this.srcVariant(url, 600, 600) + ' 600w, ' + this.srcVariant(url, 900, 900) + ' 900w'
             : '';
         const price = p.price || p.price_from || '';
         const category = String(p.category || '').trim() || 'Custom';
+        const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const img = url
-            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
+            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
             : '';
         return `
-            <div class="product-card fade-in" id="product-${VFUtils.sanitize(pid)}">
+            <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
                 <div class="product-img${url ? '' : ' no-image'}">
                     ${img}
                     <div class="product-icon-fallback">${this.icon(p.icon || category.toLowerCase())}</div>
@@ -349,20 +363,24 @@ const VF = {
 
         const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PORTFOLIO));
         if (items.length === 0) {
-            this.showError('gallery-grid', 'Could not load portfolio. Showing cached content.');
+            this.showError('gallery-grid', "Couldn't load the portfolio right now. Please refresh the page.");
             return;
         }
 
         container.innerHTML = items.map(item => {
-            const url = VFUtils.validateUrl(item.image_url);
+            const url = VFUtils.validateUrl(VFUtils.directImageUrl(item.image_url));
             if (!url) return '';
             const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
-            const srcset = this.srcVariant(url, 300) + ' 300w, ' +
-                           this.srcVariant(url, 600) + ' 600w, ' +
-                           this.srcVariant(url, 900) + ' 900w';
+            const h300 = isWide ? 150 : 300;
+            const h600 = isWide ? 300 : 600;
+            const h900 = isWide ? 450 : 900;
+            const h1200 = isWide ? 600 : 1200;
+            const srcset = this.srcVariant(url, 300, h300) + ' 300w, ' +
+                           this.srcVariant(url, 600, h600) + ' 600w, ' +
+                           this.srcVariant(url, 900, h900) + ' 900w';
             return `
                 <div class="gallery-item${isWide ? ' wide' : ''} fade-in">
-                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200))}">
+                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}">
                     <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>
             `;
@@ -380,7 +398,7 @@ const VF = {
 
         const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.TESTIMONIALS));
         if (items.length === 0) {
-            this.showError('testimonials-grid', 'Could not load reviews. Showing cached content.');
+            this.showError('testimonials-grid', "Couldn't load reviews right now. Please refresh the page.");
             return;
         }
 
@@ -418,7 +436,7 @@ const VF = {
 
         const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.WHY));
         if (items.length === 0) {
-            this.showError('why-grid', 'Could not load content. Showing cached content.');
+            this.showError('why-grid', "Couldn't load content right now. Please refresh the page.");
             return;
         }
 
@@ -442,7 +460,7 @@ const VF = {
 
         const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.STEPS));
         if (items.length === 0) {
-            this.showError('steps', 'Could not load steps. Showing cached content.');
+            this.showError('steps', "Couldn't load the steps right now. Please refresh the page.");
             return;
         }
 
@@ -551,7 +569,7 @@ const VF = {
 
         if (productParam) {
             if (this._products) this.clearProductFilters();
-            const target = document.getElementById('product-' + VFUtils.sanitize(productParam));
+            const target = document.getElementById('product-' + VFUtils.sanitize(VFUtils.slugify(productParam)));
             if (target) {
                 setTimeout(() => {
                     target.scrollIntoView({ behavior: 'smooth', block: 'center' });

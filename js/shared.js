@@ -4,61 +4,112 @@
 const VFUtils = {
     SHEET_ID: '1N3_A0mPYkbTZ1ZeC3b_-KdrgV84jPRfyfYwEqzIwNB4',
 
-    parseCSV(text) {
-        const lines = text.split('\n').filter(line => line.trim());
-        if (lines.length < 2) return [];
-        const headers = this.parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
-        const rows = [];
-        for (let i = 1; i < lines.length; i++) {
-            const values = this.parseCSVLine(lines[i]);
-            if (values.length < headers.length) continue;
-            const row = {};
-            headers.forEach((header, index) => {
-                row[header] = values[index]?.trim() || '';
-            });
-            rows.push(row);
-        }
-        return rows;
-    },
+    CACHE_TTL: 10 * 60 * 1000,
 
-    parseCSVLine(line) {
-        const result = [];
-        let current = '';
+    parseCSV(text) {
+        const src = String(text || '').replace(/\r\n?/g, '\n');
+        const rows = [];
+        let row = [];
+        let field = '';
         let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                if (inQuotes && line[i + 1] === '"') {
-                    current += '"';
-                    i++;
+
+        for (let i = 0; i < src.length; i++) {
+            const char = src[i];
+            if (inQuotes) {
+                if (char === '"') {
+                    if (src[i + 1] === '"') {
+                        field += '"';
+                        i++;
+                    } else {
+                        inQuotes = false;
+                    }
                 } else {
-                    inQuotes = !inQuotes;
+                    field += char;
                 }
-            } else if (char === ',' && !inQuotes) {
-                result.push(current);
-                current = '';
+            } else if (char === '"') {
+                inQuotes = true;
+            } else if (char === ',') {
+                row.push(field);
+                field = '';
+            } else if (char === '\n') {
+                row.push(field);
+                field = '';
+                rows.push(row);
+                row = [];
             } else {
-                current += char;
+                field += char;
             }
         }
-        result.push(current);
+        if (field !== '' || row.length) {
+            row.push(field);
+            rows.push(row);
+        }
+
+        const nonEmpty = rows.filter(r => r.some(cell => cell.trim() !== ''));
+        if (nonEmpty.length < 2) return [];
+        const headers = nonEmpty[0].map(h => h.trim().toLowerCase().replace(/[^a-z0-9_]/g, ''));
+        const result = [];
+        for (let i = 1; i < nonEmpty.length; i++) {
+            const values = nonEmpty[i];
+            if (values.length < headers.length) continue;
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = values[index]?.trim() || '';
+            });
+            result.push(obj);
+        }
         return result;
+    },
+
+    cacheGet(key) {
+        try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    cacheSet(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+        } catch (e) { /* storage may be unavailable */ }
     },
 
     async fetchTab(tabName, sheetId, cache) {
         sheetId = sheetId || this.SHEET_ID;
         if (sheetId === 'YOUR_SHEET_ID') return [];
         if (cache[tabName]) return cache[tabName];
+
+        const storageKey = `vf_cache:${sheetId}:${tabName}`;
+        const stored = this.cacheGet(storageKey);
+        if (stored && stored.data && Date.now() - stored.ts < this.CACHE_TTL) {
+            cache[tabName] = stored.data;
+            return stored.data;
+        }
+
         try {
             const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
             const result = this.parseCSV(await response.text());
             cache[tabName] = result;
+            this.cacheSet(storageKey, result);
             return result;
         } catch (err) {
+            if (stored && stored.data) {
+                cache[tabName] = stored.data;
+                return stored.data;
+            }
             return [];
         }
+    },
+
+    slugify(str) {
+        return String(str || '').trim().toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 60);
     },
 
     sanitize(str) {
@@ -71,6 +122,30 @@ const VFUtils = {
         const s = String(str || '').trim();
         if (/^https?:\/\//i.test(s)) return s;
         return '';
+    },
+
+    isDriveUrl(url) {
+        return /drive\.google\.com|googleusercontent\.com/i.test(String(url || ''));
+    },
+
+    driveId(url) {
+        const u = String(url || '');
+        let m = u.match(/\/file\/d\/([A-Za-z0-9_-]{20,})/i);
+        if (m) return m[1];
+        m = u.match(/[?&]id=([A-Za-z0-9_-]{20,})/i);
+        if (m) return m[1];
+        m = u.match(/\/d\/([A-Za-z0-9_-]{20,})/i);
+        if (m) return m[1];
+        return null;
+    },
+
+    directImageUrl(url) {
+        const u = String(url || '').trim();
+        if (!u) return '';
+        const id = this.driveId(u);
+        if (id) return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+        if (this.isDriveUrl(u)) return '';
+        return u;
     },
 
     filterAndSort(rows) {

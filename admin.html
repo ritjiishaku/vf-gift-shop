@@ -30,7 +30,7 @@
 
 <section class="admin-section">
     <h2>Add Content</h2>
-    <p class="admin-intro">Use the Google Forms below to add new items. Each submission is added to the site's Google Sheet and appears on the store automatically.</p>
+    <p class="admin-intro">Use the Google Forms below to add new items. A form writes each answer to its own <strong>"Form Responses"</strong> sheet — the sync script in the Setup Guide below copies it into the right tab, which is what appears on the store automatically.</p>
 
     <div class="admin-cards" id="admin-cards">
         <a class="admin-card" id="form-products" target="_blank" rel="noopener noreferrer">
@@ -171,10 +171,9 @@
                 <tr><td>name</td><td>Short answer</td><td>Yes</td></tr>
                 <tr><td>commission_rate</td><td>Short answer</td><td>Yes</td></tr>
                 <tr><td>is_active</td><td>Dropdown (true / false)</td><td>No</td></tr>
-                <tr><td>whatsapp</td><td>Short answer</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip"><code>rep_id</code> is the code the rep types to log in (e.g. <code>kofi</code>). <code>commission_rate</code> is a percentage number like <code>10</code>. <code>whatsapp</code> is stored but not yet shown on the site.</p>
+        <p class="admin-tip"><code>rep_id</code> is the code the rep types to log in (e.g. <code>kofi</code>). <code>commission_rate</code> is a percentage number like <code>10</code>.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -188,10 +187,9 @@
                 <tr><td>commission</td><td>Short answer</td><td>Yes</td></tr>
                 <tr><td>status</td><td>Dropdown (paid / pending)</td><td>Yes</td></tr>
                 <tr><td>date</td><td>Short answer</td><td>No</td></tr>
-                <tr><td>notes</td><td>Short answer</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip"><code>rep_id</code> must match the rep's code exactly (case-insensitive) so the payout shows on their dashboard. <code>notes</code> is stored but not yet shown.</p>
+        <p class="admin-tip"><code>rep_id</code> must match the rep's code exactly (case-insensitive) so the payout shows on their dashboard.</p>
     </div>
 </section>
 
@@ -201,13 +199,16 @@
         <ol>
             <li>In Google Forms, create a new form for each of the seven sections.</li>
             <li>Add the questions exactly as listed in the tables above.</li>
-            <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>.</li>
-            <li>Pick your VF Gift Shop Google Sheet, then choose the matching tab (<code>Products</code>, <code>Portfolio</code>, <code>Testimonials</code>, <code>Why Us</code>, <code>How to Order</code>, <code>Sales Reps</code>, or <code>Payouts</code>).</li>
-            <li>Make sure each form question title matches the existing column header in your sheet so submissions land in the right column.</li>
+            <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>, then pick your VF Gift Shop Google Sheet.</li>
+            <li>Do this for all seven forms. (Google Forms makes a separate <strong>"Form Responses"</strong> sheet for each one — this is normal.)</li>
+            <li>Open your VF sheet → <strong>Extensions → Apps Script</strong>, paste in the contents of <code>form-sync.gs</code>, and Save.</li>
+            <li>In Apps Script, click the clock icon (<strong>Triggers</strong>) → <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, event <strong>"On form submit"</strong>, source <strong>"From spreadsheet"</strong>. Save and approve the permission prompt.</li>
+            <li>Submit each form once to test — the entry should appear in the matching tab (and on the site).</li>
             <li>Copy each form's share link and paste it into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>.</li>
         </ol>
         <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet (including any underscores) so they map correctly. When in doubt, open the sheet and copy the exact header text.</p>
-        <p class="admin-tip"><strong>Tip:</strong> If a response form creates a new sheet with its own headers, you can also link it directly and the site will still work — just make sure the header names match. To keep everything in one place, use "Select existing spreadsheet" and point at the correct tab.</p>
+        <p class="admin-tip"><strong>Tip:</strong> The sync script copies every new form submission into the right tab automatically. You never need to edit or re-publish anything — just make sure the header names match.</p>
+        <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> — including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
     </div>
 </section>
 
