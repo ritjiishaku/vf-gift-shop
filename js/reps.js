@@ -78,7 +78,7 @@ const RepTools = {
             return `
                 <div class="rep-product">
                     <div class="rep-product-thumb${img ? '' : ' no-image'}">
-                        ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('no-image')">` : ''}
+                        ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.src='${VFUtils.sanitize(img)}';}else{this.parentNode.classList.add('no-image');}">` : ''}
                         <span class="rep-thumb-initial">${VFUtils.sanitize(initial)}</span>
                     </div>
                     <div class="rep-product-info">

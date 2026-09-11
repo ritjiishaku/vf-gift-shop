@@ -197,11 +197,19 @@ const VF = {
     },
 
     srcVariant(url, width, height) {
-        const u = String(url || '');
+        const u = String(url || '').trim();
+        if (!u) return '';
         const h = height == null ? width : height;
+
+        if (/googleusercontent\.com\/d\//i.test(u)) {
+            const cleanUrl = u.replace(/=[a-z0-9-]*$/i, '');
+            return `${cleanUrl}=s${width}`;
+        }
+
         if (/[?&]sz=/i.test(u)) {
             return u.replace(/([?&])sz=[^&]*/i, `$1sz=w${width}-h${h}`);
         }
+
         let out = u;
         if (/[?&]w=\d+/i.test(out)) out = out.replace(/([?&])w=\d+/i, `$1w=${width}`);
         else out += (out.includes('?') ? '&' : '?') + `w=${width}`;
@@ -345,7 +353,7 @@ const VF = {
         const category = String(p.category || '').trim() || 'Custom';
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const img = url
-            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="this.parentNode.classList.add('no-image')">`
+            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
             : '';
         return `
             <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
@@ -398,7 +406,7 @@ const VF = {
                            this.srcVariant(url, 900, h900) + ' 900w';
             return `
                 <div class="gallery-item${isWide ? ' wide' : ''} fade-in">
-                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}">
+                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.style.display='none';}">
                     <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>
             `;

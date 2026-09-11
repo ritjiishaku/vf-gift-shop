@@ -143,7 +143,7 @@ const VFUtils = {
         const u = String(url || '').trim();
         if (!u) return '';
         const id = this.driveId(u);
-        if (id) return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+        if (id) return `https://lh3.googleusercontent.com/d/${id}`;
         if (this.isDriveUrl(u)) return '';
         return u;
     },
