@@ -160,16 +160,20 @@ const VF = {
         this._referral = null;
         const stored = this.getReferral();
         if (!stored) return;
-        let name = stored.rep_id;
         try {
             const reps = await this.fetchTab(this.TABS.REPS);
+            if (reps === null) return;
             const rep = (reps || []).find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
-            if (rep && VFUtils.isActive(rep)) {
-                name = rep.name || stored.rep_id;
+            if (!rep || !VFUtils.isActive(rep)) {
+                localStorage.removeItem('vf_referral');
+                return;
             }
-        } catch (e) { /* fall back to rep id */ }
-        this._referral = { rep_id: stored.rep_id, name };
-        this.showReferralBanner();
+            const name = rep.name || stored.rep_id;
+            this._referral = { rep_id: stored.rep_id, name };
+            this.showReferralBanner();
+        } catch (e) {
+            localStorage.removeItem('vf_referral');
+        }
     },
 
     showReferralBanner() {
