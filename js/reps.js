@@ -31,7 +31,7 @@ const RepTools = {
             return;
         }
         const reps = await this.fetchTab(this.TABS.REPS);
-        const rep = this.findRep(repId, reps);
+        const rep = this.findRep(repId, reps || []);
         if (!rep) {
             errorEl.textContent = 'That rep code was not found. Check with the owner.';
             errorEl.classList.remove('hidden');
@@ -58,8 +58,8 @@ const RepTools = {
             this.fetchTab(this.TABS.PRODUCTS),
             this.fetchTab(this.TABS.PAYOUTS)
         ]);
-        this.renderProducts(VFUtils.filterAndSort(products));
-        this.renderPayouts(payouts);
+        this.renderProducts(VFUtils.filterAndSort(products || []));
+        this.renderPayouts(payouts || []);
     },
 
     renderProducts(items) {

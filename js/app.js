@@ -15,31 +15,31 @@ const VF = {
 
     DEFAULTS: {
         whatsapp_number: '2348127252004',
-        site_title: 'Gifts by VF — Customized Jewelry & Acrylic Pieces',
-        site_description: 'Gifts by VF handcrafts personalized jewelry, acrylic frames, and custom gifts for birthdays, weddings, and corporate events. Order on WhatsApp — delivered across Nigeria.',
+        site_title: '',
+        site_description: '',
         brand_name: 'Gifts by V',
         brand_accent: 'F',
-        hero_subtitle: 'Handcrafted Jewelry & Acrylic Art — Made Just for You',
-        hero_button_text: 'Browse Catalogue',
-        products_label: 'What We Make',
-        products_title: 'What We Offer',
-        products_desc: 'Every piece is handmade to your exact taste — names, colors, sizes, your way.',
-        portfolio_label: 'Portfolio',
-        portfolio_title: "Things We've Made",
-        portfolio_desc: 'Real pieces. Real customers. Real love in every stitch and edge.',
-        testimonials_label: 'What People Say',
-        testimonials_title: "Don't Take Our Word for It",
-        testimonials_desc: "Here's what our customers have said about us — unedited, unfiltered.",
-        why_label: 'Why Us',
-        why_title: 'Why People Come Back',
-        why_desc: "We've been doing this for 5+ years. Here's why people keep ordering.",
-        order_label: 'How It Works',
-        order_title: '5 Simple Steps',
-        order_desc: 'No stress. No cart. Just send us a message and we handle the rest.',
-        cta_title: "Let's Make Something for You",
-        cta_desc: "Tell us your idea. We'll bring it to life.",
-        cta_button_text: 'Message Us on WhatsApp',
-        footer_text: `© ${new Date().getFullYear()} Gifts by VF. Handcrafted with love.`
+        hero_subtitle: '',
+        hero_button_text: '',
+        products_label: '',
+        products_title: '',
+        products_desc: '',
+        portfolio_label: '',
+        portfolio_title: '',
+        portfolio_desc: '',
+        testimonials_label: '',
+        testimonials_title: '',
+        testimonials_desc: '',
+        why_label: '',
+        why_title: '',
+        why_desc: '',
+        order_label: '',
+        order_title: '',
+        order_desc: '',
+        cta_title: '',
+        cta_desc: '',
+        cta_button_text: '',
+        footer_text: `© ${new Date().getFullYear()} Gifts by VF.`
     },
 
     WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>',
@@ -163,7 +163,7 @@ const VF = {
         let name = stored.rep_id;
         try {
             const reps = await this.fetchTab(this.TABS.REPS);
-            const rep = reps.find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
+            const rep = (reps || []).find(r => String(r.rep_id || '').trim().toLowerCase() === stored.rep_id.toLowerCase());
             if (rep && VFUtils.isActive(rep)) {
                 name = rep.name || stored.rep_id;
             }
@@ -212,7 +212,7 @@ const VF = {
     async applySiteSettings() {
         const rows = await this.fetchTab(this.TABS.SETTINGS);
         const settings = { ...this.DEFAULTS };
-        rows.forEach(row => {
+        (rows || []).forEach(row => {
             if (row.key && row.value) settings[row.key] = row.value;
         });
 
@@ -261,9 +261,18 @@ const VF = {
         const container = document.getElementById('products-grid');
         if (!container) return;
 
-        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PRODUCTS));
-        if (items.length === 0) {
+        const rows = await this.fetchTab(this.TABS.PRODUCTS);
+        if (rows === null) {
             this.showError('products-grid', "Couldn't load products right now. Please refresh the page.");
+            const count = document.getElementById('catalogue-count');
+            if (count) count.textContent = '';
+            return;
+        }
+        const items = VFUtils.filterAndSort(rows);
+        if (items.length === 0) {
+            this.showError('products-grid', 'No products yet.');
+            const count = document.getElementById('catalogue-count');
+            if (count) count.textContent = '';
             return;
         }
 
@@ -361,9 +370,14 @@ const VF = {
         const container = document.getElementById('gallery-grid');
         if (!container) return;
 
-        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.PORTFOLIO));
-        if (items.length === 0) {
+        const rows = await this.fetchTab(this.TABS.PORTFOLIO);
+        if (rows === null) {
             this.showError('gallery-grid', "Couldn't load the portfolio right now. Please refresh the page.");
+            return;
+        }
+        const items = VFUtils.filterAndSort(rows);
+        if (items.length === 0) {
+            this.showError('gallery-grid', 'No portfolio pieces yet.');
             return;
         }
 
@@ -396,9 +410,14 @@ const VF = {
         const container = document.getElementById('testimonials-grid');
         if (!container) return;
 
-        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.TESTIMONIALS));
-        if (items.length === 0) {
+        const rows = await this.fetchTab(this.TABS.TESTIMONIALS);
+        if (rows === null) {
             this.showError('testimonials-grid', "Couldn't load reviews right now. Please refresh the page.");
+            return;
+        }
+        const items = VFUtils.filterAndSort(rows);
+        if (items.length === 0) {
+            this.showError('testimonials-grid', 'No reviews yet.');
             return;
         }
 
@@ -434,9 +453,14 @@ const VF = {
         const container = document.getElementById('why-grid');
         if (!container) return;
 
-        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.WHY));
-        if (items.length === 0) {
+        const rows = await this.fetchTab(this.TABS.WHY);
+        if (rows === null) {
             this.showError('why-grid', "Couldn't load content right now. Please refresh the page.");
+            return;
+        }
+        const items = VFUtils.filterAndSort(rows);
+        if (items.length === 0) {
+            this.showError('why-grid', 'No highlights yet.');
             return;
         }
 
@@ -458,9 +482,14 @@ const VF = {
         const container = document.getElementById('steps');
         if (!container) return;
 
-        const items = VFUtils.filterAndSort(await this.fetchTab(this.TABS.STEPS));
-        if (items.length === 0) {
+        const rows = await this.fetchTab(this.TABS.STEPS);
+        if (rows === null) {
             this.showError('steps', "Couldn't load the steps right now. Please refresh the page.");
+            return;
+        }
+        const items = VFUtils.filterAndSort(rows);
+        if (items.length === 0) {
+            this.showError('steps', 'No steps yet.');
             return;
         }
 

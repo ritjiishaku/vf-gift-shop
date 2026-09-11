@@ -1,6 +1,6 @@
-# Sample Data Import
+# Sheet Schema & Templates
 
-These CSV files contain sample data for the Gifts by VF showroom. Import each into its matching tab in the Google Sheet.
+These CSV files are **header-only templates** that document the exact column layout of each Google Sheet tab. They contain no demo data — real content is added in Google Sheets (see below).
 
 ## Files → Tabs
 
@@ -15,26 +15,18 @@ These CSV files contain sample data for the Gifts by VF showroom. Import each in
 | `sales-reps.csv` | `Sales Reps` |
 | `payouts.csv` | `Payouts` |
 
-## How to import (per tab)
+## How content gets in
 
-1. Open the matching tab in the Google Sheet (e.g. "Site Settings")
-2. Click **File → Import → Upload**
-3. Select the CSV file
-4. Choose **"Replace current sheet"**
-5. Confirm — then repeat for the remaining tabs
+- **Products, Portfolio, Testimonials, Why Us, How to Order, Sales Reps, Payouts** — the owner adds entries through the linked **Google Forms** (see `admin.html`). Each submission is copied into the matching tab by `form-sync.gs`.
+- **Site Settings** — there is no form for this tab. It is edited **directly in the sheet** (a `key` / `value` pair per row) to set the brand name, WhatsApp number, and page copy.
 
 ## Important
 
-- Keep the tab names exactly as listed above (spelling + spaces matter)
-- The first row of each CSV is the header — do not delete it
-- To hide a row, change its `is_visible` cell to `FALSE`
-- To reorder rows, change the `display_order` number
-- Column headers must stay on row 1
-
-## After import
-
-- Your site reads the sheet automatically — no re-publishing or code changes needed
-- Replace placeholder portfolio photos with your real photos by swapping the `image_url` values
+- Keep the tab names exactly as listed above (spelling + spaces matter).
+- The first row of each tab is the header — do not delete it.
+- To hide a row, change its `is_visible` (or `is_active` for reps) cell to `FALSE`.
+- To reorder rows, change the `display_order` number.
+- The site reads the sheet automatically — no re-publishing or code changes needed when content changes.
 
 ## Products tab (catalogue)
 
@@ -44,19 +36,13 @@ Each row becomes a catalogue card. Columns:
 |--------|--------------|
 | `name` | Product title on the card |
 | `description` | Short blurb shown under the title |
-| `image_url` | Square photo (600×600 works best). If blank, the card shows an icon tile instead |
-| `price` | Shown as "From ₦18,000" on the card. Blank hides the price. (The old `price_from` column is still accepted too) |
+| `image_url` | Photo (600×600 works best). If blank, the card shows an icon tile instead. Google Drive links are converted automatically, but the file must be shared "Anyone with the link". |
+| `price` | Shown as "From ₦18,000" on the card. Blank hides the price. |
 | `category` | The storefront builds its filter pills automatically from these — one pill per category, plus "All" |
 | `display_order` | Card position |
 | `is_visible` | `FALSE` hides the row |
 
-Example row:
-
-```
-Engraved Bar Necklace,"Sleek stainless bar with any name, date, or short message.",https://images.unsplash.com/...,₦18,000,Jewelry,1,TRUE
-```
-
-The storefront search + category filters + "Showing X of Y pieces" counter all work off this tab — no code changes needed when you add a product.
+The storefront search + category filters + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added.
 
 ---
 

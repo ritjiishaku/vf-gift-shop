@@ -101,7 +101,7 @@ const VFUtils = {
                 cache[tabName] = stored.data;
                 return stored.data;
             }
-            return [];
+            return null;
         }
     },
 

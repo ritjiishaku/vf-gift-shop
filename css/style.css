@@ -109,7 +109,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .hero {
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
-    background: url('https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=1920&h=1080&fit=crop') center/cover no-repeat;
+    background: var(--darker);
     text-align: center;
     padding: 120px 24px 80px;
     position: relative;
@@ -360,7 +360,7 @@ section { padding: 100px 24px; }
 
 /* ── TESTIMONIALS ── */
 #testimonials { 
-    background: url('https://images.unsplash.com/photo-1457530378978-8bac673b8062?w=1920&h=800&fit=crop') center/cover no-repeat;
+    background: var(--darker);
     color: var(--white);
     position: relative;
 }
@@ -463,7 +463,7 @@ section { padding: 100px 24px; }
 /* ── CTA ── */
 .cta {
     padding: 100px 24px;
-    background: url('https://images.unsplash.com/photo-1515562141589-67f0d569b6c2?w=1920&h=800&fit=crop') center/cover no-repeat;
+    background: var(--darker);
     text-align: center;
     position: relative;
 }
