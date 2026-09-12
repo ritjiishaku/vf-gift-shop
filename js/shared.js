@@ -148,6 +148,17 @@ const VFUtils = {
         return u;
     },
 
+    formatNaira(str) {
+        const s = String(str == null ? '' : str).trim();
+        if (!s) return '';
+        if (/^[0-9,.]+$/.test(s)) {
+            const n = Math.round(parseFloat(s.replace(/,/g, '')));
+            if (!Number.isFinite(n)) return s;
+            return '₦' + n.toLocaleString();
+        }
+        return s;
+    },
+
     filterAndSort(rows) {
         return rows
             .filter(r => {

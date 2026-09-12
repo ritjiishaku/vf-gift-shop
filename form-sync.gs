@@ -39,7 +39,7 @@ function onFormSubmit(e) {
       var keys = TARGETS[t].keys;
       var ok = true;
       for (var k = 0; k < keys.length; k++) {
-        if (!(keys[k] in row)) { ok = false; break; }
+        if (!(norm(keys[k]) in row)) { ok = false; break; }
       }
       if (ok) { target = TARGETS[t]; break; }
     }
@@ -65,5 +65,5 @@ function onFormSubmit(e) {
 }
 
 function norm(s) {
-  return String(s == null ? '' : s).trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+  return String(s == null ? '' : s).trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 }

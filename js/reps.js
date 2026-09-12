@@ -47,8 +47,12 @@ const RepTools = {
         document.getElementById('rep-dashboard').classList.remove('hidden');
         document.getElementById('rep-name').textContent = this._rep.name;
         const rawRate = String(this._rep.rate || '').trim();
-        const parsed = parseInt(rawRate, 10);
-        const rateText = Number.isFinite(parsed) ? parsed + '%' : (rawRate.endsWith('%') ? rawRate : rawRate + '%');
+        let rateText = rawRate;
+        if (/^\d+(\.\d+)?%?$/.test(rawRate)) {
+            rateText = parseFloat(rawRate) + '%';
+        } else if (rawRate && !rawRate.endsWith('%')) {
+            rateText = rawRate + '%';
+        }
         document.getElementById('rep-rate').textContent = rateText;
         this.loadAndRender();
     },
@@ -72,7 +76,7 @@ const RepTools = {
             const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
             const link = this.shareLink(pid, this._rep.rep_id);
             const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
-            const price = p.price || p.price_from || '';
+            const price = VFUtils.formatNaira(p.price);
             const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
             const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
             return `
@@ -98,9 +102,10 @@ const RepTools = {
 
     copyText(text, btn) {
         const original = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => (btn.textContent = original), 1500);
-        navigator.clipboard.writeText(text).catch(() => {});
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => (btn.textContent = original), 1500);
+        }).catch(() => {});
     },
 
     renderPayouts(rows) {

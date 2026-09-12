@@ -51,7 +51,7 @@ The storefront search + category filters + "Showing X of Y pieces" counter all w
 The site lets sales reps share product links and earn commission. Setup is simple:
 
 1. **Add reps** — in the `Sales Reps` tab, give each rep a short **`rep_id`** (e.g. `kofi`), their name, and a **`commission_rate`** (e.g. `10` = 10%). Set `is_active` to `TRUE` to let them log in.
-2. **Publish Payouts** (so reps can see their status) — **File → Share → Publish to web** → choose tab **Payouts** → format **CSV** → Publish. Once published, reps can see their commissions on the `reps.html` page.
+2. **Share the sheet** — **File → Share → set to "Anyone with the link" → Viewer** for the whole spreadsheet, or at least every tab the site reads (Products, Portfolio, Testimonials, Why Us, How to Order, Sales Reps, and Payouts so reps can see their status). Readable-by-link is enough — no need to use "Publish to web"; the site reads the tabs directly.
 3. **The flow:**
    - The owner adds products to the catalogue as usual.
    - A rep opens **`reps.html`** (link in the site footer — "Sales Rep Tools"), enters their `rep_id`, picks a product, and copies its share link.

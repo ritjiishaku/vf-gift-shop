@@ -210,6 +210,8 @@ const VF = {
             return u.replace(/([?&])sz=[^&]*/i, `$1sz=w${width}-h${h}`);
         }
 
+        if (!/[?&](w|h)=/i.test(u)) return u;
+
         let out = u;
         if (/[?&]w=\d+/i.test(out)) out = out.replace(/([?&])w=\d+/i, `$1w=${width}`);
         else out += (out.includes('?') ? '&' : '?') + `w=${width}`;
@@ -349,7 +351,7 @@ const VF = {
         const srcset = url
             ? this.srcVariant(url, 300, 300) + ' 300w, ' + this.srcVariant(url, 600, 600) + ' 600w, ' + this.srcVariant(url, 900, 900) + ' 900w'
             : '';
-        const price = p.price || p.price_from || '';
+        const price = VFUtils.formatNaira(p.price);
         const category = String(p.category || '').trim() || 'Custom';
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const img = url
@@ -393,7 +395,7 @@ const VF = {
             return;
         }
 
-        container.innerHTML = items.map(item => {
+        const cards = items.map(item => {
             const url = VFUtils.validateUrl(VFUtils.directImageUrl(item.image_url));
             if (!url) return '';
             const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
@@ -410,7 +412,14 @@ const VF = {
                     <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>
             `;
-        }).filter(Boolean).join('');
+        }).filter(Boolean);
+
+        if (cards.length === 0) {
+            this.showError('gallery-grid', 'No portfolio photos yet.');
+            return;
+        }
+
+        container.innerHTML = cards.join('');
 
         this.observeFadeIns();
     },

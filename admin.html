@@ -85,7 +85,7 @@
 
 <section class="admin-section">
     <h2>Column Reference</h2>
-    <p class="admin-intro">These are the <strong>exact column headers</strong> in your Google Sheet. Name each Google Form question <em>exactly</em> as shown (including underscores) so submissions map to the correct column.</p>
+    <p class="admin-intro">These are the <strong>exact column headers</strong> in your Google Sheet. Name each Google Form question to match a column above — the sync script matches them ignoring case, spaces, and underscores, so <code>Image URL</code>, <code>image url</code>, and <code>image_url</code> all map to the same column.</p>
 
     <div class="admin-colgroup">
         <h3>Products</h3>
@@ -206,7 +206,7 @@
             <li>Submit each form once to test — the entry should appear in the matching tab (and on the site).</li>
             <li>Copy each form's share link and paste it into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>.</li>
         </ol>
-        <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet (including any underscores) so they map correctly. When in doubt, open the sheet and copy the exact header text.</p>
+        <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet — matching ignores case, spaces, and underscores, so <code>Image URL</code> and <code>image_url</code> both work. When in doubt, open the sheet and copy the exact header text.</p>
         <p class="admin-tip"><strong>Tip:</strong> The sync script copies every new form submission into the right tab automatically. You never need to edit or re-publish anything — just make sure the header names match.</p>
         <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> — including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
     </div>
