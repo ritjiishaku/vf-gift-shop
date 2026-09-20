@@ -2,13 +2,19 @@
 // Reads the same Google Sheet the site uses.
 
 const RepTools = {
-    TABS: { REPS: 'Sales Reps', PRODUCTS: 'Products', PAYOUTS: 'Payouts' },
+    TABS: { SETTINGS: 'Site Settings', REPS: 'Sales Reps', PRODUCTS: 'Products', PAYOUTS: 'Payouts' },
     REP_PRODUCT_LIMIT: 8,
     REP_PRODUCT_CHUNK: 8,
     REP_PAYOUT_LIMIT: 5,
+    REP_CREDIT_WINDOW_DAYS: 30,
     _sessionKey: 'vf_rep_session',
     _cache: {},
     _rep: null,
+
+    setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    },
 
     async fetchTab(tabName) {
         return VFUtils.fetchTab(tabName, VFUtils.SHEET_ID, this._cache);
@@ -48,7 +54,7 @@ const RepTools = {
     renderDashboard() {
         document.getElementById('rep-login').classList.add('hidden');
         document.getElementById('rep-dashboard').classList.remove('hidden');
-        document.getElementById('rep-name').textContent = this._rep.name;
+        this.setText('rep-name', this._rep.name);
         const rawRate = String(this._rep.rate || '').trim();
         let rateText = rawRate;
         if (/^\d+(\.\d+)?%?$/.test(rawRate)) {
@@ -56,15 +62,23 @@ const RepTools = {
         } else if (rawRate && !rawRate.endsWith('%')) {
             rateText = rawRate + '%';
         }
-        document.getElementById('rep-rate').textContent = rateText;
+        this.setText('rep-rate', rateText);
+        this.setText('rep-rule', `Commission is ${rateText} of the product's catalogue price, excluding delivery.`);
+        this.setText('rep-credit', `Any order placed through your links within ${this.REP_CREDIT_WINDOW_DAYS} days of the buyer's first click is credited to you.`);
         this.loadAndRender();
     },
 
     async loadAndRender() {
-        const [products, payouts] = await Promise.all([
+        const [products, payouts, settings] = await Promise.all([
             this.fetchTab(this.TABS.PRODUCTS),
-            this.fetchTab(this.TABS.PAYOUTS)
+            this.fetchTab(this.TABS.PAYOUTS),
+            this.fetchTab(this.TABS.SETTINGS)
         ]);
+        (settings || []).forEach(row => {
+            if (row.key === 'commission_rule' && row.value) {
+                this.setText('rep-rule', row.value);
+            }
+        });
         this._repProducts = VFUtils.filterAndSort(products || []);
         const deepLink = new URLSearchParams(location.search).get('p');
         this._repProductShown = deepLink
@@ -114,11 +128,24 @@ const RepTools = {
         }
     },
 
+    estimatedCommission(p) {
+        const rate = parseFloat(String(this._rep && this._rep.rate || '').replace('%', ''));
+        if (!Number.isFinite(rate) || rate <= 0) return '';
+        const priceStr = String(p.price || '')
+            .replace(/^ngn\s*/i, '')
+            .replace(/^[₦#N₹]+\s*/i, '')
+            .replace(/,/g, '');
+        const price = parseFloat(priceStr);
+        if (!Number.isFinite(price) || price <= 0) return '';
+        return '≈ ₦' + Math.round(price * rate / 100).toLocaleString() + ' commission';
+    },
+
     repProductCardHTML(p, i) {
         const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
         const link = this.shareLink(pid, this._rep.rep_id);
         const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
         const price = VFUtils.formatNaira(p.price);
+        const commission = this.estimatedCommission(p);
         const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
         const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
         return `
@@ -130,8 +157,10 @@ const RepTools = {
                 <div class="rep-product-info">
                     <h4>${VFUtils.sanitize(p.name)}</h4>
                     <p>${VFUtils.sanitize(p.description)}${price ? ` &middot; From ${VFUtils.sanitize(price)}` : ''}</p>
+                    ${p.sales_caption ? `<p class="rep-caption">${VFUtils.sanitize(p.sales_caption)}</p>` : ''}
                 </div>
                 <div class="rep-product-actions">
+                    ${commission ? `<span class="rep-commission">${VFUtils.sanitize(commission)}</span>` : ''}
                     <input type="text" readonly value="${VFUtils.sanitize(link)}" aria-label="Share link for ${VFUtils.sanitize(p.name)}">
                     <button class="rep-sm-btn" data-copy="${VFUtils.sanitize(link)}">Copy</button>
                     <a class="rep-sm-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -205,7 +234,8 @@ const RepTools = {
 
         table.classList.remove('hidden');
         summary.classList.remove('hidden');
-        summary.textContent = `Pending: ${naira(pendingTotal)} · Paid: ${naira(paidTotal)}`;
+        const saleLabel = mine.length === 1 ? 'sale' : 'sales';
+        summary.textContent = `${mine.length} ${saleLabel} · Pending: ${naira(pendingTotal)} · Paid: ${naira(paidTotal)}`;
     },
 
     showAllPayouts() {

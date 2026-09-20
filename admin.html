@@ -12,6 +12,19 @@
 </head>
 <body>
 
+<!-- ADMIN GATE (speed-bump passphrase; client-side only) -->
+<div id="admin-gate" class="admin-gate" role="dialog" aria-modal="true" aria-label="Admin passphrase required">
+    <div class="admin-gate-box">
+        <h2>Admin</h2>
+        <p id="admin-gate-hint">Enter the owner passphrase to manage content.</p>
+        <form id="admin-gate-form" class="rep-form">
+            <input type="password" id="admin-gate-input" placeholder="Passphrase" autocomplete="off">
+            <button type="submit" class="rep-btn">Unlock</button>
+        </form>
+        <p id="admin-gate-error" class="rep-error hidden"></p>
+    </div>
+</div>
+
 <!-- SVG sprite (hidden) — referenced by <use href="#icon-*"/> -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="icon-gift" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></symbol>
@@ -26,6 +39,7 @@
 <header class="rep-header">
     <a href="index.html" class="nav-logo"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></a>
     <span class="rep-tag">Owner Admin</span>
+    <button id="admin-lock" class="admin-lock-btn hidden" type="button">Lock</button>
 </header>
 
 <section class="admin-section">
@@ -99,8 +113,15 @@
                 <tr><td>category</td><td>Short answer</td><td>Yes</td></tr>
                 <tr><td>display_order</td><td>Number</td><td>No</td></tr>
                 <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>material</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>size</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>turnaround</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>delivery_notes</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>payment_terms</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>sales_caption</td><td>Paragraph</td><td>No</td></tr>
             </tbody>
         </table>
+        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -267,6 +288,87 @@ const FORM_LINKS = {
     });
     if (!anySet) {
         document.getElementById('admin-note').hidden = false;
+    }
+})();
+</script>
+<script>
+// ══════════════════════════════════════════════════════════
+//  ADMIN GATE — set your passphrase hash here.
+//
+//  This is a client-side speed bump only, not real auth.
+//  To enable: set ADMIN_PASS_HASH to the SHA-256 hex of your
+//  passphrase (64 lowercase hex chars). While empty, the page
+//  stays locked with a "not configured" message.
+//
+//  Generate the hash in a browser console (https only):
+//    crypto.subtle.digest('SHA-256', new TextEncoder().encode('YOUR PHRASE'))
+//      .then(d => console.log(Array.from(new Uint8Array(d))
+//        .map(b => b.toString(16).padStart(2, '0')).join('')))
+// ══════════════════════════════════════════════════════════
+const ADMIN_PASS_HASH = '';
+
+(function () {
+    const overlay = document.getElementById('admin-gate');
+    const form = document.getElementById('admin-gate-form');
+    const input = document.getElementById('admin-gate-input');
+    const errorEl = document.getElementById('admin-gate-error');
+    const hintEl = document.getElementById('admin-gate-hint');
+    const lockBtn = document.getElementById('admin-lock');
+    if (!overlay || !form) return;
+
+    const isConfigured = /^[0-9a-f]{64}$/.test(ADMIN_PASS_HASH);
+    if (!isConfigured) {
+        hintEl.textContent = 'Admin gate is not configured. Set ADMIN_PASS_HASH in admin.html, then redeploy.';
+        return;
+    }
+
+    async function sha256Hex(text) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function unlock() {
+        overlay.classList.add('hidden');
+        if (lockBtn) lockBtn.classList.remove('hidden');
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!crypto || !crypto.subtle) {
+            errorEl.textContent = 'This tool needs HTTPS. Open the admin page over https://';
+            errorEl.classList.remove('hidden');
+            return;
+        }
+        try {
+            const hash = await sha256Hex(input.value);
+            if (hash === ADMIN_PASS_HASH) {
+                sessionStorage.setItem('vf_admin_unlocked', '1');
+                errorEl.classList.add('hidden');
+                unlock();
+            } else {
+                errorEl.textContent = 'Incorrect passphrase.';
+                errorEl.classList.remove('hidden');
+                input.select();
+            }
+        } catch (err) {
+            errorEl.textContent = 'Something went wrong. Try again.';
+            errorEl.classList.remove('hidden');
+        }
+    });
+
+    if (sessionStorage.getItem('vf_admin_unlocked') === '1') {
+        unlock();
+    }
+
+    if (lockBtn) {
+        lockBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('vf_admin_unlocked');
+            input.value = '';
+            errorEl.classList.add('hidden');
+            overlay.classList.remove('hidden');
+            lockBtn.classList.add('hidden');
+            input.focus();
+        });
     }
 })();
 </script>

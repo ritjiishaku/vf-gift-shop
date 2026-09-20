@@ -151,6 +151,17 @@ section { padding: 100px 24px; }
     color: var(--text-light);
     letter-spacing: 0.5px;
 }
+.noscript-note {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: rgba(201,169,110,0.12);
+    border: 1px solid var(--gold-light);
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    border-radius: 4px;
+}
+.noscript-note a { color: var(--gold); font-weight: 600; }
 
 .products-grid {
     display: grid;
@@ -274,7 +285,21 @@ section { padding: 100px 24px; }
     color: var(--text-light);
     font-size: 0.9rem;
     line-height: 1.6;
-    flex: 1;
+}
+.product-meta {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.7;
+}
+.product-meta li span {
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    margin-right: 6px;
 }
 
 /* ── FOOTER ── */
@@ -295,6 +320,8 @@ footer {
     color: var(--text-light);
     font-size: 0.95rem;
 }
+.empty-state p { margin-bottom: 16px; }
+.empty-state .product-order-btn { margin-top: 0; }
 
 /* ── REFERRAL BANNER ── */
 .referral-banner {
@@ -384,6 +411,21 @@ footer {
 }
 .rep-product h4 { color: var(--dark); margin-bottom: 4px; font-size: 1.05rem; }
 .rep-product p { color: var(--text-light); font-size: 0.85rem; line-height: 1.6; }
+.rep-caption {
+    color: var(--gold);
+    font-style: italic;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+.rep-commission {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold);
+    background: rgba(201,169,110,0.12);
+    border: 1px solid var(--border-input);
+    padding: 6px 10px;
+    white-space: nowrap;
+}
 .rep-product-info { flex: 1; min-width: 0; }
 .rep-product-thumb {
     position: relative;
@@ -402,7 +444,7 @@ footer {
     font-size: 1.1rem;
     color: #8a7f6f;
 }
-.rep-product-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.rep-product-actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
 .rep-product-actions input {
     width: 240px; padding: 8px 10px; font-size: 0.75rem;
     border: 1px solid var(--border-input); color: var(--text); background: var(--cream);
@@ -424,6 +466,37 @@ footer {
 
 /* ── ADMIN PAGE ── */
 .admin-section { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+.admin-lock-btn {
+    appearance: none;
+    background: none;
+    border: 1px solid rgba(0,0,0,0.2);
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.admin-lock-btn:hover { border-color: var(--gold); color: var(--gold); }
+.admin-gate {
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+}
+.admin-gate-box {
+    background: var(--white);
+    border: 1px solid var(--border-medium);
+    box-shadow: var(--shadow);
+    max-width: 420px;
+    width: 100%;
+    padding: 36px 32px;
+}
+.admin-gate-box h2 { color: var(--dark); margin-bottom: 8px; }
+.admin-gate-box .rep-form { max-width: none; margin-top: 16px; }
+.admin-gate-box .rep-error { margin-top: 12px; }
 .admin-section h2 { color: var(--dark); margin-bottom: 10px; }
 .admin-section h3 { color: var(--dark); margin: 28px 0 10px; font-size: 1.15rem; }
 .admin-intro { color: var(--text-light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px; }

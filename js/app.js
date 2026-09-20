@@ -78,6 +78,17 @@ const VF = {
         container.appendChild(el);
     },
 
+    showCatalogueError(message) {
+        const container = document.getElementById('products-grid');
+        if (!container) return;
+        if (container.querySelector('.empty-state')) return;
+        const el = document.createElement('div');
+        el.className = 'empty-state';
+        el.innerHTML = `<p>${VFUtils.sanitize(message)}</p>
+            <a class="product-order-btn" href="${this.waLink(null, null)}" target="_blank" rel="noopener noreferrer">${this.WA_ICON}<span>Order on WhatsApp</span></a>`;
+        container.appendChild(el);
+    },
+
     getReferral() {
         try {
             const raw = localStorage.getItem('vf_referral');
@@ -196,7 +207,7 @@ const VF = {
 
         const rows = await this.fetchTab(this.TABS.PRODUCTS);
         if (rows === null) {
-            this.showError('products-grid', "Couldn't load products right now. Please refresh the page.");
+            this.showCatalogueError("Couldn't load the catalogue right now. Order directly on WhatsApp instead.");
             const count = document.getElementById('catalogue-count');
             if (count) count.textContent = '';
             return;
@@ -323,6 +334,15 @@ const VF = {
         const img = url
             ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
             : '';
+        const meta = [
+            ['Material', p.material],
+            ['Size', p.size],
+            ['Turnaround', p.turnaround],
+            ['Delivery', p.delivery_notes],
+            ['Payment', p.payment_terms]
+        ].filter(([, v]) => v != null && String(v).trim() !== '')
+            .map(([k, v]) => `<li><span>${k}:</span> ${VFUtils.sanitize(v)}</li>`)
+            .join('');
         return `
             <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
                 <div class="product-img${url ? '' : ' no-image'}">
@@ -334,6 +354,7 @@ const VF = {
                 <div class="product-body">
                     <h3>${VFUtils.sanitize(p.name)}</h3>
                     <p>${VFUtils.sanitize(p.description)}</p>
+                    ${meta ? `<ul class="product-meta">${meta}</ul>` : ''}
                     <a href="${this.waLink(p.name, price)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">
                         ${this.WA_ICON}
                         <span>Order on WhatsApp</span>

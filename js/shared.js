@@ -51,10 +51,9 @@ const VFUtils = {
         const result = [];
         for (let i = 1; i < nonEmpty.length; i++) {
             const values = nonEmpty[i];
-            if (values.length < headers.length) continue;
             const obj = {};
             headers.forEach((header, index) => {
-                obj[header] = values[index]?.trim() || '';
+                obj[header] = values[index] != null ? String(values[index]).trim() : '';
             });
             result.push(obj);
         }
@@ -151,8 +150,9 @@ const VFUtils = {
     formatNaira(str) {
         const s = String(str == null ? '' : str).trim();
         if (!s) return '';
-        if (/^[0-9,.]+$/.test(s)) {
-            const n = Math.round(parseFloat(s.replace(/,/g, '')));
+        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹]+\s*/i, '');
+        if (/^[0-9,.]+$/.test(cleaned)) {
+            const n = Math.round(parseFloat(cleaned.replace(/,/g, '')));
             if (!Number.isFinite(n)) return s;
             return '₦' + n.toLocaleString();
         }
@@ -170,10 +170,17 @@ const VFUtils = {
     },
 
     filterAndSort(rows) {
+        const seen = new Set();
         return rows
             .filter(r => {
                 const v = String(r.is_visible || '').toLowerCase();
-                return v !== 'false' && v !== '0';
+                if (v === 'false' || v === '0') return false;
+                const key = [r.name, r.price, r.image_url]
+                    .map(x => String(x == null ? '' : x).trim().toLowerCase())
+                    .join('::');
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
             })
             .sort((a, b) => (parseInt(a.display_order) || 999) - (parseInt(b.display_order) || 999));
     },
