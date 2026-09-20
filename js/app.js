@@ -1,44 +1,21 @@
-// Gifts by VF — Showroom Script
+// Gifts by VF — Catalogue Script
 // All content is editable from a Google Sheet (no code changes needed).
 
 const VF = {
     TABS: {
         SETTINGS: 'Site Settings',
         PRODUCTS: 'Products',
-        PORTFOLIO: 'Portfolio',
-        TESTIMONIALS: 'Testimonials',
-        WHY: 'Why Us',
-        STEPS: 'How to Order',
-        REPS: 'Sales Reps',
-        PAYOUTS: 'Payouts'
+        REPS: 'Sales Reps'
     },
 
     DEFAULTS: {
         whatsapp_number: '2348127252004',
         site_title: '',
-        site_description: '',
         brand_name: 'Gifts by V',
         brand_accent: 'F',
-        hero_subtitle: '',
-        hero_button_text: '',
         products_label: '',
         products_title: '',
         products_desc: '',
-        portfolio_label: '',
-        portfolio_title: '',
-        portfolio_desc: '',
-        testimonials_label: '',
-        testimonials_title: '',
-        testimonials_desc: '',
-        why_label: '',
-        why_title: '',
-        why_desc: '',
-        order_label: '',
-        order_title: '',
-        order_desc: '',
-        cta_title: '',
-        cta_desc: '',
-        cta_button_text: '',
         footer_text: `© ${new Date().getFullYear()} Gifts by VF.`
     },
 
@@ -46,21 +23,13 @@ const VF = {
 
     PRODUCT_LIMIT: 12,
     PRODUCT_CHUNK: 12,
-    GALLERY_LIMIT: 8,
-    GALLERY_CHUNK: 8,
-    TESTIMONIAL_LIMIT: 6,
-    TESTIMONIAL_CHUNK: 6,
-    WHY_LIMIT: 4,
-    WHY_CHUNK: 4,
-    STEPS_LIMIT: 4,
-    STEPS_CHUNK: 4,
 
     ICONS: {
         jewelry: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
         acrylic: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
         gift: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>',
         corporate: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>',
-        star: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-star"/></svg>',
+        star: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
         target: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h4V7h2v4h4v2h-4v4h-2v-4H7z"/></svg>',
         chat: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>',
         truck: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.9 5.1H17V9.5h2.5m0-2H17c-1.1 0-2 .9-2 2v8h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-3.5l-2.5-6.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM8 9.5v6H4.5L2 17V4.5C2 3.67 2.67 3 3.5 3h9c.83 0 1.5.67 1.5 1.5V9.5H8z"/></svg>',
@@ -107,48 +76,6 @@ const VF = {
         el.className = 'empty-state';
         el.textContent = message;
         container.appendChild(el);
-    },
-
-    initLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        const img = document.getElementById('lightbox-img');
-        if (!lightbox || !img) return;
-        const closeBtn = document.getElementById('lightbox-close');
-        let lastFocused = null;
-
-        const hide = () => {
-            lightbox.classList.add('hidden');
-            img.removeAttribute('src');
-            document.body.style.overflow = '';
-            if (lastFocused && lastFocused.focus) lastFocused.focus();
-            lastFocused = null;
-        };
-
-        const open = (target) => {
-            const src = target.getAttribute('data-full') || target.getAttribute('src');
-            if (!src) return;
-            lastFocused = document.activeElement;
-            img.src = src;
-            img.alt = target.getAttribute('alt') || '';
-            const caption = document.getElementById('lightbox-caption');
-            if (caption) caption.textContent = img.alt;
-            lightbox.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            if (closeBtn) closeBtn.focus();
-        };
-
-        ['gallery-grid', 'products-grid'].forEach(id => {
-            const grid = document.getElementById(id);
-            if (!grid) return;
-            grid.addEventListener('click', (e) => {
-                const target = e.target.closest('img[data-full]');
-                if (target) open(target);
-            });
-        });
-
-        if (closeBtn) closeBtn.addEventListener('click', hide);
-        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) hide(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
     },
 
     getReferral() {
@@ -252,35 +179,16 @@ const VF = {
 
         if (settings.whatsapp_number) {
             this._waNumber = settings.whatsapp_number.replace(/[^0-9]/g, '');
-            const waEl = document.getElementById('whatsapp-link');
-            if (waEl) waEl.href = this.waLink();
         }
 
-        this.setText('hero-subtitle', settings.hero_subtitle);
-        this.setText('hero-button', settings.hero_button_text);
         this.setText('products-label', settings.products_label);
         this.setText('products-title', settings.products_title);
         this.setText('products-desc', settings.products_desc);
-        this.setText('portfolio-label', settings.portfolio_label);
-        this.setText('portfolio-title', settings.portfolio_title);
-        this.setText('portfolio-desc', settings.portfolio_desc);
-        this.setText('testimonials-label', settings.testimonials_label);
-        this.setText('testimonials-title', settings.testimonials_title);
-        this.setText('testimonials-desc', settings.testimonials_desc);
-        this.setText('why-label', settings.why_label);
-        this.setText('why-title', settings.why_title);
-        this.setText('why-desc', settings.why_desc);
-        this.setText('order-label', settings.order_label);
-        this.setText('order-title', settings.order_title);
-        this.setText('order-desc', settings.order_desc);
-        this.setText('cta-title', settings.cta_title);
-        this.setText('cta-desc', settings.cta_desc);
-        this.setText('cta-button', settings.cta_button_text);
         this.setText('footer-text', settings.footer_text);
     },
 
     // ══════════════════════════════════════════════════════
-    //  PRODUCTS
+    //  PRODUCTS / CATALOGUE
     // ══════════════════════════════════════════════════════
     async renderProducts() {
         const container = document.getElementById('products-grid');
@@ -413,7 +321,7 @@ const VF = {
         const category = String(p.category || '').trim() || 'Custom';
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const img = url
-            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
+            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
             : '';
         return `
             <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
@@ -436,320 +344,6 @@ const VF = {
     },
 
     // ══════════════════════════════════════════════════════
-    //  PORTFOLIO
-    // ══════════════════════════════════════════════════════
-    async renderPortfolio() {
-        const container = document.getElementById('gallery-grid');
-        if (!container) return;
-
-        const rows = await this.fetchTab(this.TABS.PORTFOLIO);
-        if (rows === null) {
-            this.showError('gallery-grid', "Couldn't load the portfolio right now. Please refresh the page.");
-            return;
-        }
-        const items = VFUtils.filterAndSort(rows);
-        if (items.length === 0) {
-            this.showError('gallery-grid', 'No portfolio pieces yet.');
-            return;
-        }
-
-        this._galleryItems = items.map(item => {
-            const url = VFUtils.validateUrl(VFUtils.directImageUrl(item.image_url));
-            if (!url) return '';
-            const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
-            const h300 = isWide ? 150 : 300;
-            const h600 = isWide ? 300 : 600;
-            const h900 = isWide ? 450 : 900;
-            const h1200 = isWide ? 600 : 1200;
-            const srcset = this.srcVariant(url, 300, h300) + ' 300w, ' +
-                           this.srcVariant(url, 600, h600) + ' 600w, ' +
-                           this.srcVariant(url, 900, h900) + ' 900w';
-            return `
-                <div class="gallery-item${isWide ? ' wide' : ''} fade-in">
-                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" decoding="async" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.style.display='none';}">
-                    <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
-                </div>
-            `;
-        }).filter(Boolean);
-
-        if (this._galleryItems.length === 0) {
-            this.showError('gallery-grid', 'No portfolio photos yet.');
-            return;
-        }
-
-        this._galleryShown = Math.min(this.GALLERY_LIMIT, this._galleryItems.length);
-        this.renderGalleryGrid();
-    },
-
-    renderGalleryGrid() {
-        const container = document.getElementById('gallery-grid');
-        if (!container) return;
-        const items = this._galleryItems || [];
-        const shown = Math.min(this._galleryShown, items.length);
-        let html = items.slice(0, shown).join('');
-        const more = items.length - shown;
-        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-gallery-btn');
-        container.innerHTML = html;
-        this.observeFadeIns();
-    },
-
-    showMoreGallery() {
-        const items = this._galleryItems || [];
-        if (items.length === 0) return;
-        const container = document.getElementById('gallery-grid');
-        if (!container) return;
-        const append = Math.min(this.GALLERY_CHUNK, items.length - this._galleryShown);
-        if (append <= 0) return;
-        const start = this._galleryShown;
-        this._galleryShown += append;
-
-        const html = items.slice(start, start + append).join('');
-
-        let btn = container.querySelector('#load-more-gallery-btn');
-        if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
-            const remaining = items.length - this._galleryShown;
-            if (remaining > 0) {
-                btn.textContent = `Show more (${remaining} more)`;
-            } else {
-                btn.closest('.load-more-wrap').remove();
-            }
-        } else {
-            container.insertAdjacentHTML('beforeend', html);
-        }
-        this.observeFadeIns();
-    },
-
-    // ══════════════════════════════════════════════════════
-    //  TESTIMONIALS
-    // ══════════════════════════════════════════════════════
-    async renderTestimonials() {
-        const container = document.getElementById('testimonials-grid');
-        if (!container) return;
-
-        const rows = await this.fetchTab(this.TABS.TESTIMONIALS);
-        if (rows === null) {
-            this.showError('testimonials-grid', "Couldn't load reviews right now. Please refresh the page.");
-            return;
-        }
-        const items = VFUtils.filterAndSort(rows);
-        if (items.length === 0) {
-            this.showError('testimonials-grid', 'No reviews yet.');
-            return;
-        }
-
-        this._testimonials = items;
-        this._testimonialShown = Math.min(this.TESTIMONIAL_LIMIT, items.length);
-        this.renderTestimonialGrid();
-    },
-
-    testimonialCardHTML(item) {
-        const rating = Math.max(1, Math.min(5, parseInt(item.rating) || 5));
-        const stars = this.icon('star').repeat(rating);
-        const initials = (item.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-
-        return `
-            <div class="testimonial-card fade-in">
-                <div class="star-rating">${stars}</div>
-                <p class="testimonial-text">"${VFUtils.sanitize(item.quote)}"</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">${VFUtils.sanitize(initials)}</div>
-                    <div>
-                        <div class="testimonial-name">${VFUtils.sanitize(item.name)}</div>
-                        <div class="testimonial-source">${VFUtils.sanitize(item.source)}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-    },
-
-    renderTestimonialGrid() {
-        const container = document.getElementById('testimonials-grid');
-        if (!container) return;
-        const items = this._testimonials || [];
-        const shown = Math.min(this._testimonialShown, items.length);
-        let html = items.slice(0, shown).map(item => this.testimonialCardHTML(item)).join('');
-        const more = items.length - shown;
-        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-testimonials-btn');
-        container.innerHTML = html;
-        this.observeFadeIns();
-    },
-
-    showMoreTestimonials() {
-        if (!this._testimonials || this._testimonials.length === 0) return;
-        const container = document.getElementById('testimonials-grid');
-        if (!container) return;
-        const append = Math.min(this.TESTIMONIAL_CHUNK, this._testimonials.length - this._testimonialShown);
-        if (append <= 0) return;
-        const start = this._testimonialShown;
-        this._testimonialShown += append;
-
-        const html = this._testimonials.slice(start, start + append)
-            .map(item => this.testimonialCardHTML(item))
-            .join('');
-
-        let btn = container.querySelector('#load-more-testimonials-btn');
-        if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
-            const remaining = this._testimonials.length - this._testimonialShown;
-            if (remaining > 0) {
-                btn.textContent = `Show more (${remaining} more)`;
-            } else {
-                btn.closest('.load-more-wrap').remove();
-            }
-        } else {
-            container.insertAdjacentHTML('beforeend', html);
-        }
-        this.observeFadeIns();
-    },
-
-    // ══════════════════════════════════════════════════════
-    //  WHY US
-    // ══════════════════════════════════════════════════════
-    async renderWhyUs() {
-        const container = document.getElementById('why-grid');
-        if (!container) return;
-
-        const rows = await this.fetchTab(this.TABS.WHY);
-        if (rows === null) {
-            this.showError('why-grid', "Couldn't load content right now. Please refresh the page.");
-            return;
-        }
-        const items = VFUtils.filterAndSort(rows);
-        if (items.length === 0) {
-            this.showError('why-grid', 'No highlights yet.');
-            return;
-        }
-
-        this._whyItems = items;
-        this._whyShown = Math.min(this.WHY_LIMIT, items.length);
-        this.renderWhyGrid();
-    },
-
-    whyItemHTML(w) {
-        return `
-            <div class="why-item fade-in">
-                <div class="why-icon">${this.icon(w.icon)}</div>
-                <h4>${VFUtils.sanitize(w.title)}</h4>
-                <p>${VFUtils.sanitize(w.description)}</p>
-            </div>
-        `;
-    },
-
-    renderWhyGrid() {
-        const container = document.getElementById('why-grid');
-        if (!container) return;
-        const items = this._whyItems || [];
-        const shown = Math.min(this._whyShown, items.length);
-        let html = items.slice(0, shown).map(w => this.whyItemHTML(w)).join('');
-        const more = items.length - shown;
-        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-why-btn');
-        container.innerHTML = html;
-        this.observeFadeIns();
-    },
-
-    showMoreWhyUs() {
-        if (!this._whyItems || this._whyItems.length === 0) return;
-        const container = document.getElementById('why-grid');
-        if (!container) return;
-        const append = Math.min(this.WHY_CHUNK, this._whyItems.length - this._whyShown);
-        if (append <= 0) return;
-        const start = this._whyShown;
-        this._whyShown += append;
-
-        const html = this._whyItems.slice(start, start + append)
-            .map(w => this.whyItemHTML(w))
-            .join('');
-
-        let btn = container.querySelector('#load-more-why-btn');
-        if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
-            const remaining = this._whyItems.length - this._whyShown;
-            if (remaining > 0) {
-                btn.textContent = `Show more (${remaining} more)`;
-            } else {
-                btn.closest('.load-more-wrap').remove();
-            }
-        } else {
-            container.insertAdjacentHTML('beforeend', html);
-        }
-        this.observeFadeIns();
-    },
-
-    // ══════════════════════════════════════════════════════
-    //  HOW TO ORDER (steps)
-    // ══════════════════════════════════════════════════════
-    async renderSteps() {
-        const container = document.getElementById('steps');
-        if (!container) return;
-
-        const rows = await this.fetchTab(this.TABS.STEPS);
-        if (rows === null) {
-            this.showError('steps', "Couldn't load the steps right now. Please refresh the page.");
-            return;
-        }
-        const items = VFUtils.filterAndSort(rows);
-        if (items.length === 0) {
-            this.showError('steps', 'No steps yet.');
-            return;
-        }
-
-        this._stepsItems = items;
-        this._stepsShown = Math.min(this.STEPS_LIMIT, items.length);
-        this.renderStepsGrid();
-    },
-
-    stepItemHTML(s, i) {
-        return `
-            <div class="step fade-in">
-                <div class="step-number">${i + 1}</div>
-                <h4>${VFUtils.sanitize(s.title)}</h4>
-                <p>${VFUtils.sanitize(s.description)}</p>
-            </div>
-        `;
-    },
-
-    renderStepsGrid() {
-        const container = document.getElementById('steps');
-        if (!container) return;
-        const items = this._stepsItems || [];
-        const shown = Math.min(this._stepsShown, items.length);
-        let html = items.slice(0, shown).map((s, i) => this.stepItemHTML(s, i)).join('');
-        const more = items.length - shown;
-        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-steps-btn');
-        container.innerHTML = html;
-        this.observeFadeIns();
-    },
-
-    showMoreSteps() {
-        if (!this._stepsItems || this._stepsItems.length === 0) return;
-        const container = document.getElementById('steps');
-        if (!container) return;
-        const append = Math.min(this.STEPS_CHUNK, this._stepsItems.length - this._stepsShown);
-        if (append <= 0) return;
-        const start = this._stepsShown;
-        this._stepsShown += append;
-
-        const html = this._stepsItems.slice(start, start + append)
-            .map((s, i) => this.stepItemHTML(s, start + i))
-            .join('');
-
-        let btn = container.querySelector('#load-more-steps-btn');
-        if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
-            const remaining = this._stepsItems.length - this._stepsShown;
-            if (remaining > 0) {
-                btn.textContent = `Show more (${remaining} more)`;
-            } else {
-                btn.closest('.load-more-wrap').remove();
-            }
-        } else {
-            container.insertAdjacentHTML('beforeend', html);
-        }
-        this.observeFadeIns();
-    },
-
-    // ══════════════════════════════════════════════════════
     //  INIT
     // ══════════════════════════════════════════════════════
     async init() {
@@ -760,13 +354,6 @@ const VF = {
         this._searchQuery = '';
         this._lastFiltered = null;
         this._productShown = this.PRODUCT_LIMIT;
-        this._galleryShown = this.GALLERY_LIMIT;
-        this._testimonials = null;
-        this._testimonialShown = this.TESTIMONIAL_LIMIT;
-        this._whyItems = null;
-        this._whyShown = this.WHY_LIMIT;
-        this._stepsItems = null;
-        this._stepsShown = this.STEPS_LIMIT;
 
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
@@ -778,38 +365,6 @@ const VF = {
         }
         const productParam = params.get('p');
 
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        if (hamburger && navLinks) {
-            const closeMenu = () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            };
-
-            hamburger.addEventListener('click', () => {
-                const open = hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-                hamburger.setAttribute('aria-expanded', String(open));
-            });
-
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    setTimeout(closeMenu, 150);
-                });
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                    closeMenu();
-                }
-            });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeMenu();
-            });
-        }
-
         const navbar = document.getElementById('navbar');
         if (navbar) {
             window.addEventListener('scroll', () => {
@@ -818,7 +373,6 @@ const VF = {
         }
 
         this.observeFadeIns();
-        this.initLightbox();
 
         const searchInput = document.getElementById('catalogue-search');
         if (searchInput) {
@@ -846,65 +400,12 @@ const VF = {
             });
         }
 
-        const testimonialsGrid = document.getElementById('testimonials-grid');
-        if (testimonialsGrid) {
-            testimonialsGrid.addEventListener('click', (e) => {
-                if (e.target.closest('#load-more-testimonials-btn')) this.showMoreTestimonials();
-            });
-        }
-
-        const galleryGrid = document.getElementById('gallery-grid');
-        if (galleryGrid) {
-            galleryGrid.addEventListener('click', (e) => {
-                if (e.target.closest('#load-more-gallery-btn')) this.showMoreGallery();
-            });
-        }
-
-        const whyGrid = document.getElementById('why-grid');
-        if (whyGrid) {
-            whyGrid.addEventListener('click', (e) => {
-                if (e.target.closest('#load-more-why-btn')) this.showMoreWhyUs();
-            });
-        }
-
-        const stepsEl = document.getElementById('steps');
-        if (stepsEl) {
-            stepsEl.addEventListener('click', (e) => {
-                if (e.target.closest('#load-more-steps-btn')) this.showMoreSteps();
-            });
-        }
-
         await this.resolveReferral();
 
         await Promise.all([
             this.applySiteSettings(),
             this.renderProducts()
         ]);
-
-        const deferred = [
-            { id: 'gallery', fn: () => this.renderPortfolio() },
-            { id: 'testimonials', fn: () => this.renderTestimonials() },
-            { id: 'why', fn: () => this.renderWhyUs() },
-            { id: 'order', fn: () => this.renderSteps() }
-        ];
-
-        if ('IntersectionObserver' in window) {
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    const def = deferred.find(d => d.id === entry.target.id);
-                    if (!def) return;
-                    def.fn();
-                    io.unobserve(entry.target);
-                });
-            }, { rootMargin: '0px 0px 200px 0px', threshold: 0 });
-            deferred.forEach(d => {
-                const el = document.getElementById(d.id);
-                if (el) io.observe(el);
-            });
-        } else {
-            deferred.forEach(d => d.fn());
-        }
 
         if (productParam) {
             if (this._products) this.clearProductFilters();
