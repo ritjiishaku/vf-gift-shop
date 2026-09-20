@@ -46,6 +46,8 @@ const VF = {
 
     MOBILE_PRODUCT_LIMIT: 8,
     MOBILE_PRODUCT_CHUNK: 8,
+    TESTIMONIAL_LIMIT: 6,
+    TESTIMONIAL_CHUNK: 6,
 
     ICONS: {
         jewelry: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
@@ -331,7 +333,7 @@ const VF = {
     },
 
     isNarrowScreen() {
-        return window.matchMedia('(max-width: 768px)').matches;
+        return VFUtils.isNarrowScreen();
     },
 
     renderProductGrid(filtered) {
@@ -350,7 +352,7 @@ const VF = {
             ).join('');
             const more = filtered.length - visible.length;
             if (more > 0) {
-                html += `<div class="load-more-wrap"><button type="button" class="load-more" id="load-more-btn">Show more (${more} more)</button></div>`;
+                html += VFUtils.loadMoreButton(more, 'load-more-products-btn');
             }
             container.innerHTML = html;
         }
@@ -373,7 +375,7 @@ const VF = {
             .map((p, i) => this.productCardHTML(p, p.display_order || start + i + 1))
             .join('');
 
-        let btn = document.getElementById('load-more-btn');
+        let btn = container.querySelector('#load-more-products-btn');
         if (btn) {
             btn.insertAdjacentHTML('beforebegin', html);
             const remaining = this._lastFiltered.length - this._mobileShown;
@@ -498,28 +500,70 @@ const VF = {
             return;
         }
 
-        const starSVG = this.icon('star');
+        this._testimonials = items;
+        this._testimonialShown = this.isNarrowScreen()
+            ? Math.min(this.TESTIMONIAL_LIMIT, items.length)
+            : items.length;
+        this.renderTestimonialGrid();
+    },
 
-        container.innerHTML = items.map(item => {
-            const rating = Math.max(1, Math.min(5, parseInt(item.rating) || 5));
-            const stars = starSVG.repeat(rating);
-            const initials = (item.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    testimonialCardHTML(item) {
+        const rating = Math.max(1, Math.min(5, parseInt(item.rating) || 5));
+        const stars = this.icon('star').repeat(rating);
+        const initials = (item.name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
-            return `
-                <div class="testimonial-card fade-in">
-                    <div class="star-rating">${stars}</div>
-                    <p class="testimonial-text">"${VFUtils.sanitize(item.quote)}"</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">${VFUtils.sanitize(initials)}</div>
-                        <div>
-                            <div class="testimonial-name">${VFUtils.sanitize(item.name)}</div>
-                            <div class="testimonial-source">${VFUtils.sanitize(item.source)}</div>
-                        </div>
+        return `
+            <div class="testimonial-card fade-in">
+                <div class="star-rating">${stars}</div>
+                <p class="testimonial-text">"${VFUtils.sanitize(item.quote)}"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">${VFUtils.sanitize(initials)}</div>
+                    <div>
+                        <div class="testimonial-name">${VFUtils.sanitize(item.name)}</div>
+                        <div class="testimonial-source">${VFUtils.sanitize(item.source)}</div>
                     </div>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `;
+    },
 
+    renderTestimonialGrid() {
+        const container = document.getElementById('testimonials-grid');
+        if (!container) return;
+        const items = this._testimonials || [];
+        const shown = Math.min(this._testimonialShown, items.length);
+        let html = items.slice(0, shown).map(item => this.testimonialCardHTML(item)).join('');
+        const more = items.length - shown;
+        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-testimonials-btn');
+        container.innerHTML = html;
+        this.observeFadeIns();
+    },
+
+    showMoreTestimonials() {
+        if (!this._testimonials || this._testimonials.length === 0) return;
+        const container = document.getElementById('testimonials-grid');
+        if (!container) return;
+        const append = Math.min(this.TESTIMONIAL_CHUNK, this._testimonials.length - this._testimonialShown);
+        if (append <= 0) return;
+        const start = this._testimonialShown;
+        this._testimonialShown += append;
+
+        const html = this._testimonials.slice(start, start + append)
+            .map(item => this.testimonialCardHTML(item))
+            .join('');
+
+        let btn = container.querySelector('#load-more-testimonials-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = this._testimonials.length - this._testimonialShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
         this.observeFadeIns();
     },
 
@@ -592,6 +636,8 @@ const VF = {
         this._searchQuery = '';
         this._lastFiltered = null;
         this._mobileShown = this.MOBILE_PRODUCT_LIMIT;
+        this._testimonials = null;
+        this._testimonialShown = this.TESTIMONIAL_LIMIT;
 
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
@@ -667,7 +713,14 @@ const VF = {
         const productsGrid = document.getElementById('products-grid');
         if (productsGrid) {
             productsGrid.addEventListener('click', (e) => {
-                if (e.target.closest('#load-more-btn')) this.showMoreProducts();
+                if (e.target.closest('#load-more-products-btn')) this.showMoreProducts();
+            });
+        }
+
+        const testimonialsGrid = document.getElementById('testimonials-grid');
+        if (testimonialsGrid) {
+            testimonialsGrid.addEventListener('click', (e) => {
+                if (e.target.closest('#load-more-testimonials-btn')) this.showMoreTestimonials();
             });
         }
 

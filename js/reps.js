@@ -3,6 +3,9 @@
 
 const RepTools = {
     TABS: { REPS: 'Sales Reps', PRODUCTS: 'Products', PAYOUTS: 'Payouts' },
+    REP_PRODUCT_LIMIT: 8,
+    REP_PRODUCT_CHUNK: 8,
+    REP_PAYOUT_LIMIT: 5,
     _sessionKey: 'vf_rep_session',
     _cache: {},
     _rep: null,
@@ -62,42 +65,84 @@ const RepTools = {
             this.fetchTab(this.TABS.PRODUCTS),
             this.fetchTab(this.TABS.PAYOUTS)
         ]);
-        this.renderProducts(VFUtils.filterAndSort(products || []));
-        this.renderPayouts(payouts || []);
+        this._repProducts = VFUtils.filterAndSort(products || []);
+        const deepLink = new URLSearchParams(location.search).get('p');
+        if (deepLink && VFUtils.isNarrowScreen()) {
+            this._repProductShown = this._repProducts.length;
+        } else {
+            this._repProductShown = VFUtils.isNarrowScreen()
+                ? Math.min(this.REP_PRODUCT_LIMIT, this._repProducts.length)
+                : this._repProducts.length;
+        }
+        this.renderProductList();
+        this._payoutRows = payouts || [];
+        this.renderPayouts();
     },
 
-    renderProducts(items) {
+    renderProductList() {
         const container = document.getElementById('rep-products');
+        const items = this._repProducts || [];
         if (items.length === 0) {
             container.innerHTML = '<p class="rep-empty">No products available yet.</p>';
             return;
         }
-        container.innerHTML = items.map((p, i) => {
-            const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
-            const link = this.shareLink(pid, this._rep.rep_id);
-            const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
-            const price = VFUtils.formatNaira(p.price);
-            const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
-            const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
-            return `
-                <div class="rep-product">
-                    <div class="rep-product-thumb${img ? '' : ' no-image'}">
-                        ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.src='${VFUtils.sanitize(img)}';}else{this.parentNode.classList.add('no-image');}">` : ''}
-                        <span class="rep-thumb-initial">${VFUtils.sanitize(initial)}</span>
-                    </div>
-                    <div class="rep-product-info">
-                        <h4>${VFUtils.sanitize(p.name)}</h4>
-                        <p>${VFUtils.sanitize(p.description)}${price ? ` &middot; From ${VFUtils.sanitize(price)}` : ''}</p>
-                    </div>
-                    <div class="rep-product-actions">
-                        <input type="text" readonly value="${VFUtils.sanitize(link)}" aria-label="Share link for ${VFUtils.sanitize(p.name)}">
-                        <button class="rep-sm-btn" data-copy="${VFUtils.sanitize(link)}">Copy</button>
-                        <a class="rep-sm-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                        ${navigator.share ? `<button class="rep-sm-btn" data-share="${VFUtils.sanitize(link)}">Share</button>` : ''}
-                    </div>
+        const shown = Math.min(this._repProductShown, items.length);
+        let html = items.slice(0, shown).map((p, i) => this.repProductCardHTML(p, i)).join('');
+        const more = items.length - shown;
+        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-rep-products-btn');
+        container.innerHTML = html;
+    },
+
+    showMoreRepProducts() {
+        const items = this._repProducts || [];
+        const container = document.getElementById('rep-products');
+        if (!container || items.length === 0) return;
+        const append = Math.min(this.REP_PRODUCT_CHUNK, items.length - this._repProductShown);
+        if (append <= 0) return;
+        const start = this._repProductShown;
+        this._repProductShown += append;
+
+        const html = items.slice(start, start + append).map((p, i) => this.repProductCardHTML(p, start + i)).join('');
+
+        let btn = container.querySelector('#load-more-rep-products-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = items.length - this._repProductShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
+    },
+
+    repProductCardHTML(p, i) {
+        const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
+        const link = this.shareLink(pid, this._rep.rep_id);
+        const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
+        const price = VFUtils.formatNaira(p.price);
+        const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
+        const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
+        return `
+            <div class="rep-product">
+                <div class="rep-product-thumb${img ? '' : ' no-image'}">
+                    ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.src='${VFUtils.sanitize(img)}';}else{this.parentNode.classList.add('no-image');}">` : ''}
+                    <span class="rep-thumb-initial">${VFUtils.sanitize(initial)}</span>
                 </div>
-            `;
-        }).join('');
+                <div class="rep-product-info">
+                    <h4>${VFUtils.sanitize(p.name)}</h4>
+                    <p>${VFUtils.sanitize(p.description)}${price ? ` &middot; From ${VFUtils.sanitize(price)}` : ''}</p>
+                </div>
+                <div class="rep-product-actions">
+                    <input type="text" readonly value="${VFUtils.sanitize(link)}" aria-label="Share link for ${VFUtils.sanitize(p.name)}">
+                    <button class="rep-sm-btn" data-copy="${VFUtils.sanitize(link)}">Copy</button>
+                    <a class="rep-sm-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    ${navigator.share ? `<button class="rep-sm-btn" data-share="${VFUtils.sanitize(link)}">Share</button>` : ''}
+                </div>
+            </div>
+        `;
     },
 
     copyText(text, btn) {
@@ -108,11 +153,37 @@ const RepTools = {
         }).catch(() => {});
     },
 
-    renderPayouts(rows) {
+    renderPayouts() {
+        const rows = this._payoutRows || [];
+        this._payouts = rows.filter(r => String(r.rep_id || '').trim().toLowerCase() === String(this._rep.rep_id).toLowerCase());
+        const narrow = VFUtils.isNarrowScreen();
+        this._payoutShown = narrow
+            ? Math.min(this.REP_PAYOUT_LIMIT, this._payouts.length)
+            : this._payouts.length;
+        this.renderPayoutTable();
+    },
+
+    payoutRowHTML(r) {
+        const naira = n => '₦' + Math.round(n).toLocaleString();
+        const amount = parseFloat(r.order_amount) || 0;
+        const commission = parseFloat(r.commission) || 0;
+        const paid = String(r.status || '').toLowerCase() === 'paid';
+        return `
+            <tr>
+                <td>${VFUtils.sanitize(r.product)}</td>
+                <td>${VFUtils.sanitize(naira(amount))}</td>
+                <td>${VFUtils.sanitize(naira(commission))}</td>
+                <td><span class="rep-status ${paid ? 'paid' : 'pending'}">${VFUtils.sanitize(paid ? 'Paid' : 'Pending')}</span></td>
+                <td>${VFUtils.sanitize(r.date)}</td>
+            </tr>
+        `;
+    },
+
+    renderPayoutTable() {
         const tbody = document.querySelector('#rep-payouts tbody');
         const summary = document.getElementById('rep-payout-summary');
         const table = document.getElementById('rep-payouts');
-        const mine = rows.filter(r => String(r.rep_id || '').trim().toLowerCase() === String(this._rep.rep_id).toLowerCase());
+        const mine = this._payouts || [];
         const naira = n => '₦' + Math.round(n).toLocaleString();
 
         if (mine.length === 0) {
@@ -123,27 +194,30 @@ const RepTools = {
             return;
         }
 
+        const shown = Math.min(this._payoutShown, mine.length);
+        let body = mine.slice(0, shown).map(r => this.payoutRowHTML(r)).join('');
+        const more = mine.length - shown;
+        if (more > 0) {
+            body += `<tr class="rep-showall-row"><td colspan="5"><button type="button" class="rep-showall" id="rep-showall-btn">Show all commissions (${more} more)</button></td></tr>`;
+        }
+        tbody.innerHTML = body;
+
         let pendingTotal = 0;
         let paidTotal = 0;
-        tbody.innerHTML = mine.map(r => {
-            const amount = parseFloat(r.order_amount) || 0;
+        mine.forEach(r => {
             const commission = parseFloat(r.commission) || 0;
             const paid = String(r.status || '').toLowerCase() === 'paid';
             if (paid) paidTotal += commission; else pendingTotal += commission;
-            return `
-                <tr>
-                    <td>${VFUtils.sanitize(r.product)}</td>
-                    <td>${VFUtils.sanitize(naira(amount))}</td>
-                    <td>${VFUtils.sanitize(naira(commission))}</td>
-                    <td><span class="rep-status ${paid ? 'paid' : 'pending'}">${VFUtils.sanitize(paid ? 'Paid' : 'Pending')}</span></td>
-                    <td>${VFUtils.sanitize(r.date)}</td>
-                </tr>
-            `;
-        }).join('');
+        });
 
         table.classList.remove('hidden');
         summary.classList.remove('hidden');
         summary.textContent = `Pending: ${naira(pendingTotal)} · Paid: ${naira(paidTotal)}`;
+    },
+
+    showAllPayouts() {
+        this._payoutShown = (this._payouts || []).length;
+        this.renderPayoutTable();
     },
 
     init() {
@@ -164,8 +238,16 @@ const RepTools = {
             const shareBtn = e.target.closest('[data-share]');
             if (shareBtn) {
                 navigator.share({ title: 'Gifts by VF', url: shareBtn.getAttribute('data-share') }).catch(() => {});
+                return;
             }
+            if (e.target.closest('#load-more-rep-products-btn')) this.showMoreRepProducts();
         });
+        const payoutsTable = document.getElementById('rep-payouts');
+        if (payoutsTable) {
+            payoutsTable.addEventListener('click', (e) => {
+                if (e.target.closest('#rep-showall-btn')) this.showAllPayouts();
+            });
+        }
         const saved = sessionStorage.getItem(this._sessionKey);
         if (saved) {
             document.getElementById('rep-input').value = saved;

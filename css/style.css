@@ -268,6 +268,35 @@ section { padding: 100px 24px; }
     background: var(--gold);
     color: var(--dark);
 }
+
+#rep-products .load-more-wrap {
+    margin-top: 20px;
+}
+#testimonials-grid .load-more-wrap {
+    margin-top: 28px;
+}
+.rep-showall-row td {
+    text-align: center;
+    padding-top: 18px;
+}
+.rep-showall {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+.rep-showall:hover {
+    background: var(--gold);
+    color: var(--dark);
+}
 .product-card {
     background: var(--white);
     border: 1px solid rgba(0,0,0,0.06);

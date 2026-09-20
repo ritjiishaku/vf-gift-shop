@@ -159,6 +159,16 @@ const VFUtils = {
         return s;
     },
 
+    isNarrowScreen() {
+        return window.matchMedia('(max-width: 768px)').matches;
+    },
+
+    loadMoreButton(remaining, id = 'load-more-btn') {
+        const more = parseInt(remaining) || 0;
+        if (more <= 0) return '';
+        return `<div class="load-more-wrap"><button type="button" class="load-more" id="${id}">Show more (${more} more)</button></div>`;
+    },
+
     filterAndSort(rows) {
         return rows
             .filter(r => {
