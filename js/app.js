@@ -250,6 +250,12 @@ const VF = {
         this.applyProductFilters();
     },
 
+    _setCategory(key) {
+        this._activeCategory = String(key || 'all').toLowerCase();
+        this.renderFilterPills();
+        if (this._products) this.applyProductFilters();
+    },
+
     renderFilterPills() {
         const bar = document.getElementById('catalogue-filters');
         if (!bar) return;
@@ -263,7 +269,22 @@ const VF = {
             return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${VFUtils.sanitize(key)}">${VFUtils.sanitize(c)}</button>`;
         }).join('');
         bar.innerHTML = pills;
+
+        const dropdown = document.getElementById('catalogue-filter');
+        if (dropdown) {
+            const options = [['all', 'All categories'], ...cats.map(c => [c.toLowerCase(), c])]
+                .map(([key, label]) => `<option value="${VFUtils.sanitize(key)}"${this._activeCategory === key ? ' selected' : ''}>${VFUtils.sanitize(label)}</option>`)
+                .join('');
+            dropdown.innerHTML = options;
+        }
+
         if (typeof this._refreshFilterFades === 'function') this._refreshFilterFades();
+    },
+
+    _setCategory(key) {
+        this._activeCategory = key;
+        this.renderFilterPills();
+        if (this._products) this.applyProductFilters();
     },
 
     applyProductFilters() {
@@ -480,14 +501,19 @@ const VF = {
             });
         }
 
+        const categorySelect = document.getElementById('catalogue-filter');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', () => {
+                this._setCategory(categorySelect.value || 'all');
+            });
+        }
+
         const filterBar = document.getElementById('catalogue-filters');
         if (filterBar) {
             filterBar.addEventListener('click', (e) => {
                 const pill = e.target.closest('.pill[data-category]');
                 if (!pill) return;
-                this._activeCategory = pill.getAttribute('data-category');
-                this.renderFilterPills();
-                if (this._products) this.applyProductFilters();
+                this._setCategory(pill.getAttribute('data-category'));
             });
             if (typeof filterBar.classList.toggle === 'function') {
                 const refreshFilterFades = () => {

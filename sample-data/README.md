@@ -38,7 +38,7 @@ Each row becomes a catalogue card. Columns:
 | `description` | Short blurb shown under the title |
 | `image_url` | Photo (600×600 works best). If blank, the card shows an icon tile instead. Google Drive links are converted automatically, but the file must be shared "Anyone with the link". |
 | `price` | Shown as "From ₦18,000" on the card. Blank hides the price. |
-| `category` | The storefront builds its filter pills automatically from these — one pill per category, plus "All" |
+| `category` | The storefront builds its category filter automatically from these — desktop shows glanceable filter pills, while mobile displays a clean native category select dropdown |
 | `display_order` | Card position |
 | `is_visible` | `FALSE` hides the row |
 | `in_stock` | Blank = available. `FALSE` / `0` / `no` marks the card **Sold Out** and switches the button to *Enquire on WhatsApp* |
