@@ -13,9 +13,9 @@ const VF = {
         site_title: 'Gifts by VF — Handcrafted & Bespoke Gifts',
         brand_name: 'Gifts by V',
         brand_accent: 'F',
-        products_label: 'Handcrafted & Bespoke Gifts',
-        products_title: 'Curated Keepsakes Crafted to Inspire',
-        products_desc: 'Explore our collection of custom jewelry, acrylic art, and personalized gift boxes. Select any piece to place your order directly on WhatsApp.',
+        products_label: 'Made to Order',
+        products_title: 'Every Gift Tells a Story',
+        products_desc: 'Browse our handcrafted jewelry, acrylic frames, and personalized gift boxes. See something you love? Order directly on WhatsApp — we\'ll make it just for you.',
         footer_text: `© ${new Date().getFullYear()} Gifts by VF. All rights reserved.`
     },
 
@@ -197,21 +197,15 @@ const VF = {
     // ══════════════════════════════════════════════════════
     //  SITE SETTINGS
     // ══════════════════════════════════════════════════════
-    async applySiteSettings() {
-        const rows = await this.fetchTab(this.TABS.SETTINGS);
-        const settings = { ...this.DEFAULTS };
-        (rows || []).forEach(row => {
-            if (row.key && row.value) settings[row.key] = row.value;
-        });
 
+    // Synchronously paint a settings object onto the DOM.
+    _applySettings(settings) {
         const brandName = settings.brand_name || '';
         const brandAccent = settings.brand_accent || '';
         document.querySelectorAll('.brand-text').forEach(el => (el.textContent = brandName));
         document.querySelectorAll('.brand-accent').forEach(el => (el.textContent = brandAccent));
 
-        if (settings.site_title) {
-            document.title = settings.site_title;
-        }
+        if (settings.site_title) document.title = settings.site_title;
 
         if (settings.whatsapp_number) {
             this._waNumber = settings.whatsapp_number.replace(/[^0-9]/g, '');
@@ -224,6 +218,21 @@ const VF = {
         this.setText('products-title', settings.products_title);
         this.setText('products-desc', settings.products_desc);
         this.setText('footer-text', settings.footer_text);
+    },
+
+    async applySiteSettings() {
+        // 1. Paint defaults immediately — no waiting, no flash.
+        this._applySettings(this.DEFAULTS);
+
+        // 2. Fetch sheet values and patch on top once ready.
+        const rows = await this.fetchTab(this.TABS.SETTINGS);
+        if (!rows || rows.length === 0) return;
+
+        const settings = { ...this.DEFAULTS };
+        rows.forEach(row => {
+            if (row.key && row.value) settings[row.key] = row.value;
+        });
+        this._applySettings(settings);
     },
 
     // ══════════════════════════════════════════════════════
