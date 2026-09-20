@@ -10,13 +10,13 @@ const VF = {
 
     DEFAULTS: {
         whatsapp_number: '2348127252004',
-        site_title: '',
+        site_title: 'Gifts by VF — Handcrafted & Bespoke Gifts',
         brand_name: 'Gifts by V',
         brand_accent: 'F',
-        products_label: '',
-        products_title: '',
-        products_desc: '',
-        footer_text: `© ${new Date().getFullYear()} Gifts by VF.`
+        products_label: 'Handcrafted & Bespoke Gifts',
+        products_title: 'Curated Keepsakes Crafted to Inspire',
+        products_desc: 'Explore our collection of custom jewelry, acrylic art, and personalized gift boxes. Select any piece to place your order directly on WhatsApp.',
+        footer_text: `© ${new Date().getFullYear()} Gifts by VF. All rights reserved.`
     },
 
     WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>',
