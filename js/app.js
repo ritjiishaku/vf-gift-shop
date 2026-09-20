@@ -238,6 +238,7 @@ const VF = {
             return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${VFUtils.sanitize(key)}">${VFUtils.sanitize(c)}</button>`;
         }).join('');
         bar.innerHTML = pills;
+        if (typeof this._refreshFilterFades === 'function') this._refreshFilterFades();
     },
 
     applyProductFilters() {
@@ -418,6 +419,15 @@ const VF = {
                 this.renderFilterPills();
                 if (this._products) this.applyProductFilters();
             });
+            if (typeof filterBar.classList.toggle === 'function') {
+                const refreshFilterFades = () => {
+                    const max = filterBar.scrollWidth - filterBar.clientWidth;
+                    filterBar.classList.toggle('scroll-l', filterBar.scrollLeft > 4);
+                    filterBar.classList.toggle('scroll-r', max - filterBar.scrollLeft > 4);
+                };
+                filterBar.addEventListener('scroll', refreshFilterFades, { passive: true });
+                this._refreshFilterFades = refreshFilterFades;
+            }
         }
 
         const productsGrid = document.getElementById('products-grid');

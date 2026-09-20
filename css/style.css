@@ -132,6 +132,8 @@ section { padding: 100px 24px; }
 }
 .catalogue-filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .pill {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
     background: var(--white);
     border: 1px solid var(--border-medium);
     color: var(--text-light);
@@ -594,7 +596,20 @@ footer {
 @media (max-width: 768px) {
     .catalogue-controls { flex-wrap: nowrap; flex-direction: column; align-items: stretch; gap: 10px; }
     .catalogue-search { flex: 1 1 auto; min-width: 0; }
-    .catalogue-filters { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; gap: 8px; scrollbar-width: thin; }
+    .catalogue-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 8px;
+    padding: 2px 0;
+}
+.catalogue-filters.scroll-r { -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 14px), transparent); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 14px), transparent); }
+.catalogue-filters.scroll-l { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 100%); mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 100%); }
+.catalogue-filters.scroll-l.scroll-r { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent); mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent); }
+.catalogue-filters::-webkit-scrollbar { display: none; }
     .catalogue-filters::-webkit-scrollbar { height: 4px; }
     .catalogue-filters::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
     .catalogue-count { margin-left: 0; text-align: center; }
