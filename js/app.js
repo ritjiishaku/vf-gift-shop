@@ -288,6 +288,15 @@ const VF = {
                 if (pb == null) return -1;
                 return dir * (pa - pb);
             });
+        } else if (this._sort === 'name-asc') {
+            filtered.sort((a, b) => {
+                const na = (a.name || '').trim().toLowerCase();
+                const nb = (b.name || '').trim().toLowerCase();
+                if (!na && !nb) return 0;
+                if (!na) return 1;
+                if (!nb) return -1;
+                return na < nb ? -1 : na > nb ? 1 : 0;
+            });
         }
 
         this._lastFiltered = filtered;
