@@ -365,13 +365,6 @@ footer {
 .product-order-btn:hover svg { fill: var(--gold); }
 .product-card.highlighted { box-shadow: 0 0 0 3px var(--gold); }
 
-/* ── FOOTER REP LINK ── */
-.footer-rep { margin-top: 8px; }
-.footer-rep a {
-    color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px;
-}
-.footer-rep a:hover { color: var(--gold); }
-
 /* ── SALES REP PAGE ── */
 .hidden { display: none !important; }
 .rep-header {

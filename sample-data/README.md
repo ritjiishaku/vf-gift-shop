@@ -54,7 +54,7 @@ The site lets sales reps share product links and earn commission. Setup is simpl
 2. **Share the sheet** — **File → Share → set to "Anyone with the link" → Viewer** for the whole spreadsheet, or at least every tab the site reads (Products, Portfolio, Testimonials, Why Us, How to Order, Sales Reps, and Payouts so reps can see their status). Readable-by-link is enough — no need to use "Publish to web"; the site reads the tabs directly.
 3. **The flow:**
    - The owner adds products to the catalogue as usual.
-   - A rep opens **`reps.html`** (link in the site footer — "Sales Rep Tools"), enters their `rep_id`, picks a product, and copies its share link.
+   - A rep opens **`reps.html`** (the owner sends them the direct link — `https://vf-gift-shop.vercel.app/reps.html` — along with their rep code), enters their `rep_id`, picks a product, and copies its share link.
    - The share link looks like: `https://your-site.com/index.html?ref=kofi&p=engraved-ring`
    - When a buyer clicks it, the site shows *"You were referred by Kofi"*, highlights the product, and the **Order on WhatsApp** button opens a message pre-filled with the product **and** the referral.
    - The owner confirms the order + payment in WhatsApp, then logs the sale in the `Payouts` tab: `rep_id`, `product`, `order_amount`, `commission` (amount × rate), `status` (`PENDING` or `PAID`), `date`.
