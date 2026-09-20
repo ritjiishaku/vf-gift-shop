@@ -44,6 +44,9 @@ const VF = {
 
     WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>',
 
+    MOBILE_PRODUCT_LIMIT: 8,
+    MOBILE_PRODUCT_CHUNK: 8,
+
     ICONS: {
         jewelry: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
         acrylic: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
@@ -322,16 +325,69 @@ const VF = {
             return `${p.name} ${p.description} ${p.category}`.toLowerCase().includes(q);
         });
 
+        this._lastFiltered = filtered;
+        this._mobileShown = this.MOBILE_PRODUCT_LIMIT;
+        this.renderProductGrid(filtered);
+    },
+
+    isNarrowScreen() {
+        return window.matchMedia('(max-width: 768px)').matches;
+    },
+
+    renderProductGrid(filtered) {
+        const container = document.getElementById('products-grid');
+        if (!container) return;
+
         if (filtered.length === 0) {
             container.innerHTML = `<div class="empty-state">No products match your search.</div>`;
         } else {
-            container.innerHTML = filtered.map((p, i) =>
+            const showCount = this.isNarrowScreen()
+                ? Math.min(this._mobileShown, filtered.length)
+                : filtered.length;
+            const visible = filtered.slice(0, showCount);
+            let html = visible.map((p, i) =>
                 this.productCardHTML(p, p.display_order || i + 1)
             ).join('');
+            const more = filtered.length - visible.length;
+            if (more > 0) {
+                html += `<div class="load-more-wrap"><button type="button" class="load-more" id="load-more-btn">Show more (${more} more)</button></div>`;
+            }
+            container.innerHTML = html;
         }
 
         const count = document.getElementById('catalogue-count');
-        if (count) count.textContent = `Showing ${filtered.length} of ${this._products.length} pieces`;
+        if (count) count.textContent = `Showing ${filtered.slice(0, this.isNarrowScreen() ? this._mobileShown : filtered.length).length} of ${this._products.length} pieces`;
+        this.observeFadeIns();
+    },
+
+    showMoreProducts() {
+        if (!this._lastFiltered || this._lastFiltered.length === 0) return;
+        const container = document.getElementById('products-grid');
+        if (!container) return;
+        const append = Math.min(this.MOBILE_PRODUCT_CHUNK, this._lastFiltered.length - this._mobileShown);
+        if (append <= 0) return;
+        const start = this._mobileShown;
+        this._mobileShown += append;
+
+        const html = this._lastFiltered.slice(start, start + append)
+            .map((p, i) => this.productCardHTML(p, p.display_order || start + i + 1))
+            .join('');
+
+        let btn = document.getElementById('load-more-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = this._lastFiltered.length - this._mobileShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        const count = document.getElementById('catalogue-count');
+        if (count) count.textContent = `Showing ${this._mobileShown} of ${this._products.length} pieces`;
         this.observeFadeIns();
     },
 
@@ -355,7 +411,7 @@ const VF = {
         const category = String(p.category || '').trim() || 'Custom';
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const img = url
-            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
+            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, 1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
             : '';
         return `
             <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
@@ -408,7 +464,7 @@ const VF = {
                            this.srcVariant(url, 900, h900) + ' 900w';
             return `
                 <div class="gallery-item${isWide ? ' wide' : ''} fade-in">
-                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.style.display='none';}">
+                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 33vw" alt="${VFUtils.sanitize(item.caption)}" loading="lazy" decoding="async" data-full="${VFUtils.sanitize(this.srcVariant(url, 1200, h1200))}" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.style.display='none';}">
                     <div class="gallery-label">${VFUtils.sanitize(item.caption)}</div>
                 </div>
             `;
@@ -534,6 +590,8 @@ const VF = {
         this._products = null;
         this._activeCategory = 'all';
         this._searchQuery = '';
+        this._lastFiltered = null;
+        this._mobileShown = this.MOBILE_PRODUCT_LIMIT;
 
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
@@ -606,19 +664,51 @@ const VF = {
             });
         }
 
+        const productsGrid = document.getElementById('products-grid');
+        if (productsGrid) {
+            productsGrid.addEventListener('click', (e) => {
+                if (e.target.closest('#load-more-btn')) this.showMoreProducts();
+            });
+        }
+
         await this.resolveReferral();
 
         await Promise.all([
             this.applySiteSettings(),
-            this.renderProducts(),
-            this.renderPortfolio(),
-            this.renderTestimonials(),
-            this.renderWhyUs(),
-            this.renderSteps()
+            this.renderProducts()
         ]);
+
+        const deferred = [
+            { id: 'gallery', fn: () => this.renderPortfolio() },
+            { id: 'testimonials', fn: () => this.renderTestimonials() },
+            { id: 'why', fn: () => this.renderWhyUs() },
+            { id: 'order', fn: () => this.renderSteps() }
+        ];
+
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    const def = deferred.find(d => d.id === entry.target.id);
+                    if (!def) return;
+                    def.fn();
+                    io.unobserve(entry.target);
+                });
+            }, { rootMargin: '0px 0px 200px 0px', threshold: 0 });
+            deferred.forEach(d => {
+                const el = document.getElementById(d.id);
+                if (el) io.observe(el);
+            });
+        } else {
+            deferred.forEach(d => d.fn());
+        }
 
         if (productParam) {
             if (this._products) this.clearProductFilters();
+            if (this.isNarrowScreen() && this._lastFiltered) {
+                this._mobileShown = this._lastFiltered.length;
+                this.renderProductGrid(this._lastFiltered);
+            }
             const target = document.getElementById('product-' + VFUtils.sanitize(VFUtils.slugify(productParam)));
             if (target) {
                 setTimeout(() => {
