@@ -261,6 +261,11 @@ section { padding: 100px 24px; }
     text-transform: uppercase;
     padding: 5px 10px;
 }
+.product-badge.out {
+    background: var(--dark);
+    color: var(--gold);
+}
+.product-card.is-soldout .product-body h3 { color: var(--text-light); }
 .product-pricetag {
     position: absolute; bottom: 12px; right: 12px;
     background: var(--gold);

@@ -190,5 +190,11 @@ const VFUtils = {
         const raw = row.is_active != null && row.is_active !== '' ? row.is_active : row.is_visible;
         const v = String(raw || '').toLowerCase();
         return v !== 'false' && v !== '0';
+    },
+
+    isSoldOut(row) {
+        if (!row) return false;
+        const raw = String(row.in_stock == null ? '' : row.in_stock).toLowerCase();
+        return raw === 'false' || raw === '0' || raw === 'no';
     }
 };

@@ -119,9 +119,11 @@
                 <tr><td>delivery_notes</td><td>Short answer</td><td>No</td></tr>
                 <tr><td>payment_terms</td><td>Short answer</td><td>No</td></tr>
                 <tr><td>sales_caption</td><td>Paragraph</td><td>No</td></tr>
+                <tr><td>in_stock</td><td>Dropdown (true / false)</td><td>No</td></tr>
+                <tr><td>stock_label</td><td>Short answer</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button.</p>
+        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button. Leave <code>in_stock</code> blank to keep the product available; set it to <code>false</code> / <code>0</code> / <code>no</code> to mark it <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes the badge, e.g. <code>Pre-Order Only</code>.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -229,6 +231,7 @@
         </ol>
         <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet — matching ignores case, spaces, and underscores, so <code>Image URL</code> and <code>image_url</code> both work. When in doubt, open the sheet and copy the exact header text.</p>
         <p class="admin-tip"><strong>Tip:</strong> The sync script copies every new form submission into the right tab automatically. You never need to edit or re-publish anything — just make sure the header names match.</p>
+        <p class="admin-tip"><strong>Tip:</strong> Google Drive images only appear on the site when the file is shared as <strong>"Anyone with the link — Viewer"</strong>. If a product shows the icon fallback instead of a photo, open the Drive file, click <em>Share</em>, and set link sharing to anyone.</p>
         <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> — including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
     </div>
 </section>

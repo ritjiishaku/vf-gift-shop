@@ -41,6 +41,8 @@ Each row becomes a catalogue card. Columns:
 | `category` | The storefront builds its filter pills automatically from these — one pill per category, plus "All" |
 | `display_order` | Card position |
 | `is_visible` | `FALSE` hides the row |
+| `in_stock` | Blank = available. `FALSE` / `0` / `no` marks the card **Sold Out** and switches the button to *Enquire on WhatsApp* |
+| `stock_label` | Custom badge text for out-of-stock cards, e.g. `Pre-Order Only` |
 
 The storefront search + category filters + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added.
 

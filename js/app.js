@@ -331,6 +331,8 @@ const VF = {
         const price = VFUtils.formatNaira(p.price);
         const category = String(p.category || '').trim() || 'Custom';
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
+        const soldOut = VFUtils.isSoldOut(p);
+        const badgeLabel = soldOut ? (String(p.stock_label || '').trim() || 'Sold Out') : category;
         const img = url
             ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
             : '';
@@ -344,11 +346,11 @@ const VF = {
             .map(([k, v]) => `<li><span>${k}:</span> ${VFUtils.sanitize(v)}</li>`)
             .join('');
         return `
-            <div class="product-card fade-in" id="product-${VFUtils.sanitize(slug)}">
+            <div class="product-card fade-in${soldOut ? ' is-soldout' : ''}" id="product-${VFUtils.sanitize(slug)}">
                 <div class="product-img${url ? '' : ' no-image'}">
                     ${img}
                     <div class="product-icon-fallback">${this.icon(p.icon || category.toLowerCase())}</div>
-                    <span class="product-badge">${VFUtils.sanitize(category)}</span>
+                    <span class="product-badge${soldOut ? ' out' : ''}">${VFUtils.sanitize(badgeLabel)}</span>
                     ${price ? `<span class="product-pricetag">From ${VFUtils.sanitize(price)}</span>` : ''}
                 </div>
                 <div class="product-body">
@@ -357,7 +359,7 @@ const VF = {
                     ${meta ? `<ul class="product-meta">${meta}</ul>` : ''}
                     <a href="${this.waLink(p.name, price)}" class="product-order-btn" target="_blank" rel="noopener noreferrer">
                         ${this.WA_ICON}
-                        <span>Order on WhatsApp</span>
+                        <span>${soldOut ? 'Enquire on WhatsApp' : 'Order on WhatsApp'}</span>
                     </a>
                 </div>
             </div>
@@ -375,6 +377,7 @@ const VF = {
         this._searchQuery = '';
         this._lastFiltered = null;
         this._productShown = this.PRODUCT_LIMIT;
+        this._searchTimer = null;
 
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
@@ -398,8 +401,11 @@ const VF = {
         const searchInput = document.getElementById('catalogue-search');
         if (searchInput) {
             searchInput.addEventListener('input', () => {
-                this._searchQuery = searchInput.value.trim();
-                if (this._products) this.applyProductFilters();
+                clearTimeout(this._searchTimer);
+                this._searchTimer = setTimeout(() => {
+                    this._searchQuery = searchInput.value.trim();
+                    if (this._products) this.applyProductFilters();
+                }, 150);
             });
         }
 
