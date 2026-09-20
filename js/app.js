@@ -217,6 +217,9 @@ const VF = {
             this._waNumber = settings.whatsapp_number.replace(/[^0-9]/g, '');
         }
 
+        const navWa = document.getElementById('nav-wa-btn');
+        if (navWa) navWa.href = this.waLink(null, null);
+
         this.setText('products-label', settings.products_label);
         this.setText('products-title', settings.products_title);
         this.setText('products-desc', settings.products_desc);
