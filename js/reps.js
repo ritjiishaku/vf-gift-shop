@@ -272,10 +272,7 @@ const RepTools = {
             });
         }
         const saved = sessionStorage.getItem(this._sessionKey);
-        if (saved) {
-            document.getElementById('rep-input').value = saved;
-            this.login(saved);
-        }
+        if (saved) document.getElementById('rep-input').value = saved;
     }
 };
 
