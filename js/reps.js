@@ -67,13 +67,9 @@ const RepTools = {
         ]);
         this._repProducts = VFUtils.filterAndSort(products || []);
         const deepLink = new URLSearchParams(location.search).get('p');
-        if (deepLink && VFUtils.isNarrowScreen()) {
-            this._repProductShown = this._repProducts.length;
-        } else {
-            this._repProductShown = VFUtils.isNarrowScreen()
-                ? Math.min(this.REP_PRODUCT_LIMIT, this._repProducts.length)
-                : this._repProducts.length;
-        }
+        this._repProductShown = deepLink
+            ? this._repProducts.length
+            : Math.min(this.REP_PRODUCT_LIMIT, this._repProducts.length);
         this.renderProductList();
         this._payoutRows = payouts || [];
         this.renderPayouts();
@@ -156,10 +152,7 @@ const RepTools = {
     renderPayouts() {
         const rows = this._payoutRows || [];
         this._payouts = rows.filter(r => String(r.rep_id || '').trim().toLowerCase() === String(this._rep.rep_id).toLowerCase());
-        const narrow = VFUtils.isNarrowScreen();
-        this._payoutShown = narrow
-            ? Math.min(this.REP_PAYOUT_LIMIT, this._payouts.length)
-            : this._payouts.length;
+        this._payoutShown = Math.min(this.REP_PAYOUT_LIMIT, this._payouts.length);
         this.renderPayoutTable();
     },
 

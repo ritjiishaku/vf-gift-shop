@@ -44,10 +44,16 @@ const VF = {
 
     WA_ICON: '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>',
 
-    MOBILE_PRODUCT_LIMIT: 8,
-    MOBILE_PRODUCT_CHUNK: 8,
+    PRODUCT_LIMIT: 12,
+    PRODUCT_CHUNK: 12,
+    GALLERY_LIMIT: 8,
+    GALLERY_CHUNK: 8,
     TESTIMONIAL_LIMIT: 6,
     TESTIMONIAL_CHUNK: 6,
+    WHY_LIMIT: 4,
+    WHY_CHUNK: 4,
+    STEPS_LIMIT: 4,
+    STEPS_CHUNK: 4,
 
     ICONS: {
         jewelry: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
@@ -328,12 +334,8 @@ const VF = {
         });
 
         this._lastFiltered = filtered;
-        this._mobileShown = this.MOBILE_PRODUCT_LIMIT;
+        this._productShown = this.PRODUCT_LIMIT;
         this.renderProductGrid(filtered);
-    },
-
-    isNarrowScreen() {
-        return VFUtils.isNarrowScreen();
     },
 
     renderProductGrid(filtered) {
@@ -343,10 +345,8 @@ const VF = {
         if (filtered.length === 0) {
             container.innerHTML = `<div class="empty-state">No products match your search.</div>`;
         } else {
-            const showCount = this.isNarrowScreen()
-                ? Math.min(this._mobileShown, filtered.length)
-                : filtered.length;
-            const visible = filtered.slice(0, showCount);
+            const shown = Math.min(this._productShown, filtered.length);
+            const visible = filtered.slice(0, shown);
             let html = visible.map((p, i) =>
                 this.productCardHTML(p, p.display_order || i + 1)
             ).join('');
@@ -358,7 +358,7 @@ const VF = {
         }
 
         const count = document.getElementById('catalogue-count');
-        if (count) count.textContent = `Showing ${filtered.slice(0, this.isNarrowScreen() ? this._mobileShown : filtered.length).length} of ${this._products.length} pieces`;
+        if (count) count.textContent = `Showing ${Math.min(this._productShown, filtered.length)} of ${this._products.length} pieces`;
         this.observeFadeIns();
     },
 
@@ -366,10 +366,10 @@ const VF = {
         if (!this._lastFiltered || this._lastFiltered.length === 0) return;
         const container = document.getElementById('products-grid');
         if (!container) return;
-        const append = Math.min(this.MOBILE_PRODUCT_CHUNK, this._lastFiltered.length - this._mobileShown);
+        const append = Math.min(this.PRODUCT_CHUNK, this._lastFiltered.length - this._productShown);
         if (append <= 0) return;
-        const start = this._mobileShown;
-        this._mobileShown += append;
+        const start = this._productShown;
+        this._productShown += append;
 
         const html = this._lastFiltered.slice(start, start + append)
             .map((p, i) => this.productCardHTML(p, p.display_order || start + i + 1))
@@ -378,7 +378,7 @@ const VF = {
         let btn = container.querySelector('#load-more-products-btn');
         if (btn) {
             btn.insertAdjacentHTML('beforebegin', html);
-            const remaining = this._lastFiltered.length - this._mobileShown;
+            const remaining = this._lastFiltered.length - this._productShown;
             if (remaining > 0) {
                 btn.textContent = `Show more (${remaining} more)`;
             } else {
@@ -389,7 +389,7 @@ const VF = {
         }
 
         const count = document.getElementById('catalogue-count');
-        if (count) count.textContent = `Showing ${this._mobileShown} of ${this._products.length} pieces`;
+        if (count) count.textContent = `Showing ${this._productShown} of ${this._products.length} pieces`;
         this.observeFadeIns();
     },
 
@@ -453,7 +453,7 @@ const VF = {
             return;
         }
 
-        const cards = items.map(item => {
+        this._galleryItems = items.map(item => {
             const url = VFUtils.validateUrl(VFUtils.directImageUrl(item.image_url));
             if (!url) return '';
             const isWide = String(item.wide || '').toLowerCase() === 'true' || item.wide === '1';
@@ -472,13 +472,51 @@ const VF = {
             `;
         }).filter(Boolean);
 
-        if (cards.length === 0) {
+        if (this._galleryItems.length === 0) {
             this.showError('gallery-grid', 'No portfolio photos yet.');
             return;
         }
 
-        container.innerHTML = cards.join('');
+        this._galleryShown = Math.min(this.GALLERY_LIMIT, this._galleryItems.length);
+        this.renderGalleryGrid();
+    },
 
+    renderGalleryGrid() {
+        const container = document.getElementById('gallery-grid');
+        if (!container) return;
+        const items = this._galleryItems || [];
+        const shown = Math.min(this._galleryShown, items.length);
+        let html = items.slice(0, shown).join('');
+        const more = items.length - shown;
+        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-gallery-btn');
+        container.innerHTML = html;
+        this.observeFadeIns();
+    },
+
+    showMoreGallery() {
+        const items = this._galleryItems || [];
+        if (items.length === 0) return;
+        const container = document.getElementById('gallery-grid');
+        if (!container) return;
+        const append = Math.min(this.GALLERY_CHUNK, items.length - this._galleryShown);
+        if (append <= 0) return;
+        const start = this._galleryShown;
+        this._galleryShown += append;
+
+        const html = items.slice(start, start + append).join('');
+
+        let btn = container.querySelector('#load-more-gallery-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = items.length - this._galleryShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
         this.observeFadeIns();
     },
 
@@ -501,9 +539,7 @@ const VF = {
         }
 
         this._testimonials = items;
-        this._testimonialShown = this.isNarrowScreen()
-            ? Math.min(this.TESTIMONIAL_LIMIT, items.length)
-            : items.length;
+        this._testimonialShown = Math.min(this.TESTIMONIAL_LIMIT, items.length);
         this.renderTestimonialGrid();
     },
 
@@ -585,14 +621,58 @@ const VF = {
             return;
         }
 
-        container.innerHTML = items.map(w => `
+        this._whyItems = items;
+        this._whyShown = Math.min(this.WHY_LIMIT, items.length);
+        this.renderWhyGrid();
+    },
+
+    whyItemHTML(w) {
+        return `
             <div class="why-item fade-in">
                 <div class="why-icon">${this.icon(w.icon)}</div>
                 <h4>${VFUtils.sanitize(w.title)}</h4>
                 <p>${VFUtils.sanitize(w.description)}</p>
             </div>
-        `).join('');
+        `;
+    },
 
+    renderWhyGrid() {
+        const container = document.getElementById('why-grid');
+        if (!container) return;
+        const items = this._whyItems || [];
+        const shown = Math.min(this._whyShown, items.length);
+        let html = items.slice(0, shown).map(w => this.whyItemHTML(w)).join('');
+        const more = items.length - shown;
+        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-why-btn');
+        container.innerHTML = html;
+        this.observeFadeIns();
+    },
+
+    showMoreWhyUs() {
+        if (!this._whyItems || this._whyItems.length === 0) return;
+        const container = document.getElementById('why-grid');
+        if (!container) return;
+        const append = Math.min(this.WHY_CHUNK, this._whyItems.length - this._whyShown);
+        if (append <= 0) return;
+        const start = this._whyShown;
+        this._whyShown += append;
+
+        const html = this._whyItems.slice(start, start + append)
+            .map(w => this.whyItemHTML(w))
+            .join('');
+
+        let btn = container.querySelector('#load-more-why-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = this._whyItems.length - this._whyShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
         this.observeFadeIns();
     },
 
@@ -614,14 +694,58 @@ const VF = {
             return;
         }
 
-        container.innerHTML = items.map((s, i) => `
+        this._stepsItems = items;
+        this._stepsShown = Math.min(this.STEPS_LIMIT, items.length);
+        this.renderStepsGrid();
+    },
+
+    stepItemHTML(s, i) {
+        return `
             <div class="step fade-in">
                 <div class="step-number">${i + 1}</div>
                 <h4>${VFUtils.sanitize(s.title)}</h4>
                 <p>${VFUtils.sanitize(s.description)}</p>
             </div>
-        `).join('');
+        `;
+    },
 
+    renderStepsGrid() {
+        const container = document.getElementById('steps');
+        if (!container) return;
+        const items = this._stepsItems || [];
+        const shown = Math.min(this._stepsShown, items.length);
+        let html = items.slice(0, shown).map((s, i) => this.stepItemHTML(s, i)).join('');
+        const more = items.length - shown;
+        if (more > 0) html += VFUtils.loadMoreButton(more, 'load-more-steps-btn');
+        container.innerHTML = html;
+        this.observeFadeIns();
+    },
+
+    showMoreSteps() {
+        if (!this._stepsItems || this._stepsItems.length === 0) return;
+        const container = document.getElementById('steps');
+        if (!container) return;
+        const append = Math.min(this.STEPS_CHUNK, this._stepsItems.length - this._stepsShown);
+        if (append <= 0) return;
+        const start = this._stepsShown;
+        this._stepsShown += append;
+
+        const html = this._stepsItems.slice(start, start + append)
+            .map((s, i) => this.stepItemHTML(s, start + i))
+            .join('');
+
+        let btn = container.querySelector('#load-more-steps-btn');
+        if (btn) {
+            btn.insertAdjacentHTML('beforebegin', html);
+            const remaining = this._stepsItems.length - this._stepsShown;
+            if (remaining > 0) {
+                btn.textContent = `Show more (${remaining} more)`;
+            } else {
+                btn.closest('.load-more-wrap').remove();
+            }
+        } else {
+            container.insertAdjacentHTML('beforeend', html);
+        }
         this.observeFadeIns();
     },
 
@@ -635,9 +759,14 @@ const VF = {
         this._activeCategory = 'all';
         this._searchQuery = '';
         this._lastFiltered = null;
-        this._mobileShown = this.MOBILE_PRODUCT_LIMIT;
+        this._productShown = this.PRODUCT_LIMIT;
+        this._galleryShown = this.GALLERY_LIMIT;
         this._testimonials = null;
         this._testimonialShown = this.TESTIMONIAL_LIMIT;
+        this._whyItems = null;
+        this._whyShown = this.WHY_LIMIT;
+        this._stepsItems = null;
+        this._stepsShown = this.STEPS_LIMIT;
 
         const params = new URLSearchParams(window.location.search);
         const refParam = params.get('ref');
@@ -724,6 +853,27 @@ const VF = {
             });
         }
 
+        const galleryGrid = document.getElementById('gallery-grid');
+        if (galleryGrid) {
+            galleryGrid.addEventListener('click', (e) => {
+                if (e.target.closest('#load-more-gallery-btn')) this.showMoreGallery();
+            });
+        }
+
+        const whyGrid = document.getElementById('why-grid');
+        if (whyGrid) {
+            whyGrid.addEventListener('click', (e) => {
+                if (e.target.closest('#load-more-why-btn')) this.showMoreWhyUs();
+            });
+        }
+
+        const stepsEl = document.getElementById('steps');
+        if (stepsEl) {
+            stepsEl.addEventListener('click', (e) => {
+                if (e.target.closest('#load-more-steps-btn')) this.showMoreSteps();
+            });
+        }
+
         await this.resolveReferral();
 
         await Promise.all([
@@ -758,8 +908,8 @@ const VF = {
 
         if (productParam) {
             if (this._products) this.clearProductFilters();
-            if (this.isNarrowScreen() && this._lastFiltered) {
-                this._mobileShown = this._lastFiltered.length;
+            if (this._lastFiltered) {
+                this._productShown = this._lastFiltered.length;
                 this.renderProductGrid(this._lastFiltered);
             }
             const target = document.getElementById('product-' + VFUtils.sanitize(VFUtils.slugify(productParam)));
