@@ -44,7 +44,7 @@ Each row becomes a catalogue card. Columns:
 | `in_stock` | Blank = available. `FALSE` / `0` / `no` marks the card **Sold Out** and switches the button to *Enquire on WhatsApp* |
 | `stock_label` | Custom badge text for out-of-stock cards, e.g. `Pre-Order Only` |
 
-The storefront search + category filters + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added.
+The storefront search + category filters + sort (Featured / Price low-high / Price high-low) + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added. Tap any product photo to open it full-screen. Products with a blank/non-numeric `price` always sort last.
 
 ---
 

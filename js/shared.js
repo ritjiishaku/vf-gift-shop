@@ -159,6 +159,15 @@ const VFUtils = {
         return s;
     },
 
+    priceNumber(row) {
+        const s = String(row && row.price != null ? row.price : '').trim();
+        if (!s) return null;
+        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹]+\s*/i, '');
+        if (!/^[0-9,.]+$/.test(cleaned)) return null;
+        const n = parseFloat(cleaned.replace(/,/g, ''));
+        return Number.isFinite(n) ? n : null;
+    },
+
     isNarrowScreen() {
         return window.matchMedia('(max-width: 768px)').matches;
     },

@@ -89,6 +89,31 @@ const VF = {
         container.appendChild(el);
     },
 
+    // ══════════════════════════════════════════════════════
+    //  LIGHTBOX
+    // ══════════════════════════════════════════════════════
+    openLightbox(url, name) {
+        const lb = document.getElementById('lightbox');
+        if (!lb) return;
+        const img = VFUtils.directImageUrl(url);
+        if (!img) return;
+        const src = this.srcVariant(img, 1200, 1200);
+        const caption = VFUtils.sanitize(name || '');
+        lb.innerHTML = `<button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+            <img src="${VFUtils.sanitize(src)}" alt="${caption}" decoding="async">
+            ${caption ? `<p class="lightbox-caption">${caption}</p>` : ''}`;
+        lb.hidden = false;
+        document.body.classList.add('lightbox-open');
+    },
+
+    closeLightbox() {
+        const lb = document.getElementById('lightbox');
+        if (!lb) return;
+        lb.hidden = true;
+        lb.innerHTML = '';
+        document.body.classList.remove('lightbox-open');
+    },
+
     getReferral() {
         try {
             const raw = localStorage.getItem('vf_referral');
@@ -253,6 +278,18 @@ const VF = {
             return `${p.name} ${p.description} ${p.category}`.toLowerCase().includes(q);
         });
 
+        if (this._sort === 'price-asc' || this._sort === 'price-desc') {
+            const dir = this._sort === 'price-asc' ? 1 : -1;
+            filtered.sort((a, b) => {
+                const pa = VFUtils.priceNumber(a);
+                const pb = VFUtils.priceNumber(b);
+                if (pa == null && pb == null) return 0;
+                if (pa == null) return 1;
+                if (pb == null) return -1;
+                return dir * (pa - pb);
+            });
+        }
+
         this._lastFiltered = filtered;
         this._productShown = this.PRODUCT_LIMIT;
         this.renderProductGrid(filtered);
@@ -335,7 +372,9 @@ const VF = {
         const soldOut = VFUtils.isSoldOut(p);
         const badgeLabel = soldOut ? (String(p.stock_label || '').trim() || 'Sold Out') : category;
         const img = url
-            ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{this.parentNode.classList.add('no-image');}">`
+            ? `<button type="button" class="js-lightbox" data-img="${VFUtils.sanitize(url)}" data-name="${VFUtils.sanitize(p.name)}" aria-label="View larger image of ${VFUtils.sanitize(p.name)}">
+                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(max-width: 768px) 100vw, 50vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{var c=this.closest('.product-img');if(c){c.classList.add('no-image');}}">
+                </button>`
             : '';
         const meta = [
             ['Material', p.material],
@@ -376,6 +415,7 @@ const VF = {
         this._products = null;
         this._activeCategory = 'all';
         this._searchQuery = '';
+        this._sort = 'featured';
         this._lastFiltered = null;
         this._productShown = this.PRODUCT_LIMIT;
         this._searchTimer = null;
@@ -410,6 +450,27 @@ const VF = {
             });
         }
 
+        const searchClearBtn = document.getElementById('catalogue-search-clear');
+        if (searchClearBtn) {
+            searchClearBtn.addEventListener('click', () => {
+                this._searchQuery = '';
+                if (searchInput) searchInput.value = '';
+                if (this._products) {
+                    this.renderFilterPills();
+                    this.applyProductFilters();
+                }
+                if (searchInput) searchInput.focus();
+            });
+        }
+
+        const sortSelect = document.getElementById('catalogue-sort');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', () => {
+                this._sort = sortSelect.value || 'featured';
+                if (this._products) this.applyProductFilters();
+            });
+        }
+
         const filterBar = document.getElementById('catalogue-filters');
         if (filterBar) {
             filterBar.addEventListener('click', (e) => {
@@ -434,6 +495,20 @@ const VF = {
         if (productsGrid) {
             productsGrid.addEventListener('click', (e) => {
                 if (e.target.closest('#load-more-products-btn')) this.showMoreProducts();
+                const lightboxBtn = e.target.closest('.js-lightbox[data-img]');
+                if (lightboxBtn) {
+                    this.openLightbox(lightboxBtn.getAttribute('data-img'), lightboxBtn.getAttribute('data-name'));
+                }
+            });
+        }
+
+        const lightboxEl = document.getElementById('lightbox');
+        if (lightboxEl) {
+            lightboxEl.addEventListener('click', (e) => {
+                if (e.target.closest('.lightbox-close') || e.target === lightboxEl) this.closeLightbox();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !lightboxEl.hidden) this.closeLightbox();
             });
         }
 
