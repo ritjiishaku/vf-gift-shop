@@ -143,7 +143,13 @@ section { padding: 100px 24px; }
 }
 
 /* ── CATALOGUE ── */
-#products { background: var(--cream); padding-top: 140px; }
+#products {
+    background:
+        radial-gradient(ellipse at 85% 0%, rgba(201, 169, 110, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 15% 45%, rgba(201, 169, 110, 0.06) 0%, transparent 60%),
+        var(--cream);
+    padding-top: 140px;
+}
 
 /* Control bar (search + filters + count) */
 .catalogue-controls {
