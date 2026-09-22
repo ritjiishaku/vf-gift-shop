@@ -20,6 +20,26 @@
     <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1I2iMEg47s7_ik0trBhvqbgrJIBQmFIBB">
     <link rel="canonical" href="https://vf-gift-shop.vercel.app/">
 
+    <!-- Structured data: Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Gifts by VF",
+        "url": "https://vf-gift-shop.vercel.app/",
+        "logo": "https://lh3.googleusercontent.com/d/1I2iMEg47s7_ik0trBhvqbgrJIBQmFIBB",
+        "description": "Gifts by VF handcrafts personalized jewelry, acrylic frames, and custom gifts for birthdays, weddings, and corporate events. Order on WhatsApp, delivered across Nigeria.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "telephone": "+234-812-725-2004",
+            "areaServed": "NG",
+            "availableLanguage": "English",
+            "url": "https://wa.me/2348127252004"
+        }
+    }
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle fill='%23c9a96e' cx='16' cy='16' r='16'/><text x='50%25' y='56%25' dominant-baseline='central' text-anchor='middle' font-family='Georgia,serif' font-size='13' font-weight='bold' fill='white'>VF</text></svg>">
 
@@ -57,6 +77,32 @@
 
 <div id="referral-banner" class="referral-banner" role="status"></div>
 
+<!-- HERO -->
+<header id="hero" class="hero fade-in">
+    <div class="hero-inner">
+        <p class="section-label" id="hero-label"></p>
+        <h1 class="hero-title" id="hero-title"></h1>
+        <p class="hero-desc" id="hero-desc"></p>
+        <div class="hero-ctas">
+            <a href="#products" class="hero-btn" id="hero-browse" aria-label="Browse the catalogue">
+                <span>Browse gifts</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+            </a>
+            <a href="https://wa.me/2348127252004" id="hero-wa" class="hero-btn ghost" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>
+                <span id="hero-cta-text">Chat on WhatsApp</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="trust-strip" aria-label="Brand trust points">
+    <div class="trust-item">Handmade in Nigeria</div>
+    <div class="trust-item">Personalised gifting</div>
+    <div class="trust-item">Nationwide delivery</div>
+    <div class="trust-item">Custom gifts available</div>
+</div>
+
 <!-- CATALOGUE -->
 <section id="products">
     <div class="section-inner">
@@ -80,9 +126,14 @@
                     <option value="price-desc">Price: High to Low</option>
                     <option value="name-asc">Name: A to Z</option>
                 </select>
+                <select id="catalogue-price" class="catalogue-sort" aria-label="Filter by price"></select>
                 <select id="catalogue-filter" class="catalogue-sort" aria-label="Filter by category"></select>
             </div>
             <div class="catalogue-filters" id="catalogue-filters" role="group" aria-label="Filter by category"></div>
+            <div class="catalogue-filters occasion-filters" id="occasion-filters" role="group" aria-label="Filter by occasion"></div>
+            <div class="catalogue-selects occasion-select-row hidden" id="occasion-select-row">
+                <select id="occasion-filter" class="catalogue-sort" aria-label="Filter by occasion"></select>
+            </div>
             <p class="catalogue-count" id="catalogue-count" aria-live="polite">Loading products...</p>
         </div>
         <noscript>
@@ -90,7 +141,76 @@
                 <a href="https://wa.me/2348127252004" target="_blank" rel="noopener noreferrer">here</a>.
             </p>
         </noscript>
+        <div id="featured-section" hidden>
+            <div class="featured-header">
+                <p class="section-label" id="featured-label"></p>
+                <h3 class="featured-title" id="featured-title"></h3>
+            </div>
+            <div class="featured-grid" id="featured-grid"></div>
+        </div>
         <div class="products-grid" id="products-grid"></div>
+    </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="side-section fade-in" hidden>
+    <div class="section-inner">
+        <div class="catalogue-header">
+            <p class="section-label" id="portfolio-label"></p>
+            <h2 class="section-title" id="portfolio-title"></h2>
+        </div>
+        <div class="portfolio-grid fade-in" id="portfolio-grid"></div>
+    </div>
+</section>
+
+<!-- WHY US -->
+<section id="why-us" class="side-section" hidden>
+    <div class="section-inner">
+        <div class="catalogue-header fade-in">
+            <p class="section-label" id="why-label"></p>
+            <h2 class="section-title" id="why-title"></h2>
+        </div>
+        <div class="why-grid fade-in" id="why-grid"></div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="side-section alt fade-in" hidden>
+    <div class="section-inner">
+        <div class="catalogue-header">
+            <p class="section-label" id="testimonials-label"></p>
+            <h2 class="section-title" id="testimonials-title"></h2>
+        </div>
+        <div class="testimonials-track fade-in" id="testimonials-grid"></div>
+    </div>
+</section>
+
+<!-- HOW TO ORDER -->
+<section id="how-to-order" class="side-section fade-in" hidden>
+    <div class="section-inner">
+        <div class="catalogue-header">
+            <p class="section-label" id="howto-label"></p>
+            <h2 class="section-title" id="howto-title"></h2>
+        </div>
+        <ol class="steps fade-in" id="howto-grid"></ol>
+        <div class="steps-cta fade-in">
+            <p>Ready to order? Message us on WhatsApp and we'll make it just for you.</p>
+            <a href="https://wa.me/2348127252004" id="howto-wa" class="product-order-btn" target="_blank" rel="noopener noreferrer" aria-label="Start your order on WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-whatsapp"/></svg>
+                <span>Start your order</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="side-section alt fade-in" hidden>
+    <div class="section-inner">
+        <div class="catalogue-header">
+            <p class="section-label" id="faq-label"></p>
+            <h2 class="section-title" id="faq-title"></h2>
+        </div>
+        <div class="faq-list fade-in" id="faq-grid"></div>
     </div>
 </section>
 

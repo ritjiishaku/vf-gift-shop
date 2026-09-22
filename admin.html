@@ -42,6 +42,22 @@
     <button id="admin-lock" class="admin-lock-btn hidden" type="button">Lock</button>
 </header>
 
+<main class="admin-page">
+    <section class="page-hero admin-hero">
+        <div class="page-hero-copy">
+            <p class="section-label">Owner area</p>
+            <h1>Manage your gift catalogue</h1>
+            <p>Update products, portfolio moments, FAQs, and sales content from one polished admin area.</p>
+        </div>
+        <div class="gift-chips" aria-label="Admin focus areas">
+            <span>Products</span>
+            <span>Portfolio</span>
+            <span>Reviews</span>
+            <span>FAQs</span>
+            <span>Reps</span>
+        </div>
+    </section>
+
 <section class="admin-section">
     <h2>Add Content</h2>
     <p class="admin-intro">Use the Google Forms below to add new items. A form writes each answer to its own <strong>"Form Responses"</strong> sheet — the sync script in the Setup Guide below copies it into the right tab, which is what appears on the store automatically.</p>
@@ -75,6 +91,12 @@
             <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-list"/></svg></div>
             <h3>Add an Order Step</h3>
             <p>Add a step to "How It Works" / "5 Simple Steps".</p>
+            <span class="admin-card-cta">Open form &rarr;</span>
+        </a>
+        <a class="admin-card" id="form-faqs" target="_blank" rel="noopener noreferrer">
+            <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-chat"/></svg></div>
+            <h3>Add an FAQ</h3>
+            <p>Add a question &amp; answer to the "Before You Order" section.</p>
             <span class="admin-card-cta">Open form &rarr;</span>
         </a>
         <a class="admin-card" id="form-reps" target="_blank" rel="noopener noreferrer">
@@ -119,11 +141,13 @@
                 <tr><td>delivery_notes</td><td>Short answer</td><td>No</td></tr>
                 <tr><td>payment_terms</td><td>Short answer</td><td>No</td></tr>
                 <tr><td>sales_caption</td><td>Paragraph</td><td>No</td></tr>
+                <tr><td>occasion</td><td>Short answer</td><td>No</td></tr>
+                <tr><td>featured</td><td>Dropdown (true / false)</td><td>No</td></tr>
                 <tr><td>in_stock</td><td>Dropdown (true / false)</td><td>No</td></tr>
                 <tr><td>stock_label</td><td>Short answer</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button. Leave <code>in_stock</code> blank to keep the product available; set it to <code>false</code> / <code>0</code> / <code>no</code> to mark it <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes the badge, e.g. <code>Pre-Order Only</code>.</p>
+        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. Set <code>featured</code> to <code>true</code> to put the product in the "Featured Pieces" strip at the top of the page (it hides while any filter is active). Leave <code>in_stock</code> blank to keep the product available; set it to <code>false</code> / <code>0</code> / <code>no</code> to mark it <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes the badge, e.g. <code>Pre-Order Only</code>.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -139,7 +163,21 @@
                 <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip"><code>wide</code> = <code>true</code> makes the photo span two columns (featured tile). <code>category</code> is stored but not yet shown on the site.</p>
+        <p class="admin-tip"><code>wide</code> = <code>true</code> makes the photo span two columns (featured tile). <code>category</code> is stored but not yet shown on the site. The gallery shows as "Recent Work" right below the catalogue and hides automatically when the tab is empty.</p>
+    </div>
+
+    <div class="admin-colgroup">
+        <h3>FAQs</h3>
+        <table class="admin-table">
+            <thead><tr><th>Question (form label)</th><th>Type</th><th>Required</th></tr></thead>
+            <tbody>
+                <tr><td>question</td><td>Short answer</td><td>Yes</td></tr>
+                <tr><td>answer</td><td>Paragraph</td><td>Yes</td></tr>
+                <tr><td>display_order</td><td>Number</td><td>No</td></tr>
+                <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
+            </tbody>
+        </table>
+        <p class="admin-tip">Shown as expandable question cards under the "Before You Order" heading. The section hides automatically when the tab is empty.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -169,7 +207,7 @@
                 <tr><td>is_visible</td><td>Dropdown (true / false)</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip"><code>icon</code> can be one of: <code>jewelry</code>, <code>acrylic</code>, <code>gift</code>, <code>corporate</code>, <code>star</code>, <code>target</code>, <code>chat</code>, <code>truck</code>, <code>heart</code>, <code>camera</code>, <code>award</code>, or <code>sparkle</code>. Leave blank for the default star.</p>
+        <p class="admin-tip"><code>icon</code> can be one of: <code>jewelry</code>, <code>acrylic</code>, <code>gift</code>, <code>corporate</code>, <code>star</code>, <code>target</code>, <code>chat</code>, <code>truck</code>, <code>heart</code>, <code>camera</code>, <code>award</code>, <code>sparkle</code>, or <code>link</code>. Leave blank for the default star.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -220,10 +258,10 @@
     <h2>Setup Guide</h2>
     <div class="admin-steps">
         <ol>
-            <li>In Google Forms, create a new form for each of the seven sections.</li>
+            <li>In Google Forms, create a new form for each of the eight sections.</li>
             <li>Add the questions exactly as listed in the tables above.</li>
             <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>, then pick your VF Gift Shop Google Sheet.</li>
-            <li>Do this for all seven forms. (Google Forms makes a separate <strong>"Form Responses"</strong> sheet for each one — this is normal.)</li>
+            <li>Do this for all eight forms. (Google Forms makes a separate <strong>"Form Responses"</strong> sheet for each one — this is normal.)</li>
             <li>Open your VF sheet → <strong>Extensions → Apps Script</strong>, paste in the contents of <code>form-sync.gs</code>, and Save.</li>
             <li>In Apps Script, click the clock icon (<strong>Triggers</strong>) → <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, event <strong>"On form submit"</strong>, source <strong>"From spreadsheet"</strong>. Save and approve the permission prompt.</li>
             <li>Submit each form once to test — the entry should appear in the matching tab (and on the site).</li>
@@ -255,6 +293,7 @@
 //      testimonials: 'https://docs.google.com/forms/d/e/1FAIpQLSfQrStUvW4567890/viewform',
 //      why:          'https://docs.google.com/forms/d/e/1FAIpQLSfXxYyZzW1122334/viewform',
 //      steps:        'https://docs.google.com/forms/d/e/1FAIpQLSfAaBbCcD5566778/viewform',
+//      faqs:         'https://docs.google.com/forms/d/e/1FAIpQLSfAkLjMnOp1234567/viewform',
 //      reps:         'https://docs.google.com/forms/d/e/1FAIpQLSfEeFfGgH9900112/viewform',
 //      payouts:      'https://docs.google.com/forms/d/e/1FAIpQLSfIiJjKkL3344556/viewform'
 //  };
@@ -265,6 +304,7 @@ const FORM_LINKS = {
     testimonials: 'https://docs.google.com/forms/d/1rQVm0o9NUsdX_dcZ1_tTOwnFI6r7YTIQvNVDAA18Yc4/viewform',
     why: 'https://docs.google.com/forms/d/1LAg3oQ8YKhy-J5ZKh6JjP03UZSDunyHCup0Z0SzQ-Dw/viewform',
     steps: 'https://docs.google.com/forms/d/1_Ow3bN8-Rh0ZoJLJ8O8A5dHyFUSdVdzC8egre16M3TU/viewform',
+    faqs: '',
     reps: 'https://docs.google.com/forms/d/1Fv5kkWW-wBinbfA4AYkGAFLqbYrXCp-5tbFiLbnqvOg/viewform',
     payouts: 'https://docs.google.com/forms/d/1rd5Tg5euL7KYWZgUAQ_rrdoFqV48ynfqZVIcSYrdOnI/viewform'
 };
@@ -277,6 +317,7 @@ const FORM_LINKS = {
         testimonials: 'form-testimonials',
         why: 'form-why',
         steps: 'form-steps',
+        faqs: 'form-faqs',
         reps: 'form-reps',
         payouts: 'form-payouts'
     };
