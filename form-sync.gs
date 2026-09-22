@@ -10,7 +10,8 @@ var TARGETS = [
   { tab: 'Portfolio',     keys: ['caption'] },
   { tab: 'Products',      keys: ['price', 'category'] },
   { tab: 'Why Us',        keys: ['icon'] },
-  { tab: 'How to Order',  keys: ['title', 'description'] }
+  { tab: 'How to Order',  keys: ['title', 'description'] },
+  { tab: 'FAQs',          keys: ['question', 'answer'] }
 ];
 
 function onFormSubmit(e) {

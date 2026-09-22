@@ -12,12 +12,13 @@ These CSV files are **header-only templates** that document the exact column lay
 | `testimonials.csv` | `Testimonials` |
 | `why-us.csv` | `Why Us` |
 | `how-to-order.csv` | `How to Order` |
+| `faqs.csv` | `FAQs` |
 | `sales-reps.csv` | `Sales Reps` |
 | `payouts.csv` | `Payouts` |
 
 ## How content gets in
 
-- **Products, Portfolio, Testimonials, Why Us, How to Order, Sales Reps, Payouts** — the owner adds entries through the linked **Google Forms** (see `admin.html`). Each submission is copied into the matching tab by `form-sync.gs`.
+- **Products, Portfolio, Testimonials, Why Us, How to Order, FAQs, Sales Reps, Payouts** — the owner adds entries through the linked **Google Forms** (see `admin.html`). Each submission is copied into the matching tab by `form-sync.gs`.
 - **Site Settings** — there is no form for this tab. It is edited **directly in the sheet** (a `key` / `value` pair per row) to set the brand name, WhatsApp number, and page copy.
 
 ## Important
@@ -43,8 +44,30 @@ Each row becomes a catalogue card. Columns:
 | `is_visible` | `FALSE` hides the row |
 | `in_stock` | Blank = available. `FALSE` / `0` / `no` marks the card **Sold Out** and switches the button to *Enquire on WhatsApp* |
 | `stock_label` | Custom badge text for out-of-stock cards, e.g. `Pre-Order Only` |
+| `occasion` | Comma-separated occasion tags, e.g. `Birthday, Wedding`. Drives the "occasion" filter (desktop pills + mobile select). Blank hides the control |
+| `featured` | `TRUE` puts the product in the "Featured Pieces" strip at the top of the page. The strip shows only when all filters are cleared and disappears whenever a filter/search is active |
 
-The storefront search + category filters + sort (Featured / Price low-high / Price high-low) + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added. Tap any product photo to open it full-screen. Products with a blank/non-numeric `price` always sort last.
+The storefront search + category + occasion + price-range filters + sort (Featured / Price low-high / Price high-low / Name A–Z) + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added. Products with a blank/non-numeric `price` always sort last. Tap any product photo to open it full-screen.
+
+---
+
+## Homepage sections (Why Us / Testimonials / Portfolio / How to Order / FAQs)
+
+The homepage renders the trust and buy-path sections directly from the matching tabs. Each section **only appears when its tab has at least one visible row**, so you can leave a section empty until you're ready to fill it:
+
+- **`Why Us` tab** → *"Why People Choose Us"* cards (`title`, `description`, `icon` — icon keys: `jewelry`, `gift`, `heart`, `star`, `truck`, `sparkle`, `award`, `camera`, `chat`, `target`, `corporate`, `acrylic`, `link`).
+- **`Testimonials` tab** → review cards with star ratings (`quote`, `name`, `source`, `rating` — rating is 1–5).
+- **`Portfolio` tab** → a visual "Recent Work" gallery (`image_url`, `caption`, `category`, `wide`, `display_order`, `is_visible`). Set `wide` to `TRUE` to make a piece span two columns. Tap a photo to open it full-screen. Rows without a photo show a caption tile instead.
+- **`How to Order` tab** → numbered step cards (`title`, `description`) plus a "Start your order" WhatsApp button.
+- **`FAQs` tab** → expandable question cards (`question`, `answer`, `display_order`, `is_visible`).
+
+Section headings come from **Site Settings** (`why_label`, `why_title`, `testimonials_label`, `testimonials_title`, `portfolio_label`, `portfolio_title`, `howto_label`, `howto_title`, `faq_label`, `faq_title`) and fall back to sensible defaults if blank.
+
+## Homepage hero
+
+The opening headline block above the catalogue reads from **Site Settings** — `hero_label` (eyebrow text), `hero_title` (headline), `hero_desc` (subline), `hero_cta` (WhatsApp button label) — and falls back to defaults if blank.
+
+Google also reads structured data: the page ships an `Organization` block (name, URL, contact) plus a live `ItemList` of products with prices in NGN and stock status, generated from the catalogue automatically.
 
 ---
 

@@ -184,7 +184,7 @@ const VFUtils = {
             .filter(r => {
                 const v = String(r.is_visible || '').toLowerCase();
                 if (v === 'false' || v === '0') return false;
-                const key = [r.name, r.price, r.image_url]
+                const key = [r.name || r.title || r.caption || r.question, r.price, r.image_url]
                     .map(x => String(x == null ? '' : x).trim().toLowerCase())
                     .join('::');
                 if (seen.has(key)) return false;
