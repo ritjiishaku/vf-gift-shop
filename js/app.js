@@ -36,6 +36,28 @@ const VF = {
         portfolio_title: 'Some of what we\'ve made',
         howto_label: 'Simple & Easy',
         howto_title: 'How to Order',
+        howto_steps: [
+            {
+                title: 'Find what you love',
+                description: 'Use the search bar to browse by keyword, category, or occasion and find the perfect gift for your moment.'
+            },
+            {
+                title: 'Choose your favourite',
+                description: 'Browse the catalogue, compare styles, and pick the piece that feels most personal and meaningful.'
+            },
+            {
+                title: 'Send your custom details',
+                description: 'Tap the WhatsApp button and send us the name, initials, photo, text, or custom details you want included.'
+            },
+            {
+                title: 'Confirm & pay',
+                description: 'We’ll confirm the design, final details, and pricing with you before payment is completed.'
+            },
+            {
+                title: 'We create & deliver',
+                description: 'Leave the rest to us and we’ll craft your gift with care and deliver it to you with love.'
+            }
+        ],
         faq_label: 'Good to Know',
         faq_title: 'Before You Order',
         footer_text: `© ${new Date().getFullYear()} Gifts by VF. All rights reserved.`
@@ -849,17 +871,27 @@ const VF = {
         const section = document.getElementById('how-to-order');
         const list = document.getElementById('howto-grid');
         if (!section || !list) return;
+
+        let rows = [];
         const tab = await this.fetchTab(this.TABS.HOW_TO_ORDER);
-        if (!tab) return;
-        const rows = VFUtils.filterAndSort(tab);
-        if (rows.length === 0) return;
+        if (tab) {
+            rows = VFUtils.filterAndSort(tab);
+        }
+
+        if (rows.length === 0) {
+            rows = this.DEFAULTS.howto_steps || [];
+        }
+
         list.innerHTML = rows.map((row, i) => `
             <li class="step">
                 <span class="step-num">${i + 1}</span>
-                <h3>${VFUtils.sanitize(row.title)}</h3>
-                <p>${VFUtils.sanitize(row.description)}</p>
+                <div>
+                    <h3>${VFUtils.sanitize(row.title)}</h3>
+                    <p>${VFUtils.sanitize(row.description)}</p>
+                </div>
             </li>
         `).join('');
+
         section.hidden = false;
         this.observeFadeIns();
     },
