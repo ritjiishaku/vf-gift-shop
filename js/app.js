@@ -271,11 +271,14 @@ const VF = {
     renderFilterPills() {
         const bar = document.getElementById('catalogue-filters');
         if (!bar) return;
+
+        const products = Array.isArray(this._products) ? this._products : [];
         const cats = [];
-        this._products.forEach(p => {
+        products.forEach(p => {
             const c = String(p.category || '').trim();
             if (c && !cats.some(x => x.toLowerCase() === c.toLowerCase())) cats.push(c);
         });
+
         const pills = ['All', ...cats].map(c => {
             const key = c === 'All' ? 'all' : c.toLowerCase();
             return `<button type="button" class="pill${this._activeCategory === key ? ' active' : ''}" data-category="${VFUtils.sanitize(key)}">${VFUtils.sanitize(c)}</button>`;
@@ -294,21 +297,30 @@ const VF = {
     },
 
     _setCategory(key) {
-        this._activeCategory = key;
+        this._activeCategory = String(key || 'all').toLowerCase();
         this.renderFilterPills();
         if (this._products) this.applyProductFilters();
     },
 
     applyProductFilters() {
+        const allProducts = Array.isArray(this._products) ? this._products : [];
         const container = document.getElementById('products-grid');
         if (!container) return;
 
         const q = String(this._searchQuery || '').toLowerCase();
-        const filtered = this._products.filter(p => {
+        const filtered = allProducts.filter(p => {
             const cat = String(p.category || '').trim().toLowerCase();
             if (this._activeCategory !== 'all' && cat !== this._activeCategory) return false;
             if (!q) return true;
-            return `${p.name} ${p.description} ${p.category}`.toLowerCase().includes(q);
+            const haystack = [
+                p.name,
+                p.description,
+                p.category,
+                p.material,
+                p.size,
+                p.price
+            ].join(' ').toLowerCase();
+            return haystack.includes(q);
         });
 
         if (this._sort === 'price-asc' || this._sort === 'price-desc') {
@@ -333,7 +345,7 @@ const VF = {
         }
 
         this._lastFiltered = filtered;
-        this._productShown = this.PRODUCT_LIMIT;
+        this._productShown = Math.min(this.PRODUCT_LIMIT, filtered.length);
         this.renderProductGrid(filtered);
     },
 
@@ -357,7 +369,10 @@ const VF = {
         }
 
         const count = document.getElementById('catalogue-count');
-        if (count) count.textContent = `Showing ${Math.min(this._productShown, filtered.length)} of ${this._products.length} pieces`;
+        if (count) {
+            const displayed = Math.min(this._productShown, filtered.length);
+            count.textContent = `Showing ${displayed} of ${filtered.length} pieces`;
+        }
         this.observeFadeIns();
     },
 
