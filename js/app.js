@@ -305,24 +305,34 @@ const VF = {
         if (heroWa) heroWa.href = this.waLink(null, null);
     },
 
+    settingsFromRows(rows) {
+        if (!rows || rows.length === 0) return null;
+        if (!rows.some(row => 'key' in row)) return null;
+        const settings = { ...this.DEFAULTS };
+        rows.forEach(row => {
+            if (row.key && row.value) settings[row.key] = row.value;
+        });
+        return settings;
+    },
+
     async applySiteSettings() {
-        // 1. Paint defaults immediately — no waiting, no flash.
-        this._applySettings(this.DEFAULTS);
+        // 1. Paint the last good settings immediately (defaults only when there is no cache).
+        const cached = VFUtils.cacheRead(this.TABS.SETTINGS);
+        const boot = cached ? this.settingsFromRows(cached) : null;
+        this._applySettings(boot || this.DEFAULTS);
+        console.info('[VF] settings painted(initial): ' + (boot ? 'cached' : 'defaults'));
 
         // 2. Fetch sheet values and patch on top once ready.
         const rows = await this.fetchTab(this.TABS.SETTINGS);
         if (!rows || rows.length === 0) return;
 
-        if (!rows.some(row => 'key' in row)) {
+        const fresh = this.settingsFromRows(rows);
+        if (!fresh) {
             console.warn('[VF] Site Settings loaded without a `key` column — check the tab layout (row 1 = key,value, one key pair per row, no merged cells).');
             return;
         }
-
-        const settings = { ...this.DEFAULTS };
-        rows.forEach(row => {
-            if (row.key && row.value) settings[row.key] = row.value;
-        });
-        this._applySettings(settings);
+        this._applySettings(fresh);
+        console.info('[VF] settings painted(sheet): ' + Object.keys(fresh).length + ' keys');
     },
 
     // ══════════════════════════════════════════════════════

@@ -13,9 +13,17 @@ const VFUtils = {
     tabUrl(tabName, sheetId) {
         const gid = this.TAB_GIDS[tabName];
         if (gid != null) {
-            return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+            return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}&cb=${Date.now()}`;
         }
         return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+    },
+
+    cacheRead(tabName, sheetId) {
+        sheetId = sheetId || this.SHEET_ID;
+        const key = `vf_cache:${sheetId}:${tabName}`;
+        const stored = this.cacheGet(key);
+        if (stored && Array.isArray(stored.data) && stored.data.length > 0) return stored.data;
+        return null;
     },
 
     refreshMode() {
@@ -110,7 +118,7 @@ const VFUtils = {
 
         try {
             const url = this.tabUrl(tabName, sheetId);
-            const response = await fetch(url);
+            const response = await fetch(url, { cache: 'no-store' });
             if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
             const result = this.parseCSV(await response.text());
             cache[tabName] = result;
