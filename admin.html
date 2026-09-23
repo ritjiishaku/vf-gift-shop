@@ -37,7 +37,10 @@
 </svg>
 
 <header class="rep-header">
-    <a href="index.html" class="nav-logo"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></a>
+    <a href="index.html" class="nav-logo" aria-label="Gifts by VF">
+        <span class="brand-name"><span class="brand-text">Gifts by V</span><span class="brand-accent">F</span></span>
+        <span class="nav-tagline">Bespoke Gifts</span>
+    </a>
     <span class="rep-tag">Owner Admin</span>
     <button id="admin-lock" class="admin-lock-btn hidden" type="button">Lock</button>
 </header>
@@ -382,6 +385,23 @@ const FORM_LINKS = {
     reps: 'https://docs.google.com/forms/d/1Fv5kkWW-wBinbfA4AYkGAFLqbYrXCp-5tbFiLbnqvOg/viewform',
     payouts: 'https://docs.google.com/forms/d/1rd5Tg5euL7KYWZgUAQ_rrdoFqV48ynfqZVIcSYrdOnI/viewform'
 };
+</script>
+<script src="js/shared.js"></script>
+<script>
+(function () {
+    const apply = rows => {
+        (rows || []).forEach(row => {
+            if (row.key === 'brand_name' && row.value) {
+                document.querySelectorAll('.brand-text').forEach(el => (el.textContent = row.value));
+            } else if (row.key === 'brand_accent' && row.value) {
+                document.querySelectorAll('.brand-accent').forEach(el => (el.textContent = row.value));
+            }
+        });
+    };
+    try {
+        VFUtils.fetchTab('Site Settings').then(apply).catch(() => {});
+    } catch (err) {}
+})();
 </script>
 <script>
 (function () {

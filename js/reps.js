@@ -90,6 +90,10 @@ const RepTools = {
         (settings || []).forEach(row => {
             if (row.key === 'commission_rule' && row.value) {
                 this.setText('rep-rule', row.value);
+            } else if (row.key === 'brand_name' && row.value) {
+                document.querySelectorAll('.brand-text').forEach(el => (el.textContent = row.value));
+            } else if (row.key === 'brand_accent' && row.value) {
+                document.querySelectorAll('.brand-accent').forEach(el => (el.textContent = row.value));
             }
         });
         this._repProducts = this.dedupeProducts(VFUtils.filterAndSort(products || []));
