@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-NG">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — Gifts by VF</title>
+    <title>Admin â€” Gifts by VF</title>
     <meta name="robots" content="noindex">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<!-- SVG sprite (hidden) — referenced by <use href="#icon-*"/> -->
+<!-- SVG sprite (hidden) â€” referenced by <use href="#icon-*"/> -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="icon-gift" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></symbol>
     <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2S13.77 8.8 12 8.8 8.8 10.23 8.8 12s1.43 3.2 3.2 3.2zM9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></symbol>
@@ -63,13 +63,13 @@
 
 <section class="admin-section">
     <h2>Add Content</h2>
-    <p class="admin-intro">Use the Google Forms below to add new items. A form writes each answer to its own <strong>"Form Responses"</strong> sheet — the sync script in the Setup Guide below copies it into the right tab, which is what appears on the store automatically.</p>
+    <p class="admin-intro">Use the Google Forms below to add new items. A form writes each answer to its own <strong>"Form Responses"</strong> sheet â€” the sync script in the Setup Guide below copies it into the right tab, which is what appears on the store automatically.</p>
 
     <div class="admin-cards" id="admin-cards">
         <a class="admin-card" id="form-products" target="_blank" rel="noopener noreferrer">
             <div class="admin-card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-gift"/></svg></div>
             <h3>Add a Product</h3>
-            <p>New item for "What We Make" — jewelry, acrylic, or custom gifts.</p>
+            <p>New item for "What We Make" â€” jewelry, acrylic, or custom gifts.</p>
             <span class="admin-card-cta">Open form &rarr;</span>
         </a>
         <a class="admin-card" id="form-portfolio" target="_blank" rel="noopener noreferrer">
@@ -124,7 +124,7 @@
 
 <section class="admin-section">
     <h2>Column Reference</h2>
-    <p class="admin-intro">These are the <strong>exact column headers</strong> in your Google Sheet. Name each Google Form question to match a column above — the sync script matches them ignoring case, spaces, and underscores, so <code>Image URL</code>, <code>image url</code>, and <code>image_url</code> all map to the same column.</p>
+    <p class="admin-intro">These are the <strong>exact column headers</strong> in your Google Sheet. Name each Google Form question to match a column above â€” the sync script matches them ignoring case, spaces, and underscores, so <code>Image URL</code>, <code>image url</code>, and <code>image_url</code> all map to the same column.</p>
 
     <div class="admin-colgroup">
         <h3>Products</h3>
@@ -151,7 +151,7 @@
                 <tr><td>stock_label</td><td>Short answer</td><td>No</td></tr>
             </tbody>
         </table>
-        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>video_url</code> takes a YouTube, Google Drive, or direct <code>.mp4</code>/<code>.webm</code> link — give a product a photo, a video, or both (with both, the photo is the thumbnail and a ▶ badge plays the video fullscreen). Drive videos must be shared "Anyone with the link". <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. Set <code>featured</code> to <code>true</code> to put the product in the "Featured Pieces" strip at the top of the page (it hides while any filter is active). Leave <code>in_stock</code> blank to keep the product available; set it to <code>false</code> / <code>0</code> / <code>no</code> to mark it <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes the badge, e.g. <code>Pre-Order Only</code>.</p>
+        <p class="admin-tip">Optional detail fields (<code>material</code>, <code>size</code>, <code>turnaround</code>, <code>delivery_notes</code>, <code>payment_terms</code>) appear on the product card only when filled. <code>video_url</code> takes a YouTube, Google Drive, or direct <code>.mp4</code>/<code>.webm</code> link â€” give a product a photo, a video, or both (with both, the photo is the thumbnail and a â–¶ badge plays the video fullscreen). Drive videos must be shared "Anyone with the link". <code>sales_caption</code> is the ready-made pitch shown to sales reps beside their share button. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. Set <code>featured</code> to <code>true</code> to put the product in the "Featured Pieces" strip at the top of the page (it hides while any filter is active). Leave <code>in_stock</code> blank to keep the product available; set it to <code>false</code> / <code>0</code> / <code>no</code> to mark it <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes the badge, e.g. <code>Pre-Order Only</code>.</p>
     </div>
 
     <div class="admin-colgroup">
@@ -265,43 +265,43 @@
             <li>In Google Forms, create a new form for each of the eight sections.</li>
             <li>Add the questions exactly as listed in the tables above.</li>
             <li>In the <strong>Responses</strong> tab, click the Sheets icon and choose <strong>"Select existing spreadsheet"</strong>, then pick your VF Gift Shop Google Sheet.</li>
-            <li>Do this for all eight forms. (Google Forms makes a separate <strong>"Form Responses"</strong> sheet for each one — this is normal.)</li>
-            <li>Open your VF sheet → <strong>Extensions → Apps Script</strong>, paste in the contents of <code>form-sync.gs</code>, and Save.</li>
-            <li>In Apps Script, click the clock icon (<strong>Triggers</strong>) → <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, event <strong>"On form submit"</strong>, source <strong>"From spreadsheet"</strong>. Save and approve the permission prompt.</li>
-            <li>Submit each form once to test — the entry should appear in the matching tab (and on the site).</li>
+            <li>Do this for all eight forms. (Google Forms makes a separate <strong>"Form Responses"</strong> sheet for each one â€” this is normal.)</li>
+            <li>Open your VF sheet â†’ <strong>Extensions â†’ Apps Script</strong>, paste in the contents of <code>form-sync.gs</code>, and Save.</li>
+            <li>In Apps Script, click the clock icon (<strong>Triggers</strong>) â†’ <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, event <strong>"On form submit"</strong>, source <strong>"From spreadsheet"</strong>. Save and approve the permission prompt.</li>
+            <li>Submit each form once to test â€” the entry should appear in the matching tab (and on the site).</li>
             <li>Copy each form's share link and paste it into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>.</li>
         </ol>
-        <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet — matching ignores case, spaces, and underscores, so <code>Image URL</code> and <code>image_url</code> both work. When in doubt, open the sheet and copy the exact header text.</p>
-        <p class="admin-tip"><strong>Tip:</strong> The sync script copies every new form submission into the right tab automatically. You never need to edit or re-publish anything — just make sure the header names match.</p>
-        <p class="admin-tip"><strong>Tip:</strong> Google Drive images only appear on the site when the file is shared as <strong>"Anyone with the link — Viewer"</strong>. If a product shows the icon fallback instead of a photo, open the Drive file, click <em>Share</em>, and set link sharing to anyone.</p>
-        <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> — including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
+        <p class="admin-tip"><strong>About column names:</strong> the site reads fields like <code>image_url</code>, <code>display_order</code>, <code>is_visible</code>, <code>is_active</code>, <code>rep_id</code>, <code>commission_rate</code>, and <code>order_amount</code>. Name your form questions to match the headers already in your sheet â€” matching ignores case, spaces, and underscores, so <code>Image URL</code> and <code>image_url</code> both work. When in doubt, open the sheet and copy the exact header text.</p>
+        <p class="admin-tip"><strong>Tip:</strong> The sync script copies every new form submission into the right tab automatically. You never need to edit or re-publish anything â€” just make sure the header names match.</p>
+        <p class="admin-tip"><strong>Tip:</strong> Google Drive images only appear on the site when the file is shared as <strong>"Anyone with the link â€” Viewer"</strong>. If a product shows the icon fallback instead of a photo, open the Drive file, click <em>Share</em>, and set link sharing to anyone.</p>
+        <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> â€” including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
     </div>
 
     <h3>Owner Guide</h3>
 
     <details class="admin-accordion">
-        <summary>First-time setup — from zero to a live catalogue</summary>
+        <summary>First-time setup â€” from zero to a live catalogue</summary>
         <div class="accordion-body">
             <div class="admin-steps">
                 <ol>
                     <li>Create a Google Sheet and make <strong>9 tabs</strong> with these exact names: <code>Site Settings</code>, <code>Products</code>, <code>Portfolio</code>, <code>Testimonials</code>, <code>Why Us</code>, <code>How to Order</code>, <code>FAQs</code>, <code>Sales Reps</code>, <code>Payouts</code>.</li>
-                    <li>Add a header row to each tab using the columns in the Column Reference above. Products has the most — only <code>name</code>, <code>description</code>, <code>image_url</code>, and <code>category</code> are required; everything else is optional.</li>
+                    <li>Add a header row to each tab using the columns in the Column Reference above. Products has the most â€” only <code>name</code>, <code>description</code>, <code>image_url</code>, and <code>category</code> are required; everything else is optional.</li>
                     <li>Click <strong>Share</strong> &rarr; set access to <strong>"Anyone with the link"</strong> &rarr; role <strong>Viewer</strong>.</li>
                     <li>In the sheet, go to <strong>Extensions &rarr; Apps Script</strong>, paste the contents of <code>form-sync.gs</code>, and Save.</li>
                     <li>Click the clock icon (Triggers) &rarr; <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, source <strong>"From spreadsheet"</strong>, event <strong>"On form submit"</strong>. Save and approve the permission prompt once.</li>
                     <li>Create one Google Form per content type (Products, Portfolio, Testimonials, Why Us, How to Order, FAQs, Sales Reps, Payouts) with questions named to match the headers.</li>
-                    <li>Point each form's Responses at this spreadsheet — Google adds a separate "Form Responses" sheet per form, which is normal. The script copies submissions into the real tabs automatically.</li>
+                    <li>Point each form's Responses at this spreadsheet â€” Google adds a separate "Form Responses" sheet per form, which is normal. The script copies submissions into the real tabs automatically.</li>
                     <li>Submit each form once to test. The row should appear in the matching tab; if it doesn't, check <strong>View &rarr; Logs</strong> in Apps Script for "No matching tab."</li>
                     <li>Copy each form's <strong>Send</strong> link into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>. The "Add an FAQ" card stays inert until its <code>faqs</code> link is added here.</li>
                     <li>Set the owner passphrase (below), redeploy, then refresh the site to confirm every section appears.</li>
                 </ol>
             </div>
-            <p class="admin-tip"><strong>Owner passphrase:</strong> the admin page uses a client-side speed-bump, not real security. Put the SHA-256 hash of your passphrase in the <code>ADMIN_PASS_HASH</code> constant inside <code>admin.html</code> — the comment above it shows how to generate the hash. Then redeploy.</p>
+            <p class="admin-tip"><strong>Owner passphrase:</strong> the admin page uses a client-side speed-bump, not real security. Put the SHA-256 hash of your passphrase in the <code>ADMIN_PASS_HASH</code> constant inside <code>admin.html</code> â€” the comment above it shows how to generate the hash. Then redeploy.</p>
         </div>
     </details>
 
     <details class="admin-accordion">
-        <summary>Site Settings — every key and what it controls</summary>
+        <summary>Site Settings â€” every key and what it controls</summary>
         <div class="accordion-body">
             <p>Each row in the <code>Site Settings</code> tab is an optional override. Leave a key out (or empty) and the site keeps its built-in default for that part of the page.</p>
             <table class="admin-table">
@@ -318,7 +318,7 @@
                     <tr><td>howto_label / howto_title</td><td>"How to Order" heading</td></tr>
                     <tr><td>faq_label / faq_title</td><td>"Before You Order" heading</td></tr>
                     <tr><td>footer_text</td><td>Footer line</td></tr>
-                    <tr><td>whatsapp_number</td><td>Digits only — used for every WhatsApp order link</td></tr>
+                    <tr><td>whatsapp_number</td><td>Digits only â€” used for every WhatsApp order link</td></tr>
                     <tr><td>commission_rule</td><td>Short line shown on the sales rep page, e.g. <code>10% commission on every sale</code></td></tr>
                 </tbody>
             </table>
@@ -329,10 +329,10 @@
         <summary>Update content day-to-day</summary>
         <div class="accordion-body">
             <ul class="admin-tips-list">
-                <li><strong>Two ways to add content:</strong> the Google Forms above write to the tabs automatically, or you can edit a tab directly in Sheets. Either way, save and refresh the site — the live page picks changes up within a few minutes (data is cached for 10 minutes).</li>
-                <li><strong>Products:</strong> every <code>name</code> must be unique — share links and product previews identify items by name. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. <code>featured</code> = <code>true</code> puts the product in the top "Featured Pieces" strip, which hides while any filter is active. Set <code>in_stock</code> to <code>false</code> / <code>0</code> / <code>no</code> to turn the card into <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes that badge (e.g. <code>Pre-Order Only</code>).</li>
-                <li><strong>Reps &amp; payouts:</strong> onboard a rep with a code (<code>rep_id</code>) and a number like <code>10</code> for the <code>commission_rate</code>. Record a sale under Payouts using the rep's exact code — <code>status</code> is case-insensitive (<code>paid</code> / <code>PAID</code> / <code>pending</code>). The rep sees everything on <code>reps.html</code>.</li>
-                <li><strong>Settings changes apply instantly</strong> to headings, hero copy, and the WhatsApp number — no redeploy needed for content.</li>
+                <li><strong>Two ways to add content:</strong> the Google Forms above write to the tabs automatically, or you can edit a tab directly in Sheets. Either way, save and refresh the site â€” the live page picks changes up within a few minutes (data is cached for 10 minutes).</li>
+                <li><strong>Products:</strong> every <code>name</code> must be unique â€” share links and product previews identify items by name. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. <code>featured</code> = <code>true</code> puts the product in the top "Featured Pieces" strip, which hides while any filter is active. Set <code>in_stock</code> to <code>false</code> / <code>0</code> / <code>no</code> to turn the card into <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes that badge (e.g. <code>Pre-Order Only</code>).</li>
+                <li><strong>Reps &amp; payouts:</strong> onboard a rep with a code (<code>rep_id</code>) and a number like <code>10</code> for the <code>commission_rate</code>. Record a sale under Payouts using the rep's exact code â€” <code>status</code> is case-insensitive (<code>paid</code> / <code>PAID</code> / <code>pending</code>). The rep sees everything on <code>reps.html</code>.</li>
+                <li><strong>Settings changes apply instantly</strong> to headings, hero copy, and the WhatsApp number â€” no redeploy needed for content.</li>
             </ul>
         </div>
     </details>
@@ -341,13 +341,13 @@
         <summary>Troubleshooting</summary>
         <div class="accordion-body">
             <ul class="admin-tips-list">
-                <li><strong>Section not showing</strong> — tab name differs (spaces/caps matter), the tab has no visible rows (blank counts as visible; only <code>FALSE</code> / <code>0</code> / <code>no</code> hide), the sheet isn't shared as Viewer, or headers don't match.</li>
-                <li><strong>Product photo missing</strong> — the Drive file must be shared <strong>"Anyone with the link — Viewer"</strong>; otherwise the card falls back to a placeholder icon.</li>
-                <li><strong>Form submission not appearing</strong> — question names don't match the headers, or the trigger is missing. Check <strong>View &rarr; Logs</strong> in Apps Script for "No matching tab."</li>
-                <li><strong>Site looks stale after an edit</strong> — data is cached for ~10 minutes; refresh again and wait a moment.</li>
-                <li><strong>Payout not on a rep's dashboard</strong> — the Payout's <code>rep_id</code> must match the rep's code exactly (case-insensitive).</li>
-                <li><strong>"Add an FAQ" card doesn't open</strong> — there's no <code>faqs</code> entry in <code>FORM_LINKS</code> yet; add one after creating the FAQ form.</li>
-                <li><strong>Links / images broken</strong> — confirm each form link and image URL was pasted without spaces.</li>
+                <li><strong>Section not showing</strong> â€” tab name differs (spaces/caps matter), the tab has no visible rows (blank counts as visible; only <code>FALSE</code> / <code>0</code> / <code>no</code> hide), the sheet isn't shared as Viewer, or headers don't match.</li>
+                <li><strong>Product photo missing</strong> â€” the Drive file must be shared <strong>"Anyone with the link â€” Viewer"</strong>; otherwise the card falls back to a placeholder icon.</li>
+                <li><strong>Form submission not appearing</strong> â€” question names don't match the headers, or the trigger is missing. Check <strong>View &rarr; Logs</strong> in Apps Script for "No matching tab."</li>
+                <li><strong>Site looks stale after an edit</strong> â€” data is cached for ~10 minutes; refresh again and wait a moment.</li>
+                <li><strong>Payout not on a rep's dashboard</strong> â€” the Payout's <code>rep_id</code> must match the rep's code exactly (case-insensitive).</li>
+                <li><strong>"Add an FAQ" card doesn't open</strong> â€” there's no <code>faqs</code> entry in <code>FORM_LINKS</code> yet; add one after creating the FAQ form.</li>
+                <li><strong>Links / images broken</strong> â€” confirm each form link and image URL was pasted without spaces.</li>
             </ul>
         </div>
     </details>
@@ -358,7 +358,7 @@
 </footer>
 
 <script>
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  PASTE YOUR GOOGLE FORM LINKS HERE
 //
 //  In Google Forms, click "Send" > copy the link. It looks like:
@@ -376,7 +376,7 @@
 //      reps:         'https://docs.google.com/forms/d/e/1FAIpQLSfEeFfGgH9900112/viewform',
 //      payouts:      'https://docs.google.com/forms/d/e/1FAIpQLSfIiJjKkL3344556/viewform'
 //  };
-// ══════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const FORM_LINKS = {
     products: 'https://docs.google.com/forms/d/11nQBJyPwRnwvTLHveIvoANx0i7xfAPAQD-5URzJ6kDw/viewform',
     portfolio: 'https://docs.google.com/forms/d/1RDQBM3BGmjve4-0oVESDDpxTMGBZKtbc3WaBweQzEHE/viewform',
@@ -387,7 +387,7 @@ const FORM_LINKS = {
     payouts: 'https://docs.google.com/forms/d/1rd5Tg5euL7KYWZgUAQ_rrdoFqV48ynfqZVIcSYrdOnI/viewform'
 };
 </script>
-<script src="js/shared.js?v=3"></script>
+<script src="js/shared.js?v=4"></script>
 <script>
 (function () {
     const apply = rows => {
@@ -431,8 +431,8 @@ const FORM_LINKS = {
 })();
 </script>
 <script>
-// ══════════════════════════════════════════════════════════
-//  ADMIN GATE — set your passphrase hash here.
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  ADMIN GATE â€” set your passphrase hash here.
 //
 //  This is a client-side speed bump only, not real auth.
 //  To enable: set ADMIN_PASS_HASH to the SHA-256 hex of your
@@ -443,7 +443,7 @@ const FORM_LINKS = {
 //    crypto.subtle.digest('SHA-256', new TextEncoder().encode('YOUR PHRASE'))
 //      .then(d => console.log(Array.from(new Uint8Array(d))
 //        .map(b => b.toString(16).padStart(2, '0')).join('')))
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const ADMIN_PASS_HASH = '6ca25ebb589d5d3deab4ca5c97416f90f0dd5823855b21e9915cdf0e8b307d5f';
 
 (function () {

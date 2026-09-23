@@ -117,10 +117,18 @@ const VFUtils = {
         }
 
         try {
-            const url = this.tabUrl(tabName, sheetId);
-            const response = await fetch(url, { cache: 'no-store' });
-            if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
-            const result = this.parseCSV(await response.text());
+            let result;
+            if (tabName === 'Site Settings') {
+                const response = await fetch('/api/settings?cb=' + Date.now(), { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
+                const json = await response.json();
+                result = Array.isArray(json) ? json : [];
+            } else {
+                const url = this.tabUrl(tabName, sheetId);
+                const response = await fetch(url, { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
+                result = this.parseCSV(await response.text());
+            }
             cache[tabName] = result;
             this.cacheSet(storageKey, result);
             return result;
