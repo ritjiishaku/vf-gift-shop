@@ -38,19 +38,32 @@ Use a key/value structure like this:
 | key | value |
 |---|---|
 | site_title | Gifts by VF — Handcrafted & Bespoke Gifts |
+| brand_name | Gifts by V |
+| brand_accent | F |
 | hero_label | Thoughtful Gifts |
 | hero_title | Thoughtful gifts for every special moment. |
 | hero_desc | Handcrafted jewellery, acrylic keepsakes... |
 | hero_cta | Chat on WhatsApp |
-| brand_name | Gifts by V |
-| brand_accent | F |
-| whatsapp_number | 2348127252004 |
+| products_label | The Catalogue |
+| products_title | Shop our pieces |
+| products_desc | Every piece is handmade and made to order. |
+| featured_label | Curated For You |
+| featured_title | Featured Pieces |
+| why_label | Why People Come Back |
+| why_title | The VF Difference |
+| testimonials_label | Kind Words |
+| testimonials_title | What Customers Say |
+| portfolio_label | Recent Work |
+| portfolio_title | Our Latest Pieces |
 | howto_label | Simple & Easy |
 | howto_title | How to Order |
 | faq_label | Good to Know |
 | faq_title | Before You Order |
+| footer_text | Gifts by VF — Handmade with love |
+| whatsapp_number | 2348127252004 |
+| commission_rule | 10% commission on every sale |
 
-You can add or remove keys based on what you want to override.
+Each row is an optional override: leave a key out (or give it an empty value) and the site falls back to its built-in default for that part of the page. `whatsapp_number` is digits only — the site uses it to build every WhatsApp order link.
 
 ### Products tab
 Use headers like:
@@ -66,6 +79,21 @@ Use headers like:
 - `stock_label`
 - `occasion`
 - `featured`
+- `material`
+- `size`
+- `turnaround`
+- `delivery_notes`
+- `payment_terms`
+- `sales_caption`
+
+Notes:
+
+- `name` must be **unique** — the site, preview pages, and sales rep share links all identify products by name.
+- `occasion` takes comma-separated tags (e.g. `Birthday, Wedding`) and powers the occasion filter.
+- `featured` = `TRUE` shows the product in the "Featured Pieces" strip at the top of the page (it hides from the main grid while a filter is active).
+- `in_stock` = `FALSE` / `0` / `no` marks the product **Sold Out** with an *Enquire on WhatsApp* button; `stock_label` replaces the badge text.
+- `material`, `size`, `turnaround`, `delivery_notes`, `payment_terms` appear on the product card only when filled.
+- `sales_caption` is the ready-made pitch shown to sales reps next to their share button.
 
 Example:
 
@@ -165,13 +193,16 @@ For the script to read the data, the sheet URL must be copied into the JavaScrip
 
 ## 5) Connect the sheet to the site
 
-The project uses the sheet ID in `js/shared.js` and fetches data using the published CSV export links.
+The project reads data through the published CSV export links, using the sheet ID in **two** places:
+
+1. `js/shared.js` — `VFUtils.SHEET_ID`
+2. `api/product/[slug].js` — the serverless product-preview route (top of the file)
 
 If the spreadsheet is changed or replaced:
 
 1. Get the new spreadsheet URL.
 2. Copy the spreadsheet ID.
-3. Update the sheet ID in the project code.
+3. Update the sheet ID in `js/shared.js` **and** `api/product/[slug].js`.
 4. Refresh the site.
 
 ## 6) Keep rows hidden or visible
@@ -180,8 +211,11 @@ Use the `is_visible` column to hide or show content.
 
 - `TRUE` or `1` = visible
 - `FALSE` or `0` = hidden
+- leaving the cell **blank** = visible
 
 This is very useful when you are preparing updates and do not want them live yet.
+
+> The same "blank counts as visible" rule applies to `is_active` on the Sales Reps tab and `in_stock` on Products (blank `in_stock` keeps a product available).
 
 ## 7) Reorder content
 
@@ -197,9 +231,10 @@ Before publishing, confirm:
 - tab names are exact
 - headers are correct
 - rows have `is_visible` values
+- product names are unique
 - images use shareable links
 - the sheet is shared publicly for viewing
-- the spreadsheet ID is correct in the code
+- the spreadsheet ID is correct in `js/shared.js` and `api/product/[slug].js`
 
 ## 9) Troubleshooting
 

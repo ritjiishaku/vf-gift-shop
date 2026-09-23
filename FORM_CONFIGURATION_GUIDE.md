@@ -63,6 +63,14 @@ Form should collect:
 - stock_label
 - occasion
 - featured
+- material
+- size
+- turnaround
+- delivery_notes
+- payment_terms
+- sales_caption
+
+`material`, `size`, `turnaround`, `delivery_notes`, `payment_terms` are optional and show on the product card only when filled. `sales_caption` is the ready-made pitch shown to sales reps. See the Google Sheet Configuration Guide for how `occasion`, `featured`, `in_stock`, and `stock_label` behave.
 
 ### Portfolio
 Form should collect:
@@ -129,6 +137,10 @@ Use values like:
 
 The script expects boolean-style values to be easy to interpret.
 
+On the site side, only `FALSE`, `0`, and `no` count as "hidden"; **blank counts as visible**. This applies to `is_visible`, `is_active`, and `in_stock` (blank `in_stock` keeps a product available).
+
+Set `featured` to `TRUE` / `1` to show a product in the "Featured Pieces" strip at the top of the page — it hides from the main grid while a filter is active.
+
 ### Display ordering
 Use `display_order` to control position. Smaller numbers appear first.
 
@@ -159,9 +171,11 @@ If a form is missing a mapped target, the submission may not appear where expect
 
 Example trigger setup:
 
-- Trigger type: `From form`
+- Trigger type: `From form` (`From spreadsheet` also works — both fire the same handler)
 - Event type: `On form submit`
-- Function: the sync handler in the script
+- Function: `onFormSubmit`
+
+`onFormSubmit` is the exact function name in `form-sync.gs`. After saving, approve the requested permissions the first time. If a submission does not land in a tab, open **View → Logs** in Apps Script — the script logs `No matching tab.` when a form's fields don't match any configured target.
 
 ## 8) Validation steps
 

@@ -272,6 +272,81 @@
         <p class="admin-tip"><strong>Tip:</strong> Google Drive images only appear on the site when the file is shared as <strong>"Anyone with the link — Viewer"</strong>. If a product shows the icon fallback instead of a photo, open the Drive file, click <em>Share</em>, and set link sharing to anyone.</p>
         <p class="admin-tip"><strong>Privacy:</strong> These tabs are published so the site can read them, which means <strong>anyone with the link can see every row</strong> — including sales reps' payouts and commission figures. Never put private contact numbers, addresses, or financial notes in these tabs. Keep anything sensitive in a separate, <em>unpublished</em> sheet.</p>
     </div>
+
+    <h3>Owner Guide</h3>
+
+    <details class="admin-accordion">
+        <summary>First-time setup — from zero to a live catalogue</summary>
+        <div class="accordion-body">
+            <div class="admin-steps">
+                <ol>
+                    <li>Create a Google Sheet and make <strong>9 tabs</strong> with these exact names: <code>Site Settings</code>, <code>Products</code>, <code>Portfolio</code>, <code>Testimonials</code>, <code>Why Us</code>, <code>How to Order</code>, <code>FAQs</code>, <code>Sales Reps</code>, <code>Payouts</code>.</li>
+                    <li>Add a header row to each tab using the columns in the Column Reference above. Products has the most — only <code>name</code>, <code>description</code>, <code>image_url</code>, and <code>category</code> are required; everything else is optional.</li>
+                    <li>Click <strong>Share</strong> &rarr; set access to <strong>"Anyone with the link"</strong> &rarr; role <strong>Viewer</strong>.</li>
+                    <li>In the sheet, go to <strong>Extensions &rarr; Apps Script</strong>, paste the contents of <code>form-sync.gs</code>, and Save.</li>
+                    <li>Click the clock icon (Triggers) &rarr; <strong>Add Trigger</strong>: function <code>onFormSubmit</code>, source <strong>"From spreadsheet"</strong>, event <strong>"On form submit"</strong>. Save and approve the permission prompt once.</li>
+                    <li>Create one Google Form per content type (Products, Portfolio, Testimonials, Why Us, How to Order, FAQs, Sales Reps, Payouts) with questions named to match the headers.</li>
+                    <li>Point each form's Responses at this spreadsheet — Google adds a separate "Form Responses" sheet per form, which is normal. The script copies submissions into the real tabs automatically.</li>
+                    <li>Submit each form once to test. The row should appear in the matching tab; if it doesn't, check <strong>View &rarr; Logs</strong> in Apps Script for "No matching tab."</li>
+                    <li>Copy each form's <strong>Send</strong> link into the <code>FORM_LINKS</code> block at the bottom of <code>admin.html</code>. The "Add an FAQ" card stays inert until its <code>faqs</code> link is added here.</li>
+                    <li>Set the owner passphrase (below), redeploy, then refresh the site to confirm every section appears.</li>
+                </ol>
+            </div>
+            <p class="admin-tip"><strong>Owner passphrase:</strong> the admin page uses a client-side speed-bump, not real security. Put the SHA-256 hash of your passphrase in the <code>ADMIN_PASS_HASH</code> constant inside <code>admin.html</code> — the comment above it shows how to generate the hash. Then redeploy.</p>
+        </div>
+    </details>
+
+    <details class="admin-accordion">
+        <summary>Site Settings — every key and what it controls</summary>
+        <div class="accordion-body">
+            <p>Each row in the <code>Site Settings</code> tab is an optional override. Leave a key out (or empty) and the site keeps its built-in default for that part of the page.</p>
+            <table class="admin-table">
+                <thead><tr><th>key</th><th>What it controls</th></tr></thead>
+                <tbody>
+                    <tr><td>site_title</td><td>Browser tab title</td></tr>
+                    <tr><td>brand_name / brand_accent</td><td>Logo text (name + highlighted letter)</td></tr>
+                    <tr><td>hero_label / hero_title / hero_desc / hero_cta</td><td>Homepage hero copy</td></tr>
+                    <tr><td>products_label / products_title / products_desc</td><td>Catalogue heading and intro</td></tr>
+                    <tr><td>featured_label / featured_title</td><td>"Featured Pieces" strip heading</td></tr>
+                    <tr><td>why_label / why_title</td><td>"Why People Come Back" heading</td></tr>
+                    <tr><td>testimonials_label / testimonials_title</td><td>Reviews heading</td></tr>
+                    <tr><td>portfolio_label / portfolio_title</td><td>Recent work heading</td></tr>
+                    <tr><td>howto_label / howto_title</td><td>"How to Order" heading</td></tr>
+                    <tr><td>faq_label / faq_title</td><td>"Before You Order" heading</td></tr>
+                    <tr><td>footer_text</td><td>Footer line</td></tr>
+                    <tr><td>whatsapp_number</td><td>Digits only — used for every WhatsApp order link</td></tr>
+                    <tr><td>commission_rule</td><td>Short line shown on the sales rep page, e.g. <code>10% commission on every sale</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </details>
+
+    <details class="admin-accordion">
+        <summary>Update content day-to-day</summary>
+        <div class="accordion-body">
+            <ul class="admin-tips-list">
+                <li><strong>Two ways to add content:</strong> the Google Forms above write to the tabs automatically, or you can edit a tab directly in Sheets. Either way, save and refresh the site — the live page picks changes up within a few minutes (data is cached for 10 minutes).</li>
+                <li><strong>Products:</strong> every <code>name</code> must be unique — share links and product previews identify items by name. <code>occasion</code> takes comma-separated tags (e.g. <code>Birthday, Wedding</code>) and powers the occasion filter. <code>featured</code> = <code>true</code> puts the product in the top "Featured Pieces" strip, which hides while any filter is active. Set <code>in_stock</code> to <code>false</code> / <code>0</code> / <code>no</code> to turn the card into <strong>Sold Out</strong> with an <em>Enquire on WhatsApp</em> button. <code>stock_label</code> customizes that badge (e.g. <code>Pre-Order Only</code>).</li>
+                <li><strong>Reps &amp; payouts:</strong> onboard a rep with a code (<code>rep_id</code>) and a number like <code>10</code> for the <code>commission_rate</code>. Record a sale under Payouts using the rep's exact code — <code>status</code> is case-insensitive (<code>paid</code> / <code>PAID</code> / <code>pending</code>). The rep sees everything on <code>reps.html</code>.</li>
+                <li><strong>Settings changes apply instantly</strong> to headings, hero copy, and the WhatsApp number — no redeploy needed for content.</li>
+            </ul>
+        </div>
+    </details>
+
+    <details class="admin-accordion">
+        <summary>Troubleshooting</summary>
+        <div class="accordion-body">
+            <ul class="admin-tips-list">
+                <li><strong>Section not showing</strong> — tab name differs (spaces/caps matter), the tab has no visible rows (blank counts as visible; only <code>FALSE</code> / <code>0</code> / <code>no</code> hide), the sheet isn't shared as Viewer, or headers don't match.</li>
+                <li><strong>Product photo missing</strong> — the Drive file must be shared <strong>"Anyone with the link — Viewer"</strong>; otherwise the card falls back to a placeholder icon.</li>
+                <li><strong>Form submission not appearing</strong> — question names don't match the headers, or the trigger is missing. Check <strong>View &rarr; Logs</strong> in Apps Script for "No matching tab."</li>
+                <li><strong>Site looks stale after an edit</strong> — data is cached for ~10 minutes; refresh again and wait a moment.</li>
+                <li><strong>Payout not on a rep's dashboard</strong> — the Payout's <code>rep_id</code> must match the rep's code exactly (case-insensitive).</li>
+                <li><strong>"Add an FAQ" card doesn't open</strong> — there's no <code>faqs</code> entry in <code>FORM_LINKS</code> yet; add one after creating the FAQ form.</li>
+                <li><strong>Links / images broken</strong> — confirm each form link and image URL was pasted without spaces.</li>
+            </ul>
+        </div>
+    </details>
 </section>
 
 <footer>
@@ -304,7 +379,6 @@ const FORM_LINKS = {
     testimonials: 'https://docs.google.com/forms/d/1rQVm0o9NUsdX_dcZ1_tTOwnFI6r7YTIQvNVDAA18Yc4/viewform',
     why: 'https://docs.google.com/forms/d/1LAg3oQ8YKhy-J5ZKh6JjP03UZSDunyHCup0Z0SzQ-Dw/viewform',
     steps: 'https://docs.google.com/forms/d/1_Ow3bN8-Rh0ZoJLJ8O8A5dHyFUSdVdzC8egre16M3TU/viewform',
-    faqs: 'https://docs.google.com/forms/d/e/1FAIpQLSfAkLjMnOp1234567/viewform',
     reps: 'https://docs.google.com/forms/d/1Fv5kkWW-wBinbfA4AYkGAFLqbYrXCp-5tbFiLbnqvOg/viewform',
     payouts: 'https://docs.google.com/forms/d/1rd5Tg5euL7KYWZgUAQ_rrdoFqV48ynfqZVIcSYrdOnI/viewform'
 };

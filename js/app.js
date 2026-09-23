@@ -351,16 +351,15 @@ const VF = {
 
     buildProductJsonLd() {
         if (!this._products || this._products.length === 0) return;
-        const base = location.href.split('?')[0].split('#')[0];
+        const urlFor = p => location.origin + '/product/' + encodeURIComponent(VFUtils.slugify(p.name) || VFUtils.slugify(p.display_order || ''));
         const list = this._products.slice(0, 100).map(p => {
-            const slug = VFUtils.slugify(p.name);
             const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
             const item = {
                 '@type': 'Product',
                 name: p.name,
                 description: p.description || undefined,
                 image: img ? [img] : undefined,
-                url: base + '?p=' + encodeURIComponent(slug)
+                url: urlFor(p)
             };
             const price = VFUtils.priceNumber(p);
             if (price != null && price > 0) {
@@ -736,8 +735,7 @@ const VF = {
     async copyProductLink(btn) {
         const slug = btn.getAttribute('data-slug');
         if (!slug) return;
-        const base = location.href.split('?')[0].split('#')[0];
-        const text = base + '?p=' + encodeURIComponent(slug);
+        const text = location.origin + '/product/' + encodeURIComponent(slug);
         const ariaLabel = btn.getAttribute('aria-label');
         const showCopied = () => {
             btn.classList.add('copied');
@@ -812,7 +810,8 @@ const VF = {
         if (!section || !list) return;
         const tab = await this.fetchTab(this.TABS.FAQ);
         if (!tab) return;
-        const rows = VFUtils.filterAndSort(tab);
+        const rows = VFUtils.filterAndSort(tab)
+            .filter(r => String(r.question || '').trim() !== '' && String(r.answer || '').trim() !== '');
         if (rows.length === 0) return;
         list.innerHTML = rows.map(row => `
             <details class="faq-item">

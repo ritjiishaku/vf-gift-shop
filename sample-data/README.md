@@ -80,7 +80,7 @@ The site lets sales reps share product links and earn commission. Setup is simpl
 3. **The flow:**
    - The owner adds products to the catalogue as usual.
    - A rep opens **`reps.html`** (the owner sends them the direct link — `https://vf-gift-shop.vercel.app/reps.html` — along with their rep code), enters their `rep_id`, picks a product, and copies its share link.
-   - The share link looks like: `https://your-site.com/index.html?ref=kofi&p=engraved-ring`
+   - The share link looks like: `https://your-site.com/product/engraved-ring?ref=kofi`
    - When a buyer clicks it, the site shows *"You were referred by Kofi"*, highlights the product, and the **Order on WhatsApp** button opens a message pre-filled with the product **and** the referral.
    - The owner confirms the order + payment in WhatsApp, then logs the sale in the `Payouts` tab: `rep_id`, `product`, `order_amount`, `commission` (amount × rate), `status` (`PENDING` or `PAID`), `date`.
 4. **Commission:** `commission = order_amount × commission_rate / 100`. The owner writes the number in the `commission` column. Flip `status` to `PAID` once the rep is paid. Status matching is **case-insensitive** (`paid`/`PAID`/`Pending`/`pending` all work).
@@ -96,10 +96,16 @@ The site lets sales reps share product links and earn commission. Setup is simpl
 Each product is identified by a **slug derived from its name** (lowercase, spaces and special characters replaced with `-`). The link is built as:
 
 ```
-index.html?ref=REP_ID&p=PRODUCT_SLUG
+product/PRODUCT_SLUG?ref=REP_ID
 ```
 
-For example, a product named "Engraved Bar Necklace" becomes `engraved-bar-necklace`.
+For example, a product named "Engraved Bar Necklace" becomes `engraved-bar-necklace`. The share URL for rep code `kofi` is:
+
+```
+https://your-site.com/product/engraved-bar-necklace?ref=kofi
+```
+
+If you paste a product link into a chat (WhatsApp, Telegram, Facebook, Instagram), it shows a **preview card with that product's own photo, name, and price** — each product gets its own image. Clicking the link takes the buyer straight to the catalogue with the product highlighted and your referral attached.
 
 Buyers who were referred keep the attribution for 30 days (stored in their browser), so even if they order a different product later, the referral still reaches you in the WhatsApp message.
 

@@ -14,18 +14,21 @@ If you are unsure, check the Google Sheet Configuration Guide in this project.
 
 Go to the `Site Settings` tab.
 
-You can change values like:
+The full list of keys the site reads is:
 
-- `site_title`
-- `hero_label`
-- `hero_title`
-- `hero_desc`
-- `hero_cta`
-- `whatsapp_number`
-- `howto_label`
-- `howto_title`
-- `faq_label`
-- `faq_title`
+- `site_title` — browser tab title
+- `brand_name` / `brand_accent` — logo text (name + highlighted letter)
+- `hero_label` / `hero_title` / `hero_desc` / `hero_cta` — homepage hero copy
+- `products_label` / `products_title` / `products_desc` — catalogue heading
+- `featured_label` / `featured_title` — "Featured Pieces" strip heading
+- `why_label` / `why_title` — "Why People Come Back" heading
+- `testimonials_label` / `testimonials_title` — reviews heading
+- `portfolio_label` / `portfolio_title` — recent work heading
+- `howto_label` / `howto_title` — "How to Order" heading
+- `faq_label` / `faq_title` — "Before You Order" heading
+- `footer_text` — footer line
+- `whatsapp_number` — number used for every order button (digits only)
+- `commission_rule` — short line shown on the sales rep page, e.g. `10% commission on every sale`
 
 These values update the homepage copy and the WhatsApp contact links.
 
@@ -35,6 +38,8 @@ These values update the homepage copy and the WhatsApp contact links.
 |---|---|
 | hero_title | Thoughtful gifts for every birthday, wedding and milestone. |
 | hero_desc | Handcrafted gifts made to celebrate the people who matter most. |
+| footer_text | Gifts by VF &middot; Handmade with love |
+| commission_rule | 10% commission on every sale |
 
 ## 3) Add or edit products
 
@@ -42,17 +47,28 @@ Go to the `Products` tab.
 
 ### Fill in these fields for each product
 
+Core fields:
+
 - `name`
 - `description`
 - `image_url`
 - `price`
 - `category`
-- `occasion`
 - `display_order`
 - `is_visible`
-- `in_stock`
-- `stock_label`
-- `featured`
+
+Optional fields (shown on the product card only when filled):
+
+- `material`
+- `size`
+- `turnaround`
+- `delivery_notes`
+- `payment_terms`
+- `occasion` — comma-separated tags (e.g. `Birthday, Wedding`) that power the occasion filter
+- `featured` — set to `TRUE` to show the product in the "Featured Pieces" strip at the top of the page (it hides from the main grid while a filter is active)
+- `in_stock` — set to `FALSE` / `0` / `no` to mark the product **Sold Out** (the card switches to an *Enquire on WhatsApp* button)
+- `stock_label` — replaces the badge text, e.g. `Pre-Order Only`
+- `sales_caption` — the ready-made pitch shown to sales reps next to their share button
 
 ### Good product example
 
@@ -62,10 +78,11 @@ Go to the `Products` tab.
 
 ### Tips
 
+- Each product `name` must be **unique** — the site, the share links, and the preview pages all identify products by name.
 - Keep products in a single category for easier filtering.
 - Use `display_order` to decide the order on the catalogue page.
-- Set `is_visible` to `FALSE` when you are not ready to publish a product.
-- Use `featured` = `TRUE` for highlight items in the campaign area.
+- Leave `is_visible` blank to keep the product visible; set it to `FALSE`, `0`, or `no` when you are not ready to publish.
+- Use `featured` = `TRUE` for the "Featured Pieces" strip at the top of the catalogue.
 
 ## 4) Add product images
 
@@ -215,6 +232,8 @@ Set the `status` to:
 - `PENDING`
 - `PAID`
 
+Matching is case-insensitive, so `paid`, `PAID`, `Pending`, and `pending` all work.
+
 This helps keep reps and commissions organised.
 
 ## 12) Publish and check the site
@@ -230,7 +249,7 @@ After making changes:
 
 If something does not appear:
 
-- check `is_visible` is `TRUE`
+- check `is_visible` is not `FALSE`, `0`, or `no` (blank counts as visible)
 - check the tab name matches exactly
 - check the sheet is still shared with anyone who can view it
 - check the header names match the expected format

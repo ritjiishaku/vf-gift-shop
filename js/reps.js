@@ -27,8 +27,19 @@ const RepTools = {
     },
 
     shareLink(pid, ref) {
-        const path = location.pathname.replace(/reps\.html$/i, '').replace(/\/+$/, '');
-        return location.origin + path + '/index.html?ref=' + encodeURIComponent(ref) + '&p=' + encodeURIComponent(pid);
+        return location.origin + '/product/' + encodeURIComponent(pid) + '?ref=' + encodeURIComponent(ref);
+    },
+
+    dedupeProducts(rows) {
+        const seen = new Set();
+        const out = [];
+        (rows || []).forEach(p => {
+            const key = VFUtils.slugify(p.name) || String(p.display_order || '').trim();
+            if (!key || seen.has(key)) return;
+            seen.add(key);
+            out.push(p);
+        });
+        return out;
     },
 
     async login(repId) {
@@ -65,6 +76,8 @@ const RepTools = {
         this.setText('rep-rate', rateText);
         this.setText('rep-rule', `Commission is ${rateText} of the product's catalogue price, excluding delivery.`);
         this.setText('rep-credit', `Any order placed through your links within ${this.REP_CREDIT_WINDOW_DAYS} days of the buyer's first click is credited to you.`);
+        const rateStat = document.getElementById('rep-stat-rate');
+        if (rateStat) rateStat.textContent = rateText;
         this.loadAndRender();
     },
 
@@ -79,7 +92,7 @@ const RepTools = {
                 this.setText('rep-rule', row.value);
             }
         });
-        this._repProducts = VFUtils.filterAndSort(products || []);
+        this._repProducts = this.dedupeProducts(VFUtils.filterAndSort(products || []));
         const deepLink = new URLSearchParams(location.search).get('p');
         this._repProductShown = deepLink
             ? this._repProducts.length
@@ -131,12 +144,8 @@ const RepTools = {
     estimatedCommission(p) {
         const rate = parseFloat(String(this._rep && this._rep.rate || '').replace('%', ''));
         if (!Number.isFinite(rate) || rate <= 0) return '';
-        const priceStr = String(p.price || '')
-            .replace(/^ngn\s*/i, '')
-            .replace(/^[₦#N₹]+\s*/i, '')
-            .replace(/,/g, '');
-        const price = parseFloat(priceStr);
-        if (!Number.isFinite(price) || price <= 0) return '';
+        const price = VFUtils.priceNumber(p);
+        if (price == null || price <= 0) return '';
         return '≈ ₦' + Math.round(price * rate / 100).toLocaleString() + ' commission';
     },
 
@@ -144,38 +153,71 @@ const RepTools = {
         const pid = VFUtils.slugify(p.name) || String(p.display_order || (i + 1));
         const link = this.shareLink(pid, this._rep.rep_id);
         const waShare = `https://wa.me/?text=${encodeURIComponent(link)}`;
-        const price = VFUtils.formatNaira(p.price);
+        const price = VFUtils.priceNumber(p) != null ? VFUtils.formatNaira(p.price) : '';
         const commission = this.estimatedCommission(p);
+        const soldOut = VFUtils.isSoldOut(p);
+        const stockLabel = soldOut ? (String(p.stock_label || '').trim() || 'Sold Out') : '';
         const img = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
         const initial = String(p.name || '?').trim().charAt(0).toUpperCase();
+        const shareBtn = navigator.share
+            ? `<button type="button" class="rep-share-btn" data-share="${VFUtils.sanitize(link)}">Share</button>`
+            : '';
         return `
-            <div class="rep-product">
+            <div class="rep-product${soldOut ? ' is-soldout' : ''}" itemscope itemtype="https://schema.org/Product">
                 <div class="rep-product-thumb${img ? '' : ' no-image'}">
                     ${img ? `<img src="${VFUtils.sanitize(img)}" alt="" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.src='${VFUtils.sanitize(img)}';}else{this.parentNode.classList.add('no-image');}">` : ''}
                     <span class="rep-thumb-initial">${VFUtils.sanitize(initial)}</span>
+                    ${soldOut ? `<span class="rep-stock-badge">${VFUtils.sanitize(stockLabel)}</span>` : ''}
                 </div>
                 <div class="rep-product-info">
-                    <h4>${VFUtils.sanitize(p.name)}</h4>
-                    <p>${VFUtils.sanitize(p.description)}${price ? ` &middot; From ${VFUtils.sanitize(price)}` : ''}</p>
+                    <h4 itemprop="name">${VFUtils.sanitize(p.name)}</h4>
+                    ${price ? `<span class="rep-product-price" itemprop="price" content="${VFUtils.priceNumber(p)}">From ${VFUtils.sanitize(price)}</span>` : ''}
+                    <p itemprop="description">${VFUtils.sanitize(p.description)}</p>
                     ${p.sales_caption ? `<p class="rep-caption">${VFUtils.sanitize(p.sales_caption)}</p>` : ''}
+                    ${commission ? `<span class="rep-commission">${VFUtils.sanitize(commission)}</span>` : ''}
                 </div>
                 <div class="rep-product-actions">
-                    ${commission ? `<span class="rep-commission">${VFUtils.sanitize(commission)}</span>` : ''}
-                    <input type="text" readonly value="${VFUtils.sanitize(link)}" aria-label="Share link for ${VFUtils.sanitize(p.name)}">
-                    <button class="rep-sm-btn" data-copy="${VFUtils.sanitize(link)}">Copy</button>
-                    <a class="rep-sm-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                    ${navigator.share ? `<button class="rep-sm-btn" data-share="${VFUtils.sanitize(link)}">Share</button>` : ''}
+                    <button type="button" class="rep-copy-btn" data-copy="${VFUtils.sanitize(link)}" aria-label="Copy share link for ${VFUtils.sanitize(p.name)}">Copy link</button>
+                    <a class="rep-share-btn" href="${waShare}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    ${shareBtn}
                 </div>
             </div>
         `;
     },
 
+    fallbackCopy(text) {
+        return new Promise((resolve, reject) => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy') ? resolve() : reject(new Error('copy failed'));
+            } catch (err) {
+                reject(err);
+            } finally {
+                document.body.removeChild(ta);
+            }
+        });
+    },
+
     copyText(text, btn) {
         const original = btn.textContent;
-        navigator.clipboard.writeText(text).then(() => {
+        const done = () => {
+            btn.classList.add('copied');
             btn.textContent = 'Copied!';
-            setTimeout(() => (btn.textContent = original), 1500);
-        }).catch(() => {});
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.textContent = original;
+            }, 2000);
+        };
+        Promise.resolve()
+            .then(() => navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+            .then(done)
+            .catch(() => this.fallbackCopy(text).then(done))
+            .catch(() => {});
     },
 
     renderPayouts() {
@@ -207,10 +249,20 @@ const RepTools = {
         const table = document.getElementById('rep-payouts');
         const mine = this._payouts || [];
         const naira = n => '₦' + Math.round(n).toLocaleString();
+        const setStats = (sales, pending, paid) => {
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+            set('rep-stat-sales', String(sales));
+            set('rep-stat-pending', naira(pending));
+            set('rep-stat-paid', naira(paid));
+        };
 
         if (mine.length === 0) {
             tbody.innerHTML = '';
             table.classList.add('hidden');
+            setStats(0, 0, 0);
             summary.textContent = 'No commissions recorded yet. Sales you refer will appear here once the owner confirms them.';
             summary.classList.remove('hidden');
             return;
@@ -233,6 +285,7 @@ const RepTools = {
         });
 
         table.classList.remove('hidden');
+        setStats(mine.length, pendingTotal, paidTotal);
         summary.classList.remove('hidden');
         const saleLabel = mine.length === 1 ? 'sale' : 'sales';
         summary.textContent = `${mine.length} ${saleLabel} · Pending: ${naira(pendingTotal)} · Paid: ${naira(paidTotal)}`;

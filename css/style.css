@@ -1108,7 +1108,41 @@ body {
     text-transform: uppercase;
 }
 .rep-page-shell, .admin-page {
-    background: linear-gradient(180deg, #fffefb 0%, #f5f0e8 100%);
+    background:
+        radial-gradient(ellipse at 80% 4%, rgba(201, 169, 110, 0.16) 0%, transparent 52%),
+        radial-gradient(ellipse at 8% 30%, rgba(201, 169, 110, 0.08) 0%, transparent 48%),
+        linear-gradient(180deg, #fffefb 0%, #f5f0e8 100%);
+}
+.rep-hero .section-label { letter-spacing: 4px; }
+.rep-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0 26px;
+}
+.rep-stat {
+    background: rgba(201, 169, 110, 0.08);
+    border: 1px solid rgba(201, 169, 110, 0.22);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+}
+.rep-stat-num {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.15;
+}
+.rep-stat-label {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
 }
 .rep-section, .admin-section { max-width: 900px; margin: 0 auto; padding: 36px 24px 60px; }
 .rep-panel {
@@ -1131,19 +1165,49 @@ body {
     background: var(--gold); color: var(--dark); border: 1px solid var(--gold);
     padding: 12px 24px; font-weight: 600; font-size: 0.9rem;
     letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;
-    transition: all 0.3s; white-space: nowrap;
+    transition: all 0.3s; white-space: nowrap; border-radius: 4px;
 }
 .rep-btn:hover { background: transparent; color: var(--gold); }
 .rep-btn-ghost { background: none; color: var(--text); border-color: rgba(0,0,0,0.2); margin-top: 30px; }
 .rep-btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
 .rep-error { color: #c0392b; font-size: 0.9rem; margin-top: 14px; }
 .rep-product {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    border: 1px solid rgba(0,0,0,0.08); padding: 18px 20px; margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--border-medium);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
     background: var(--white);
+    transition: border-color 0.3s;
 }
+.rep-product:hover { border-color: var(--gold-light); }
+.rep-product.is-soldout .rep-product-info h4 { color: var(--text-light); }
+.rep-product.is-soldout .rep-product-price { color: var(--text-light); text-decoration: line-through; }
 .rep-product h4 { color: var(--dark); margin-bottom: 4px; font-size: 1.05rem; }
 .rep-product p { color: var(--text-light); font-size: 0.85rem; line-height: 1.6; }
+.rep-product-price {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 2px 0 6px;
+}
+.rep-stock-badge {
+    position: absolute;
+    top: 6px; left: 6px;
+    background: var(--dark);
+    color: var(--gold);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 999px;
+}
 .rep-caption {
     color: var(--gold);
     font-style: italic;
@@ -1151,6 +1215,8 @@ body {
     margin-top: 4px;
 }
 .rep-commission {
+    display: inline-block;
+    margin-top: 10px;
     font-size: 0.72rem;
     font-weight: 700;
     color: var(--gold);
@@ -1162,8 +1228,8 @@ body {
 .rep-product-info { flex: 1; min-width: 0; }
 .rep-product-thumb {
     position: relative;
-    width: 48px; height: 48px;
-    border-radius: 8px;
+    width: 64px; height: 64px;
+    border-radius: 10px;
     overflow: hidden;
     flex-shrink: 0;
     background: var(--gradient-placeholder);
@@ -1177,17 +1243,38 @@ body {
     font-size: 1.1rem;
     color: #8a7f6f;
 }
-.rep-product-actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
-.rep-product-actions input {
-    width: 240px; padding: 8px 10px; font-size: 0.75rem;
-    border: 1px solid var(--border-input); color: var(--text); background: var(--cream);
+.rep-product-actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; flex-shrink: 0; max-width: 300px; }
+.rep-copy-btn, .rep-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    border-radius: 4px;
 }
-.rep-sm-btn {
-    background: none; border: 1px solid rgba(0,0,0,0.2); cursor: pointer;
-    padding: 8px 12px; font-size: 0.75rem; font-weight: 600; transition: all 0.3s;
-    text-decoration: none; color: var(--text); white-space: nowrap;
+.rep-copy-btn {
+    background: var(--gold);
+    color: var(--dark);
+    border: 1px solid var(--gold);
+    flex: 1 0 100px;
 }
-.rep-sm-btn:hover { border-color: var(--gold); color: var(--gold); }
+.rep-copy-btn:hover, .rep-copy-btn.copied { background: transparent; color: var(--gold); }
+.rep-share-btn {
+    background: none;
+    color: var(--text);
+    border: 1px solid var(--border-input);
+    flex: 1 0 88px;
+}
+.rep-share-btn:hover { border-color: var(--gold); color: var(--gold); }
 .rep-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
 .rep-table th, .rep-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,0.08); font-size: 0.9rem; }
 .rep-table th { color: var(--text-light); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
@@ -1306,6 +1393,51 @@ body {
     font-size: 0.88rem;
     line-height: 1.7;
 }
+.admin-accordion {
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(28, 19, 8, 0.03);
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.admin-accordion summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark);
+    transition: color 0.2s ease, background 0.2s ease;
+}
+.admin-accordion summary:hover {
+    color: var(--gold);
+    background: rgba(201, 169, 110, 0.05);
+}
+.admin-accordion summary::-webkit-details-marker { display: none; }
+.admin-accordion summary::after {
+    content: '+';
+    font-size: 1.3rem;
+    color: var(--gold);
+    line-height: 1;
+    transition: transform 0.25s;
+}
+.admin-accordion[open] summary::after { transform: rotate(45deg); }
+.admin-accordion .accordion-body {
+    padding: 0 18px 18px;
+}
+.admin-accordion .accordion-body .admin-table { margin-top: 8px; }
+.admin-accordion ul.admin-tips-list {
+    margin: 10px 0 0 18px;
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 0.9rem;
+}
+.admin-accordion ul.admin-tips-list li { margin-bottom: 10px; }
 @media (max-width: 640px) {
     .rep-header { padding: 12px 16px; gap: 8px; flex-wrap: wrap; }
     .rep-header .nav-logo { font-size: 1.25rem; letter-spacing: 1px; }
@@ -1327,9 +1459,10 @@ body {
     }
     .rep-product-thumb { grid-area: thumb; }
     .rep-product-info { grid-area: info; min-width: 0; }
-    .rep-product-actions { grid-area: actions; width: 100%; flex-wrap: wrap; gap: 8px; }
-    .rep-product-actions input { flex: 1 1 100%; width: 100%; min-width: 0; }
-    .rep-sm-btn { flex: 1; text-align: center; }
+    .rep-product-actions { grid-area: actions; width: 100%; max-width: none; flex-wrap: wrap; gap: 8px; }
+    .rep-copy-btn, .rep-share-btn { flex: 1 1 auto; min-width: 0; }
+
+    .rep-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
     .rep-table th, .rep-table td { padding: 8px 8px; }
     .rep-table th:nth-child(2), .rep-table td:nth-child(2),

@@ -57,7 +57,25 @@
         <div id="rep-products"></div>
 
         <h3>Your Commissions</h3>
-        <p class="rep-hint">Only sales the owner has confirmed appear here — no confirmed sales yet means no payouts yet.</p>
+        <p class="rep-hint">Only sales the owner has confirmed appear here.</p>
+        <div class="rep-stats" id="rep-stats" aria-label="Commission summary">
+            <div class="rep-stat">
+                <span class="rep-stat-num" id="rep-stat-rate">&mdash;</span>
+                <span class="rep-stat-label">Commission rate</span>
+            </div>
+            <div class="rep-stat">
+                <span class="rep-stat-num" id="rep-stat-sales">0</span>
+                <span class="rep-stat-label">Confirmed sales</span>
+            </div>
+            <div class="rep-stat">
+                <span class="rep-stat-num" id="rep-stat-pending">&#8358;0</span>
+                <span class="rep-stat-label">Pending</span>
+            </div>
+            <div class="rep-stat">
+                <span class="rep-stat-num" id="rep-stat-paid">&#8358;0</span>
+                <span class="rep-stat-label">Paid</span>
+            </div>
+        </div>
         <p id="rep-payout-summary" class="rep-hint hidden"></p>
         <table id="rep-payouts" class="rep-table">
             <thead>

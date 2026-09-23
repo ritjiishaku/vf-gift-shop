@@ -150,7 +150,7 @@ const VFUtils = {
     formatNaira(str) {
         const s = String(str == null ? '' : str).trim();
         if (!s) return '';
-        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹]+\s*/i, '');
+        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹?]+\s*/i, '');
         if (/^[0-9,.]+$/.test(cleaned)) {
             const n = Math.round(parseFloat(cleaned.replace(/,/g, '')));
             if (!Number.isFinite(n)) return s;
@@ -162,7 +162,7 @@ const VFUtils = {
     priceNumber(row) {
         const s = String(row && row.price != null ? row.price : '').trim();
         if (!s) return null;
-        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹]+\s*/i, '');
+        const cleaned = s.replace(/^ngn\s*/i, '').replace(/^[₦#N₹?]+\s*/i, '');
         if (!/^[0-9,.]+$/.test(cleaned)) return null;
         const n = parseFloat(cleaned.replace(/,/g, ''));
         return Number.isFinite(n) ? n : null;
