@@ -147,6 +147,20 @@ const VFUtils = {
         return u;
     },
 
+    videoUrl(url) {
+        const u = String(url || '').trim();
+        if (!u) return null;
+        const yt = u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/i);
+        if (yt) return { src: `https://www.youtube-nocookie.com/embed/${yt[1]}?rel=0`, type: 'iframe' };
+        if (this.isDriveUrl(u)) {
+            const id = this.driveId(u);
+            if (id) return { src: `https://drive.google.com/file/d/${id}/preview`, type: 'iframe' };
+            return null;
+        }
+        if (/^https?:\/\/\S+\.(mp4|webm)(\?\S*)?$/i.test(u)) return { src: u, type: 'file' };
+        return null;
+    },
+
     formatNaira(str) {
         const s = String(str == null ? '' : str).trim();
         if (!s) return '';

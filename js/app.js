@@ -145,15 +145,25 @@ const VF = {
     // ══════════════════════════════════════════════════════
     //  LIGHTBOX
     // ══════════════════════════════════════════════════════
-    openLightbox(url, name) {
+    openLightbox(url, name, video) {
         const lb = document.getElementById('lightbox');
         if (!lb) return;
-        const img = VFUtils.directImageUrl(url);
-        if (!img) return;
-        const src = this.srcVariant(img, 1200, 1200);
         const caption = VFUtils.sanitize(name || '');
+        let media;
+        if (video && video.src && video.type === 'iframe') {
+            media = `<iframe src="${VFUtils.sanitize(video.src)}" title="${caption}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+        } else if (video && video.src) {
+            const img = VFUtils.directImageUrl(url);
+            const poster = img ? VFUtils.sanitize(this.srcVariant(img, 1200, 1200)) : '';
+            media = `<video src="${VFUtils.sanitize(video.src)}"${poster ? ` poster="${poster}"` : ''} controls autoplay playsinline></video>`;
+        } else {
+            const img = VFUtils.directImageUrl(url);
+            if (!img) return;
+            const src = this.srcVariant(img, 1200, 1200);
+            media = `<img src="${VFUtils.sanitize(src)}" alt="${caption}" decoding="async">`;
+        }
         lb.innerHTML = `<button type="button" class="lightbox-close" aria-label="Close">&times;</button>
-            <img src="${VFUtils.sanitize(src)}" alt="${caption}" decoding="async">
+            ${media}
             ${caption ? `<p class="lightbox-caption">${caption}</p>` : ''}`;
         lb.hidden = false;
         document.body.classList.add('lightbox-open');
@@ -678,9 +688,11 @@ const VF = {
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const soldOut = VFUtils.isSoldOut(p);
         const badgeLabel = soldOut ? (String(p.stock_label || '').trim() || 'Sold Out') : category;
-        const img = url
-            ? `<button type="button" class="js-lightbox" data-img="${VFUtils.sanitize(url)}" data-name="${VFUtils.sanitize(p.name)}" aria-label="View larger image of ${VFUtils.sanitize(p.name)}">
-                    <img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(min-width: 768px) 320px, 100vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{var c=this.closest('.product-img');if(c){c.classList.add('no-image');}}">
+        const video = VFUtils.videoUrl(p.video_url);
+        const img = (url || video)
+            ? `<button type="button" class="js-lightbox" data-img="${VFUtils.sanitize(url)}" data-name="${VFUtils.sanitize(p.name)}"${video ? ` data-video="${VFUtils.sanitize(video.src)}" data-video-type="${video.type}"` : ''} aria-label="${video ? 'Play video of' : 'View larger image of'} ${VFUtils.sanitize(p.name)}">
+                    ${url ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(min-width: 768px) 320px, 100vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{var c=this.closest('.product-img');if(c){c.classList.add('no-image');}}">` : ''}
+                    ${video ? '<span class="product-play" aria-hidden="true"></span>' : ''}
                 </button>`
             : '';
         const meta = [
@@ -726,9 +738,12 @@ const VF = {
             this.copyProductLink(shareBtn);
             return;
         }
-        const lightboxBtn = e.target.closest('.js-lightbox[data-img]');
+        const lightboxBtn = e.target.closest('.js-lightbox');
         if (lightboxBtn) {
-            this.openLightbox(lightboxBtn.getAttribute('data-img'), lightboxBtn.getAttribute('data-name'));
+            const src = lightboxBtn.getAttribute('data-video');
+            const type = lightboxBtn.getAttribute('data-video-type');
+            const video = src ? { src, type: type === 'file' ? 'file' : 'iframe' } : null;
+            this.openLightbox(lightboxBtn.getAttribute('data-img'), lightboxBtn.getAttribute('data-name'), video);
         }
     },
 
@@ -1020,6 +1035,11 @@ const VF = {
         const featuredGrid = document.getElementById('featured-grid');
         if (featuredGrid) {
             featuredGrid.addEventListener('click', (e) => this.handleProductGridClick(e));
+        }
+
+        const portfolioGrid = document.getElementById('portfolio-grid');
+        if (portfolioGrid) {
+            portfolioGrid.addEventListener('click', (e) => this.handleProductGridClick(e));
         }
 
         const lightboxEl = document.getElementById('lightbox');

@@ -55,6 +55,7 @@ Form should collect:
 - name
 - description
 - image_url
+- video_url
 - price
 - category
 - display_order
@@ -70,7 +71,7 @@ Form should collect:
 - payment_terms
 - sales_caption
 
-`material`, `size`, `turnaround`, `delivery_notes`, `payment_terms` are optional and show on the product card only when filled. `sales_caption` is the ready-made pitch shown to sales reps. See the Google Sheet Configuration Guide for how `occasion`, `featured`, `in_stock`, and `stock_label` behave.
+`material`, `size`, `turnaround`, `delivery_notes`, `payment_terms` are optional and show on the product card only when filled. `video_url` takes a YouTube, Google Drive, or direct MP4/WebM link and shows a ▶ play badge on the card (a product can use a photo, a video, or both). `sales_caption` is the ready-made pitch shown to sales reps. See the Google Sheet Configuration Guide for how `occasion`, `featured`, `in_stock`, and `stock_label` behave.
 
 ### Portfolio
 Form should collect:

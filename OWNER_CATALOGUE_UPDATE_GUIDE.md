@@ -64,6 +64,7 @@ Optional fields (shown on the product card only when filled):
 - `turnaround`
 - `delivery_notes`
 - `payment_terms`
+- `video_url` — a YouTube, Google Drive, or direct MP4/WebM link; a ▶ badge appears on the card and clicking it plays the video fullscreen. Give a product a photo, a video, or both (with both, the photo becomes the thumbnail). Share Drive videos as `Anyone with the link`, same as images
 - `occasion` — comma-separated tags (e.g. `Birthday, Wedding`) that power the occasion filter
 - `featured` — set to `TRUE` to show the product in the "Featured Pieces" strip at the top of the page (it hides from the main grid while a filter is active)
 - `in_stock` — set to `FALSE` / `0` / `no` to mark the product **Sold Out** (the card switches to an *Enquire on WhatsApp* button)

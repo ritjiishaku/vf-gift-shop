@@ -71,6 +71,7 @@ Use headers like:
 - `name`
 - `description`
 - `image_url`
+- `video_url`
 - `price`
 - `category`
 - `display_order`
@@ -93,6 +94,7 @@ Notes:
 - `featured` = `TRUE` shows the product in the "Featured Pieces" strip at the top of the page (it hides from the main grid while a filter is active).
 - `in_stock` = `FALSE` / `0` / `no` marks the product **Sold Out** with an *Enquire on WhatsApp* button; `stock_label` replaces the badge text.
 - `material`, `size`, `turnaround`, `delivery_notes`, `payment_terms` appear on the product card only when filled.
+- `video_url` accepts a YouTube, Google Drive, or direct MP4/WebM link; the card shows a ▶ badge that plays the video fullscreen. Use a photo, a video, or both (with both, the photo is the thumbnail). Share Drive videos as `Anyone with the link`.
 - `sales_caption` is the ready-made pitch shown to sales reps next to their share button.
 
 Example:
