@@ -2,6 +2,20 @@
 
 This guide explains how to set up the Google Sheet that powers the Gifts by VF catalogue and admin flow.
 
+## Quick reference — tabs and their columns
+
+| Tab | Columns |
+|---|---|
+| `Site Settings` | `key`, `value` |
+| `Products` | `name`, `description`, `image_url`, `video_url`, `price`, `category`, `display_order`, `is_visible`, `in_stock`, `stock_label`, `occasion`, `featured`, `material`, `size`, `turnaround`, `delivery_notes`, `payment_terms`, `sales_caption` |
+| `Portfolio` | `image_url`, `caption`, `category`, `wide`, `display_order`, `is_visible` |
+| `Testimonials` | `quote`, `name`, `source`, `rating`, `display_order`, `is_visible` |
+| `Why Us` | `title`, `description`, `icon`, `display_order`, `is_visible` |
+| `How to Order` | `title`, `description`, `display_order`, `is_visible` |
+| `FAQs` | `question`, `answer`, `display_order`, `is_visible` |
+| `Sales Reps` | `rep_id`, `name`, `commission_rate`, `is_active` |
+| `Payouts` | `rep_id`, `product`, `order_amount`, `commission`, `status`, `date` |
+
 ## 1) Create the Google Sheet
 
 1. Open Google Sheets.
@@ -33,35 +47,36 @@ Important:
 Each tab needs a header row in the first row. The rows below that are your content.
 
 ### Site Settings tab
-Use a key/value structure like this:
+Use a key/value structure — one row per setting, exactly as below.
 
-| key | value |
-|---|---|
-| site_title | Gifts by VF — Handcrafted & Bespoke Gifts |
-| brand_name | Gifts by V |
-| brand_accent | F |
-| hero_label | Thoughtful Gifts |
-| hero_title | Thoughtful gifts for every special moment. |
-| hero_desc | Handcrafted jewellery, acrylic keepsakes... |
-| hero_cta | Chat on WhatsApp |
-| products_label | The Catalogue |
-| products_title | Shop our pieces |
-| products_desc | Every piece is handmade and made to order. |
-| featured_label | Curated For You |
-| featured_title | Featured Pieces |
-| why_label | Why People Come Back |
-| why_title | The VF Difference |
-| testimonials_label | Kind Words |
-| testimonials_title | What Customers Say |
-| portfolio_label | Recent Work |
-| portfolio_title | Our Latest Pieces |
-| howto_label | Simple & Easy |
-| howto_title | How to Order |
-| faq_label | Good to Know |
-| faq_title | Before You Order |
-| footer_text | Gifts by VF — Handmade with love |
-| whatsapp_number | 2348127252004 |
-| commission_rule | 10% commission on every sale |
+| key | What it controls | Example value |
+|---|---|---|
+| `site_title` | Browser tab title | `Gifts by VF — Handcrafted & Bespoke Gifts` |
+| `brand_name` | Brand name shown in the nav/footer | `Gifts by V` |
+| `brand_accent` | Letter highlighted in the brand logo | `F` |
+| `hero_label` | Small label above the hero headline | `Thoughtful Gifts` |
+| `hero_title` | Hero headline | `Thoughtful gifts for every special moment.` |
+| `hero_desc` | Hero sub-text | `Handcrafted jewellery, acrylic keepsakes, and personalised gifts for birthdays, weddings, and meaningful occasions — made with care and delivered across Nigeria.` |
+| `hero_cta` | Hero button text | `Chat on WhatsApp` |
+| `products_label` | Catalogue section label | `The Catalogue` |
+| `products_title` | Catalogue section heading | `Shop our pieces` |
+| `products_desc` | Catalogue section description | `Every piece is handmade and made to order.` |
+| `featured_label` | Featured pieces strip label | `Curated For You` |
+| `featured_title` | Featured pieces strip heading | `Featured Pieces` |
+| `why_label` | Why-Us section label | `Why People Come Back` |
+| `why_title` | Why-Us section heading | `The VF Difference` |
+| `why_desc` | Why-Us section sub-text (defined in code, not yet rendered on the page) | `Handcrafted with care, delivered with love.` |
+| `testimonials_label` | Testimonials section label | `Kind Words` |
+| `testimonials_title` | Testimonials heading | `What Customers Say` |
+| `portfolio_label` | Portfolio section label | `Recent Work` |
+| `portfolio_title` | Portfolio heading | `Our Latest Pieces` |
+| `howto_label` | How-to-Order section label | `Simple & Easy` |
+| `howto_title` | How-to-Order heading | `How to Order` |
+| `faq_label` | FAQs section label | `Good to Know` |
+| `faq_title` | FAQs heading | `Before You Order` |
+| `footer_text` | Footer copyright text | `© 2026 Gifts by VF. All rights reserved.` |
+| `whatsapp_number` | Number used to build every WhatsApp order link (digits only) | `2348127252004` |
+| `commission_rule` | Commission note shown on the sales rep page only | `10% commission on every sale` |
 
 Each row is an optional override: leave a key out (or give it an empty value) and the site falls back to its built-in default for that part of the page. `whatsapp_number` is digits only — the site uses it to build every WhatsApp order link.
 
@@ -252,6 +267,23 @@ If prices or content do not show correctly:
 - check for blank values or malformed CSV rows
 - confirm the header names are correct
 - check for unsupported characters or broken image links
+
+### Site Settings changes not showing
+
+The site caches each tab for 60 seconds and Google's own export cache can add a short delay. To see edits immediately, open:
+
+```
+https://vf-gift-shop.vercel.app/?refresh=1
+```
+
+(`?refresh=1` bypasses the site cache for that load. For the rep page use `reps.html?refresh=1`.)
+
+If settings still never appear:
+
+- confirm the `Site Settings` tab layout is exactly row 1 = `key`,`value` with one key pair per row below
+- make sure there are **no merged cells** and nothing in columns C and beyond
+- delete any stray/empty rows below the last key, then re-type any cell to force Google to refresh its export
+- the site reads `Site Settings` from the classic `export?format=csv&gid=0` endpoint, so as long as that tab is the first tab the layout above applies
 
 ---
 

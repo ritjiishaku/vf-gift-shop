@@ -313,6 +313,11 @@ const VF = {
         const rows = await this.fetchTab(this.TABS.SETTINGS);
         if (!rows || rows.length === 0) return;
 
+        if (!rows.some(row => 'key' in row)) {
+            console.warn('[VF] Site Settings loaded without a `key` column — check the tab layout (row 1 = key,value, one key pair per row, no merged cells).');
+            return;
+        }
+
         const settings = { ...this.DEFAULTS };
         rows.forEach(row => {
             if (row.key && row.value) settings[row.key] = row.value;

@@ -4,7 +4,27 @@
 const VFUtils = {
     SHEET_ID: '1N3_A0mPYkbTZ1ZeC3b_-KdrgV84jPRfyfYwEqzIwNB4',
 
-    CACHE_TTL: 10 * 60 * 1000,
+    CACHE_TTL: 60 * 1000,
+
+    TAB_GIDS: {
+        'Site Settings': 0
+    },
+
+    tabUrl(tabName, sheetId) {
+        const gid = this.TAB_GIDS[tabName];
+        if (gid != null) {
+            return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+        }
+        return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+    },
+
+    refreshMode() {
+        try {
+            return new URLSearchParams(location.search).get('refresh') === '1';
+        } catch (e) {
+            return false;
+        }
+    },
 
     parseCSV(text) {
         const src = String(text || '').replace(/\r\n?/g, '\n');
@@ -78,17 +98,18 @@ const VFUtils = {
     async fetchTab(tabName, sheetId, cache) {
         sheetId = sheetId || this.SHEET_ID;
         if (sheetId === 'YOUR_SHEET_ID') return [];
-        if (cache[tabName]) return cache[tabName];
+        const force = this.refreshMode();
+        if (!force && cache[tabName]) return cache[tabName];
 
         const storageKey = `vf_cache:${sheetId}:${tabName}`;
         const stored = this.cacheGet(storageKey);
-        if (stored && stored.data && Date.now() - stored.ts < this.CACHE_TTL) {
+        if (!force && stored && stored.data && Date.now() - stored.ts < this.CACHE_TTL) {
             cache[tabName] = stored.data;
             return stored.data;
         }
 
         try {
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+            const url = this.tabUrl(tabName, sheetId);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch ${tabName}`);
             const result = this.parseCSV(await response.text());
