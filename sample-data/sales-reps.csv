@@ -1,1 +1,3 @@
 rep_id,name,commission_rate,is_active
+VF003,Ritji ,0.15,True
+VF001,Fechi ,0.15,True

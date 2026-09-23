@@ -1,48 +1,48 @@
-name,description,image_url,video_url,price,category,display_order,is_visible,in_stock,stock_label,occasion,featured,material,size,turnaround,delivery_notes,payment_terms,sales_caption
-Customised Wrist Watch,"Make it personal. Get your wristwatch customised with a name. Perfect for birthdays, anniversaries, gifts, and everyday wear.",https://drive.google.com/uc?export=view&id=1I2iMEg47s7_ik0trBhvqbgrJIBQmFIBB,,"₦35,000",Jewelry,1,TRUE,,,,,,,,,,
-Customised Bracelet,"Make it personal. Get a beautiful bracelet customised with a name of your choice. Perfect for birthdays, anniversaries, special gifts, and everyday wear.",https://drive.google.com/file/d/1ZtkxHDw0q4hNUEBUpaF3GczSVgyWmDz-/view?usp=drivesdk,,"₦20,000",Jewelry,2,TRUE,,,,,,,,,,
-Customised Bracelet,"Your name. Your style. Your bracelet.
+name,description,image_url,price,category,display_order,is_visible
+Customised Wrist Watch ,"Make it personal. Get your wristwatch customised with a name. Perfect for birthdays, anniversaries, gifts, and everyday wear.",https://drive.google.com/uc?export=view&id=1I2iMEg47s7_ik0trBhvqbgrJIBQmFIBB,"₦35,000",Jewelry ,1.0,True
+Customised Bracelet ,"Make it personal. Get a beautiful bracelet customised with a name of your choice. Perfect for birthdays, anniversaries, special gifts, and everyday wear.",https://drive.google.com/file/d/1ZtkxHDw0q4hNUEBUpaF3GczSVgyWmDz-/view?usp=drivesdk,"₦20,000",Jewelry ,2.0,True
+Customised Bracelet ,"Your name. Your style. Your bracelet. 
 
-Customised with the name of your choice and perfect for gifting or everyday wear.",https://drive.google.com/file/d/1ZtkxHDw0q4hNUEBUpaF3GczSVgyWmDz-/view?usp=drivesdk,,"₦18,000",Jewelry,3,TRUE,,,,,,,,,,
-Customised Necklace,"Your name, your necklace.
+Customised with the name of your choice and perfect for gifting or everyday wear.",https://drive.google.com/file/d/1ZtkxHDw0q4hNUEBUpaF3GczSVgyWmDz-/view?usp=drivesdk,"₦18,000",Jewelry ,3.0,True
+Customised Necklace ,"Your name, your necklace. 
 
 Get a beautiful necklace customised with your name or the name of someone special.
 
-A thoughtful gift for birthdays, anniversaries, or everyday wear.",https://drive.google.com/file/d/1XnbL8M3x2y01FHLIpe172fAneVvkIHcK/view?usp=drivesdk,,"#26,000",Jewelry,4,TRUE,,,,,,,,,,
-Customised Necklace,"Beautiful, personal, and made to last.
+A thoughtful gift for birthdays, anniversaries, or everyday wear.",https://drive.google.com/file/d/1XnbL8M3x2y01FHLIpe172fAneVvkIHcK/view?usp=drivesdk,"#26,000",Jewelry ,4.0,True
+Customised Necklace ,"Beautiful, personal, and made to last. 
 
-Feel free to bathe and swim with it. no need to take it off.",https://drive.google.com/file/d/1b9GlzWicwz25d-FxLyXVEkUFVt_QjlIz/view?usp=drivesdk,,"₦26,000",Jewelry,6,TRUE,,,,,,,,,,
-Customised Wrist Watch,"A gift they’ll actually wear.
+Feel free to bathe and swim with it. no need to take it off.",https://drive.google.com/file/d/1b9GlzWicwz25d-FxLyXVEkUFVt_QjlIz/view?usp=drivesdk,"₦26,000",Jewelry ,6.0,True
+Customised Wrist Watch ,"A gift they’ll actually wear. 
 
 Make this wristwatch extra special by adding a name or personalised detail.
 
-Perfect for birthdays, anniversaries, celebrations, and meaningful gifts.",https://drive.google.com/file/d/1SNJ42vGTls7xq7MtrfXn_p0XQotdRXIz/view?usp=drivesdk,,"₦35,000",Jewelry,6,TRUE,,,,,,,,,,
-Customised Gold layered Anklet,"Customised Gold-Layered Anklet
+Perfect for birthdays, anniversaries, celebrations, and meaningful gifts.",https://drive.google.com/file/d/1SNJ42vGTls7xq7MtrfXn_p0XQotdRXIz/view?usp=drivesdk,"₦35,000",Jewelry ,6.0,True
+Customised Gold layered Anklet ,"Customised Gold-Layered Anklet 
 
-Make it personal with your name or a special word.
+Make it personal with your name or a special word. 
 
 Beautiful, personal, and made to last.
 
 Feel free to bathe and swim with it. no need to take it off.
 
-Perfect for everyday wear or as a thoughtful gift.",https://drive.google.com/file/d/1ZC30Gj93pmQ0A9Ep_Ut8N1M-UeBs8PJP/view?usp=drivesdk,,"₦23,000",Jewelry,7,TRUE,,,,,,,,,,
-Customised Waist chain,"Customised Waist Chain.
+Perfect for everyday wear or as a thoughtful gift.",https://drive.google.com/file/d/1ZC30Gj93pmQ0A9Ep_Ut8N1M-UeBs8PJP/view?usp=drivesdk,"₦23,000",Jewelry ,7.0,True
+Customised Waist chain ,"Customised Waist Chain.
 
-Beautiful, personal, and made to last.
+Beautiful, personal, and made to last. 
 
-Feel free to bathe and swim with it.",https://drive.google.com/file/d/1HUJVJKDfrS3DCPYFPE09eo3lwRthDBDZ/view?usp=drivesdk,,"₦26,000",Jewelry,8,TRUE,,,,,,,,,,
-Customised Waist Chain,A waist chain you can bathe and swim with is the perfect gift for yourself or a loved one. ❤️,https://drive.google.com/file/d/1qgk5WG9M17i9KVdrRXHpE6hi7bp34DIZ/view?usp=drivesdk,,"₦25,000",Jewelry,,TRUE,,,,,,,,,,
-12/16 inches Acrylic frameless.,"Turn your favourite memories into beautiful wall art.
+Feel free to bathe and swim with it.",https://drive.google.com/file/d/1HUJVJKDfrS3DCPYFPE09eo3lwRthDBDZ/view?usp=drivesdk,"₦26,000",Jewelry ,8.0,True
+Customised Waist Chain ,A waist chain you can bathe and swim with is the perfect gift for yourself or a loved one. ❤️,https://drive.google.com/file/d/1qgk5WG9M17i9KVdrRXHpE6hi7bp34DIZ/view?usp=drivesdk,"₦25,000",Jewelry ,,True
+12/16 inches Acrylic frameless.,"Turn your favourite memories into beautiful wall art. 
 
 Our customised acrylic frameless is perfect for birthdays, anniversaries, weddings, family photos, and thoughtful gifts.
 
-Beautiful, personal, and made to last.",https://drive.google.com/file/d/1jGMLvnmhL0YE_YPTkx2mobmOEQSqQeCS/view?usp=drivesdk,,"₦25,000",Personalised Home Décor.,9,TRUE,,,,,,,,,,
-Customised Wrist watch and Bracelet,"Customised Bracelet & Wristwatch Set
+Beautiful, personal, and made to last.",https://drive.google.com/file/d/1jGMLvnmhL0YE_YPTkx2mobmOEQSqQeCS/view?usp=drivesdk,"₦25,000",Personalised Home Décor. ,9.0,True
+Customised Wrist watch and Bracelet ,"Customised Bracelet & Wristwatch Set
 
-A beautiful personalised set made to celebrate someone special. Thoughtfully customised with a personal touch, making it perfect for birthdays, anniversaries, special milestones, or simply as a meaningful gift. ",https://drive.google.com/file/d/1D8UfApPIf3mSn5TL9_zN5vmVElWgFIhq/view?usp=drivesdk,,"₦55,000",Jewelry,10,TRUE,,,,,,,,,,
+A beautiful personalised set made to celebrate someone special. Thoughtfully customised with a personal touch, making it perfect for birthdays, anniversaries, special milestones, or simply as a meaningful gift. ",https://drive.google.com/file/d/1D8UfApPIf3mSn5TL9_zN5vmVElWgFIhq/view?usp=drivesdk,"₦55,000",Jewelry ,10.0,True
 Acrylic frameless 36/72,"36 × 72 inches Acrylic Frameless is one of our biggest sizes.
 
-Perfect for large walls, bedrooms, living rooms, offices, and special gifts. It’s a beautiful choice for weddings, anniversaries, birthdays, housewarmings, and other memorable occasions.",https://drive.google.com/file/d/1cyQra5iR1AAmBbWkn4HMhmjDXaGsF0Y8/view?usp=drivesdk,,"₦200,000",Acrylic frameless,,TRUE,,,,,,,,,,
-Customised Necklace and bracelet,Customised Gold layered Necklace and bracelet. A beautiful matching set. ,https://drive.google.com/file/d/196PmPaEpG_0Vx371J-lCJKIrsADwQyZA/view?usp=drivesdk,,"₦44,000",Jewelry,,TRUE,,,,,,,,,,
-"Customized Necklace, Bracelet & Wristwatch Set",A beautiful personalized set made to feel special. Perfect for gifting or creating a meaningful look for yourself.,https://drive.google.com/file/d/1DvFOBrSZrq8mRun0_UpVzVup4-XO7HG4/view?usp=drivesdk,,"₦79,000",Jewelry,,TRUE,,,,,,,,,,
-36/72 inches Acrylic frameless,"36/72 inches Acrylic Frameless. Perfect for weddings, anniversaries, birthdays, and special occasions. ",https://drive.google.com/file/d/18XBH64AH-93wa853a0fADv1EhzDocxX0/view?usp=drivesdk,,"₦200,000",Acrylic frameless,,TRUE,,,,,,,,,,
+Perfect for large walls, bedrooms, living rooms, offices, and special gifts. It’s a beautiful choice for weddings, anniversaries, birthdays, housewarmings, and other memorable occasions.",https://drive.google.com/file/d/1cyQra5iR1AAmBbWkn4HMhmjDXaGsF0Y8/view?usp=drivesdk,"₦200,000",Acrylic frameless ,,True
+Customised Necklace and bracelet ,Customised Gold layered Necklace and bracelet. A beautiful matching set. ,https://drive.google.com/file/d/196PmPaEpG_0Vx371J-lCJKIrsADwQyZA/view?usp=drivesdk,"₦44,000",Jewelry ,,True
+"Customized Necklace, Bracelet & Wristwatch Set",A beautiful personalized set made to feel special. Perfect for gifting or creating a meaningful look for yourself.,https://drive.google.com/file/d/1DvFOBrSZrq8mRun0_UpVzVup4-XO7HG4/view?usp=drivesdk,"₦79,000",Jewelry ,,True
+36/72 inches Acrylic frameless ,"36/72 inches Acrylic Frameless. Perfect for weddings, anniversaries, birthdays, and special occasions. ",https://drive.google.com/file/d/18XBH64AH-93wa853a0fADv1EhzDocxX0/view?usp=drivesdk,"₦200,000",Acrylic frameless ,,True
