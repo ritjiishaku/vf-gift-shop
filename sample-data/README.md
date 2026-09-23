@@ -1,6 +1,6 @@
 # Sheet Schema & Templates
 
-These CSV files are **header-only templates** that document the exact column layout of each Google Sheet tab. They contain no demo data — real content is added in Google Sheets (see below).
+These CSV files are **templates** that document the exact column layout of each Google Sheet tab. They contain no product data — real content is added in Google Sheets (see below). The exception is `site-settings.csv`, which ships with every documented key pre-filled as a ready-to-edit template.
 
 ## Files → Tabs
 
