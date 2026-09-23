@@ -1,6 +1,6 @@
 title,description,display_order,is_visible
-Find What You Love,"Use the search bar to find the product you need. E.g. “jewellery,” “acrylic frame,” “indoor signage,” and more.",1.0,True
-Choose Your Favourite,Browse through the options and select the piece you love.,2.0,True
-Send Your Custom Details,"Tap the WhatsApp button and send us the name, photo, text, or any other details you’d like us to customize.",3.0,True
-Confirm & Pay,"We’ll confirm your order details with you, then you can proceed to make payment.",4.0,True
-We Create & Deliver,Leave the rest to us. We’ll carefully craft your order and deliver it to you with love.,5.0,True
+Find What You Love,"Use the search bar to find the product you need. E.g. “jewellery,” “acrylic frame,” “indoor signage,” and more.",1,TRUE
+Choose Your Favourite,Browse through the options and select the piece you love.,2,TRUE
+Send Your Custom Details,"Tap the WhatsApp button and send us the name, photo, text, or any other details you’d like us to customize.",3,TRUE
+Confirm & Pay,"We’ll confirm your order details with you, then you can proceed to make payment.",4,TRUE
+We Create & Deliver,Leave the rest to us. We’ll carefully craft your order and deliver it to you with love.,5,TRUE
