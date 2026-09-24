@@ -3,3 +3,4 @@
 *.xlsx
 sample-data/
 *.md
+!README.md
