@@ -298,6 +298,9 @@ section { padding: 100px 24px; }
 #featured-section {
     margin-top: 40px;
 }
+#featured {
+    padding: 0 24px 56px;
+}
 .featured-header {
     display: flex;
     align-items: baseline;
@@ -752,6 +755,32 @@ footer {
     color: var(--gold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+.testimonials-more {
+    text-align: center;
+    margin-top: 48px;
+}
+.testimonials-more[hidden] { display: none; }
+.testimonials-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.testimonials-more-btn:hover {
+    background: var(--gold);
+    color: var(--dark);
 }
 
 #how-to-order {

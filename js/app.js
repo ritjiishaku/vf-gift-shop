@@ -68,6 +68,7 @@ const VF = {
     PRODUCT_LIMIT: 12,
     PRODUCT_CHUNK: 12,
     FEATURED_LIMIT: 6,
+    TESTIMONIAL_LIMIT: 6,
 
     PRICE_RANGES: [
         ['any', 'Any price'],
@@ -606,10 +607,6 @@ const VF = {
             return true;
         });
 
-        if (!filteredView && this._featuredIds && this._featuredIds.size) {
-            filtered = filtered.filter(p => !this._featuredIds.has(this.keyOf(p)));
-        }
-
         if (this._sort === 'price-asc' || this._sort === 'price-desc') {
             const dir = this._sort === 'price-asc' ? 1 : -1;
             filtered.sort((a, b) => {
@@ -920,7 +917,8 @@ const VF = {
         if (!tab) return;
         const rows = VFUtils.filterAndSort(tab);
         if (rows.length === 0) return;
-        track.innerHTML = rows.map(row => {
+
+        const card = row => {
             const stars = this.starRating(row.rating);
             const rated = stars.split('☆')[0].length;
             const byline = [row.name, row.source].filter(Boolean).map(s => VFUtils.sanitize(s)).join(' · ');
@@ -931,7 +929,29 @@ const VF = {
                     ${byline ? `<figcaption>&mdash; ${byline}</figcaption>` : ''}
                 </figure>
             `;
-        }).join('');
+        };
+
+        track.innerHTML = rows.slice(0, this.TESTIMONIAL_LIMIT).map(card).join('');
+
+        const more = document.getElementById('testimonials-more');
+        if (more) {
+            if (rows.length > this.TESTIMONIAL_LIMIT) {
+                const rest = rows.slice(this.TESTIMONIAL_LIMIT);
+                const btn = more.querySelector('.testimonials-more-btn');
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        track.insertAdjacentHTML('beforeend', rest.map(card).join(''));
+                        btn.setAttribute('aria-expanded', 'true');
+                        more.hidden = true;
+                        this.observeFadeIns();
+                    });
+                }
+                more.hidden = false;
+            } else {
+                more.hidden = true;
+            }
+        }
+
         section.hidden = false;
         this.observeFadeIns();
     },

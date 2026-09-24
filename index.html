@@ -50,7 +50,7 @@
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap">
 
-    <link rel="stylesheet" href="css/style.css?v=10">
+    <link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 
@@ -103,6 +103,19 @@
     <div class="trust-item">QUALITY YOU CAN TRUST</div>
 </div>
 
+<!-- FEATURED PIECES -->
+<section id="featured">
+    <div class="section-inner">
+        <div id="featured-section" hidden>
+            <div class="featured-header">
+                <p class="section-label" id="featured-label"></p>
+                <h3 class="featured-title" id="featured-title"></h3>
+            </div>
+            <div class="featured-grid" id="featured-grid"></div>
+        </div>
+    </div>
+</section>
+
 <!-- CATALOGUE -->
 <section id="products">
     <div class="section-inner">
@@ -141,13 +154,6 @@
                 <a href="https://wa.me/2348127252004" target="_blank" rel="noopener noreferrer">here</a>.
             </p>
         </noscript>
-        <div id="featured-section" hidden>
-            <div class="featured-header">
-                <p class="section-label" id="featured-label"></p>
-                <h3 class="featured-title" id="featured-title"></h3>
-            </div>
-            <div class="featured-grid" id="featured-grid"></div>
-        </div>
         <div class="products-grid" id="products-grid"></div>
     </div>
 </section>
@@ -183,6 +189,9 @@
             <h2 class="section-title" id="testimonials-title"></h2>
         </div>
         <div class="testimonials-track fade-in" id="testimonials-grid"></div>
+        <div class="testimonials-more fade-in" id="testimonials-more" hidden>
+            <button type="button" class="testimonials-more-btn" aria-expanded="false">See more from our customers</button>
+        </div>
     </div>
 </section>
 
@@ -235,7 +244,7 @@
 <div id="lightbox" class="lightbox" hidden></div>
 
 <script src="js/shared.js?v=9"></script>
-<script src="js/app.js?v=10"></script>
+<script src="js/app.js?v=12"></script>
 
 </body>
 </html>
