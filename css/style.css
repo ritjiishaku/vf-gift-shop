@@ -575,6 +575,26 @@ footer {
     pointer-events: none;
 }
 .referral-banner.visible { opacity: 1; transform: translateY(0); }
+.referral-banner span {
+    display: inline-block;
+    padding-right: 28px;
+}
+.referral-banner .referral-close {
+    pointer-events: auto;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: var(--dark);
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 6px 8px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+.referral-banner .referral-close:hover { opacity: 1; }
 
 /* ── PRODUCT ORDER BUTTON ── */
 .product-actions {

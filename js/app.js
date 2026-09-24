@@ -207,7 +207,10 @@ const VF = {
             }
             const name = rep.name || stored.rep_id;
             this._referral = { rep_id: stored.rep_id, name };
-            this.showReferralBanner();
+            if (this._showRefBanner) {
+                this._showRefBanner = false;
+                this.showReferralBanner();
+            }
         } catch (e) {
             localStorage.removeItem('vf_referral');
         }
@@ -216,9 +219,30 @@ const VF = {
     showReferralBanner() {
         const banner = document.getElementById('referral-banner');
         if (!banner || !this._referral) return;
-        banner.textContent = `You were referred by ${this._referral.name}`;
+        banner.innerHTML = '';
+        const text = document.createElement('span');
+        text.textContent = `You were referred by ${this._referral.name}`;
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'referral-close';
+        close.setAttribute('aria-label', 'Dismiss referral message');
+        close.innerHTML = '&times;';
+        close.addEventListener('click', () => this.dismissReferralBanner());
+        banner.appendChild(text);
+        banner.appendChild(close);
         banner.classList.add('visible');
         document.body.classList.add('has-referral');
+    },
+
+    dismissReferralBanner() {
+        const banner = document.getElementById('referral-banner');
+        if (banner) banner.classList.remove('visible');
+        document.body.classList.remove('has-referral');
+        this._referral = null;
+        try {
+            localStorage.removeItem('vf_referral');
+            localStorage.removeItem('vf_ref_new');
+        } catch (e) { /* storage may be unavailable */ }
     },
 
     orderMessage(productName, price) {
@@ -947,6 +971,7 @@ const VF = {
     async init() {
         this._waNumber = this.DEFAULTS.whatsapp_number;
         this._referral = null;
+        this._showRefBanner = false;
         this._products = null;
         this._activeCategory = 'all';
         this._searchQuery = '';
@@ -960,11 +985,18 @@ const VF = {
         this._featuredIds = null;
 
         const params = new URLSearchParams(window.location.search);
+        if (params.get('clearref')) {
+            try {
+                localStorage.removeItem('vf_referral');
+                localStorage.removeItem('vf_ref_new');
+            } catch (e) { /* storage may be unavailable */ }
+        }
         const refParam = params.get('ref');
         if (refParam) {
             const cleanRef = String(refParam).replace(/[^a-z0-9_-]/gi, '').toLowerCase().slice(0, 30);
             if (cleanRef) {
                 localStorage.setItem('vf_referral', JSON.stringify({ rep_id: cleanRef, arrive_at: Date.now() }));
+                this._showRefBanner = true;
             }
         }
         const productParam = params.get('p');
