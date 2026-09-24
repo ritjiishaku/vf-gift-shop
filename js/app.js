@@ -454,6 +454,37 @@ const VF = {
             || this._priceRange !== 'any';
     },
 
+    matchesFilters(p) {
+        if (this._activeCategory !== 'all') {
+            const cat = String(p.category || '').trim().toLowerCase();
+            if (cat !== this._activeCategory) return false;
+        }
+        if (this._activeOccasion !== 'all') {
+            const tags = String(p.occasion || '').toLowerCase().split(',').map(t => t.trim());
+            if (!tags.includes(this._activeOccasion)) return false;
+        }
+        if (this._priceRange !== 'any') {
+            const n = VFUtils.priceNumber(p);
+            if (n == null) return false;
+            if (this._priceRange === 'under-20000' && !(n < 20000)) return false;
+            if (this._priceRange === '20000-50000' && !(n >= 20000 && n <= 50000)) return false;
+            if (this._priceRange === 'above-50000' && !(n > 50000)) return false;
+        }
+        const q = String(this._searchQuery || '').toLowerCase();
+        if (q) {
+            const haystack = [
+                p.name,
+                p.description,
+                p.category,
+                p.material,
+                p.size,
+                p.price
+            ].join(' ').toLowerCase();
+            if (!haystack.includes(q)) return false;
+        }
+        return true;
+    },
+
     renderFeaturedStrip() {
         const section = document.getElementById('featured-section');
         const container = document.getElementById('featured-grid');
@@ -462,15 +493,23 @@ const VF = {
             section.hidden = true;
             return;
         }
-        if (container.dataset.built !== '1') {
-            const shown = this._featuredProducts.slice(0, this.FEATURED_LIMIT);
+        const pool = this.isFilteredView()
+            ? this._featuredProducts.filter(p => this.matchesFilters(p))
+            : this._featuredProducts.slice();
+        if (pool.length === 0) {
+            section.hidden = true;
+            return;
+        }
+        const shown = pool.slice(0, this.FEATURED_LIMIT);
+        const sig = shown.map(p => this.keyOf(p)).join('|');
+        if (container.dataset.sig !== sig) {
+            container.dataset.sig = sig;
             container.innerHTML = shown.map((p, i) =>
                 this.productCardHTML(p, p.display_order || i + 1)
             ).join('');
-            container.dataset.built = '1';
             this.observeFadeIns();
         }
-        section.hidden = this.isFilteredView();
+        section.hidden = false;
     },
 
     renderPriceSelect() {
@@ -575,37 +614,7 @@ const VF = {
 
         this.renderFeaturedStrip();
 
-        const q = String(this._searchQuery || '').toLowerCase();
-        const filteredView = this.isFilteredView();
-        let filtered = allProducts.filter(p => {
-            if (this._activeCategory !== 'all') {
-                const cat = String(p.category || '').trim().toLowerCase();
-                if (cat !== this._activeCategory) return false;
-            }
-            if (this._activeOccasion !== 'all') {
-                const tags = String(p.occasion || '').toLowerCase().split(',').map(t => t.trim());
-                if (!tags.includes(this._activeOccasion)) return false;
-            }
-            if (this._priceRange !== 'any') {
-                const n = VFUtils.priceNumber(p);
-                if (n == null) return false;
-                if (this._priceRange === 'under-20000' && !(n < 20000)) return false;
-                if (this._priceRange === '20000-50000' && !(n >= 20000 && n <= 50000)) return false;
-                if (this._priceRange === 'above-50000' && !(n > 50000)) return false;
-            }
-            if (q) {
-                const haystack = [
-                    p.name,
-                    p.description,
-                    p.category,
-                    p.material,
-                    p.size,
-                    p.price
-                ].join(' ').toLowerCase();
-                if (!haystack.includes(q)) return false;
-            }
-            return true;
-        });
+        let filtered = allProducts.filter(p => this.matchesFilters(p));
 
         if (this._sort === 'price-asc' || this._sort === 'price-desc') {
             const dir = this._sort === 'price-asc' ? 1 : -1;
