@@ -133,7 +133,9 @@ const RepTools = {
 
         let btn = container.querySelector('#load-more-rep-products-btn');
         if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
+            const wrap = btn.closest('.load-more-wrap');
+            if (wrap) wrap.insertAdjacentHTML('beforebegin', html);
+            else container.insertAdjacentHTML('beforeend', html);
             const remaining = items.length - this._repProductShown;
             if (remaining > 0) {
                 btn.textContent = `Show more (${remaining} more)`;

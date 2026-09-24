@@ -288,6 +288,7 @@ const VF = {
         this.setText('featured-title', settings.featured_title);
         this.setText('why-label', settings.why_label);
         this.setText('why-title', settings.why_title);
+        this.setText('why-desc', settings.why_desc);
         this.setText('testimonials-label', settings.testimonials_label);
         this.setText('testimonials-title', settings.testimonials_title);
         this.setText('portfolio-label', settings.portfolio_label);
@@ -659,7 +660,9 @@ const VF = {
 
         let btn = container.querySelector('#load-more-products-btn');
         if (btn) {
-            btn.insertAdjacentHTML('beforebegin', html);
+            const wrap = btn.closest('.load-more-wrap');
+            if (wrap) wrap.insertAdjacentHTML('beforebegin', html);
+            else container.insertAdjacentHTML('beforeend', html);
             const remaining = this._lastFiltered.length - this._productShown;
             if (remaining > 0) {
                 btn.textContent = `Show more (${remaining} more)`;
@@ -694,7 +697,21 @@ const VF = {
     },
 
     productCardHTML(p, pid) {
-        const url = VFUtils.validateUrl(VFUtils.directImageUrl(p.image_url));
+        let imageUrl = String(p.image_url || '').trim();
+        let video = VFUtils.videoUrl(p.video_url);
+
+        // Safety net: if a video link (YouTube, Short, or direct .mp4/.webm)
+        // was pasted into image_url, treat it as the card's video instead of
+        // rendering a broken image. Drive links stay treated as images.
+        if (!video) {
+            const peek = VFUtils.videoUrl(imageUrl);
+            if (peek && !VFUtils.isDriveUrl(imageUrl)) {
+                video = peek;
+                imageUrl = '';
+            }
+        }
+
+        const url = VFUtils.validateUrl(VFUtils.directImageUrl(imageUrl));
         const srcset = url
             ? this.srcVariant(url, 300, 300) + ' 300w, ' + this.srcVariant(url, 600, 600) + ' 600w, ' + this.srcVariant(url, 900, 900) + ' 900w'
             : '';
@@ -703,11 +720,10 @@ const VF = {
         const slug = VFUtils.slugify(p.name) || VFUtils.slugify(pid);
         const soldOut = VFUtils.isSoldOut(p);
         const badgeLabel = soldOut ? (String(p.stock_label || '').trim() || 'Sold Out') : category;
-        const video = VFUtils.videoUrl(p.video_url);
         const img = (url || video)
             ? `<button type="button" class="js-lightbox" data-img="${VFUtils.sanitize(url)}" data-name="${VFUtils.sanitize(p.name)}"${video ? ` data-video="${VFUtils.sanitize(video.src)}" data-video-type="${video.type}"` : ''} aria-label="${video ? 'Play video of' : 'View larger image of'} ${VFUtils.sanitize(p.name)}">
                     ${url ? `<img src="${VFUtils.sanitize(url)}" srcset="${VFUtils.sanitize(srcset)}" sizes="(min-width: 768px) 320px, 100vw" alt="${VFUtils.sanitize(p.name)}" loading="lazy" decoding="async" onerror="if(!this.dataset.retried){this.dataset.retried='true';this.removeAttribute('srcset');this.src='${VFUtils.sanitize(url)}';}else{var c=this.closest('.product-img');if(c){c.classList.add('no-image');}}">` : ''}
-                    ${video ? '<span class="product-play" aria-hidden="true"></span>' : ''}
+                    ${video ? '<span class="product-play-wrap" aria-hidden="true"><span class="product-play"></span><span class="product-play-label">Watch</span></span>' : ''}
                 </button>`
             : '';
         const meta = [

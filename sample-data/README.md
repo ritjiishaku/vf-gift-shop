@@ -33,11 +33,14 @@ These CSV files are **templates** that document the exact column layout of each 
 
 Each row becomes a catalogue card. Columns:
 
+> `products.csv` ships with a few illustrative rows so you can see the layout at a glance — replace them with your real products. The two most important rules: every product's `name` must be **unique** (share links and product pages identify products by name), and every row keeps its own `display_order`.
+
 | Column | What it does |
 |--------|--------------|
 | `name` | Product title on the card |
 | `description` | Short blurb shown under the title |
 | `image_url` | Photo (600×600 works best). If blank, the card shows an icon tile instead. Google Drive links are converted automatically, but the file must be shared "Anyone with the link". |
+| `video_url` | Optional video for the card. Paste a YouTube (`watch`/`shorts`/`embed`), Google Drive, or direct `.mp4`/`.webm` link — the card shows a gold ▶ badge and tapping opens the video in an overlay instead of a photo. Drive + YouTube files must be shared "Anyone with the link". |
 | `price` | Shown as "From ₦18,000" on the card. Blank hides the price. |
 | `category` | The storefront builds its category filter automatically from these — desktop shows glanceable filter pills, while mobile displays a clean native category select dropdown |
 | `display_order` | Card position |
@@ -46,6 +49,12 @@ Each row becomes a catalogue card. Columns:
 | `stock_label` | Custom badge text for out-of-stock cards, e.g. `Pre-Order Only` |
 | `occasion` | Comma-separated occasion tags, e.g. `Birthday, Wedding`. Drives the "occasion" filter (desktop pills + mobile select). Blank hides the control |
 | `featured` | `TRUE` puts the product in the "Featured Pieces" strip at the top of the page. The strip shows only when all filters are cleared and disappears whenever a filter/search is active |
+| `material` | Shown on the card as a meta row when filled, e.g. `Gold-layered alloy` |
+| `size` | Shown on the card as a meta row when filled, e.g. `12/16 inches`, `Adjustable` |
+| `turnaround` | Shown on the card as a meta row when filled, e.g. `3–5 days` |
+| `delivery_notes` | Shown on the card as a meta row when filled, e.g. `Nationwide delivery` |
+| `payment_terms` | Shown on the card as a meta row when filled, e.g. `50% deposit, balance on approval` |
+| `sales_caption` | Ready-made pitch shown to sales reps next to their share button (reps page only) |
 
 The storefront search + category + occasion + price-range filters + sort (Featured / Price low-high / Price high-low / Name A–Z) + "Showing X of Y pieces" counter all work off this tab — no code changes needed when a product is added. Products with a blank/non-numeric `price` always sort last. Tap any product photo to open it full-screen.
 
